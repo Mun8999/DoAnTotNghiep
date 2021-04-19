@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:bullet_journel/assets/icons/db_icons.dart';
-import 'package:bullet_journel/edit_image/edit_image_view.dart';
+import 'package:bullet_journel/snap_photo/snap_photo_view.dart';
 import 'package:bullet_journel/login/login_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,7 +48,7 @@ class _LoginViewState extends State<LoginView> {
   void onLoginPressed() {
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => EditImageView()),
+        MaterialPageRoute(builder: (context) => SnapPhotoView()),
         (Route<dynamic> route) => false);
   }
 

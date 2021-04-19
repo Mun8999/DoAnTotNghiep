@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
-class EditImageViewModel {
+class SnapPhotoViewModel {
   final _sliderController = BehaviorSubject<double>();
   final _filterImageController = BehaviorSubject<BlendMode>();
   Stream get sliderStream => _sliderController.stream;

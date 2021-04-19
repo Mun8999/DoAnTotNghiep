@@ -1,16 +1,16 @@
-import 'package:bullet_journel/edit_image/edit_image_viewmodel.dart';
+import 'package:bullet_journel/snap_photo/snap_photo_viewmodel.dart';
 import 'package:flutter/material.dart';
 
-class EditImageView extends StatefulWidget {
+class SnapPhotoView extends StatefulWidget {
   @override
-  _EditImageViewState createState() => _EditImageViewState();
+  _SnapPhotoViewState createState() => _SnapPhotoViewState();
 }
 
 double selected = 0;
 List<BlendMode> blendModes = [];
-EditImageViewModel editImageViewModel = EditImageViewModel();
+SnapPhotoViewModel editImageViewModel = SnapPhotoViewModel();
 
-class _EditImageViewState extends State<EditImageView> {
+class _SnapPhotoViewState extends State<SnapPhotoView> {
   @override
   void initState() {
     super.initState();

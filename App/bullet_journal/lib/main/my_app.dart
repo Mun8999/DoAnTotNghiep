@@ -1,4 +1,4 @@
-import 'package:bullet_journel/edit_image/edit_image_view.dart';
+import 'package:bullet_journel/snap_photo/snap_photo_view.dart';
 import 'package:bullet_journel/login/login_view.dart';
 import 'package:flutter/material.dart';
 
