@@ -50,7 +50,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
         ),
         body: Container(
           margin: EdgeInsets.only(top: 10),
-          padding: EdgeInsets.all(5),
+          padding: EdgeInsets.all(8),
           child: StaggeredGridView.countBuilder(
             crossAxisCount: 4,
             itemCount: 16,
