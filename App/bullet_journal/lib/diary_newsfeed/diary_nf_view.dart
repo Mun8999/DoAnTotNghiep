@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bullet_journel/edit_image/edit_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -9,16 +10,24 @@ class DiaryNewFeedsView extends StatefulWidget {
 }
 
 List<String> images = [
-  'assets/images/bg_login_1.jpg',
-  'assets/images/bg_login_2.jpg',
-  'assets/images/bg_login_3.jpg',
-  'assets/images/bg_login_4.jpg',
-  'assets/images/bg_login_5.jpg',
-  'assets/images/bg_login_6.png',
-  'assets/images/FB_IMG_1618136235995.jpg',
-  'assets/icons/icon_cat.png'
+  'assets/images/FB_IMG_1618988919479.jpg',
+  'assets/images/FB_IMG_1619003669083.jpg',
+  'assets/images/FB_IMG_1619004242859.jpg',
+  'assets/images/FB_IMG_1619006556060.jpg',
+  'assets/images/FB_IMG_1619006780237.jpg',
+  'assets/images/FB_IMG_1619007243993.jpg',
+  'assets/images/FB_IMG_1619007315847.jpg',
+  'assets/images/FB_IMG_1619032982645.jpg',
+  'assets/images/FB_IMG_1619035711744.jpg',
+  'assets/images/FB_IMG_1619035803604.jpg',
+  'assets/images/FB_IMG_1619036146750.jpg',
+  'assets/images/FB_IMG_1619036516420.jpg',
+  'assets/images/FB_IMG_1619037184892.jpg',
+  'assets/images/FB_IMG_1619088169362.jpg',
+  'assets/images/FB_IMG_1619096684228.jpg',
+  'assets/images/FB_IMG_1619157271674.jpg'
 ];
-int imageIndex = -1;
+bool isTaped = false;
 
 class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
   @override
@@ -34,14 +43,30 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
             ),
           ),
           title: Center(
-            child: Text(
-              'Nhật ký',
-              style: TextStyle(color: Colors.black),
-            ),
+            child: isTaped
+                ? Container(
+                    height: 40,
+                    child: TextField(
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                        )),
+                  )
+                : Text(
+                    'Nhật ký',
+                    style: TextStyle(color: Colors.black),
+                  ),
           ),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    isTaped = !isTaped;
+                  });
+                },
                 icon: Icon(
                   Icons.search_rounded,
                   color: Colors.black,
@@ -49,54 +74,68 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
           ],
         ),
         body: Container(
-          margin: EdgeInsets.only(top: 10),
           padding: EdgeInsets.all(8),
+          height: height,
+          width: width,
           child: StaggeredGridView.countBuilder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
             crossAxisCount: 4,
-            itemCount: 16,
+            itemCount: images.length,
             itemBuilder: (BuildContext context, int index) {
-              imageIndex++;
-              if (imageIndex == images.length - 1) imageIndex = 0;
-              return Stack(
-                children: [
+              return Container(
+                child: Stack(children: [
                   Container(
+                    padding:
+                        EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 50),
                     decoration: BoxDecoration(
+                        color: Colors.white,
+                        // color: 100 * (index % 9) == 0
+                        //     ? Colors.pink[50]
+                        //     : Colors.pink[100 * (index % 9)],
                         borderRadius: BorderRadius.circular(8),
-                        image: DecorationImage(
-                            image: AssetImage(images[imageIndex]),
-                            fit: BoxFit.cover),
+                        // border: Border.all(color: Colors.black),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.grey.withOpacity(0.5),
                               blurRadius: 1,
                               offset: Offset(2, 2))
                         ]),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8)),
-                      color: Colors.white,
+                    child: SizedBox(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                                image: AssetImage(images[index]),
+                                fit: BoxFit.cover),
+                            boxShadow: [
+                              // BoxShadow(
+                              //     color: Colors.grey.withOpacity(0.5),
+                              //     blurRadius: 1,
+                              //     offset: Offset(2, 2))
+                            ]),
+                      ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Center(
+                  ),
+                  Positioned(
+                    bottom: 8,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
                         child: Text(
-                          'Happy Day',
+                          'Hellllo',
                           style: TextStyle(color: Colors.black, fontSize: 16),
                         ),
                       ),
                     ),
                   )
-                ],
+                ]),
               );
             },
             // ignore: missing_return
             staggeredTileBuilder: (index) {
-              return new StaggeredTile.count(2, index.isEven ? 3 : 2);
+              return new StaggeredTile.count(2, index.isEven ? 3 : 4);
             },
             // staggeredTileBuilder: (int index) =>
             //     new StaggeredTile.count(2, index.isEven ? 2 : 1),

@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bullet Journal App',
-      home: EditImageView(),
+      home: DiaryNewFeedsView(),
     );
   }
 }
