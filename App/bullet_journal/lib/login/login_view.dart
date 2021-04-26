@@ -35,21 +35,26 @@ class _LoginViewState extends State<LoginView> {
     heightOfContext = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            setLoginBackGround(),
-            buildWidget(),
-          ],
+        child: Container(
+          height: heightOfContext,
+          child: Stack(
+            children: [
+              setLoginBackGround(),
+              Align(alignment: Alignment.bottomCenter, child: buildWidget()),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void onLoginPressed() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => SnapPhotoView()),
-        (Route<dynamic> route) => false);
+    // Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => SnapPhotoView()),
+    //     (Route<dynamic> route) => false);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SnapPhotoView()));
   }
 
   Widget setLoginBackGround() {
@@ -73,9 +78,9 @@ class _LoginViewState extends State<LoginView> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: heightOfContext * 0.1,
-            ),
+            // SizedBox(
+            //   height: heightOfContext * 0.1,
+            // ),
             buildIcon(),
             buildTextIntro(),
             SizedBox(
@@ -99,6 +104,9 @@ class _LoginViewState extends State<LoginView> {
                   buildLoginTab(),
                 ],
               ),
+            ),
+            SizedBox(
+              height: heightOfContext * 0.01,
             ),
           ],
         ),
@@ -193,7 +201,7 @@ class _LoginViewState extends State<LoginView> {
                   LoginViewIcon.iconly_light_outline_profile,
                   color: Colors.white,
                 ),
-                // errorText: snapshot.hasData ? snapshot.data : null,
+                errorText: snapshot.hasData ? snapshot.data : null,
                 labelText: 'Username',
                 labelStyle: TextStyle(color: Colors.white),
                 fillColor: Colors.white.withOpacity(0.2),
@@ -352,9 +360,10 @@ class _LoginViewState extends State<LoginView> {
                 stream: loginViewModel.loginStream,
                 builder: (context, snapshot) {
                   return RaisedButton(
-                    onPressed: !snapshot.hasData || !snapshot.data
-                        ? null
-                        : onLoginPressed,
+                    onPressed: onLoginPressed,
+                    // !snapshot.hasData || !snapshot.data
+                    //     ? null
+                    //     : onLoginPressed,
                     color: const Color(0xffD93025),
                     child: Text(
                       'LOGIN',

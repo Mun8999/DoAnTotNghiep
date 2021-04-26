@@ -32,190 +32,238 @@ bool isTaped = false;
 class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.menu_rounded,
-              color: Colors.black,
-            ),
-          ),
-          title: Center(
-            child: isTaped
-                ? Container(
-                    height: 40,
-                    child: TextField(
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        )),
-                  )
-                : Text(
-                    'Nhật ký',
-                    style: TextStyle(color: Colors.black),
-                  ),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    isTaped = !isTaped;
-                  });
-                },
-                icon: Icon(
-                  Icons.search_rounded,
-                  color: Colors.black,
-                ))
-          ],
-        ),
-        body: Container(
-          padding: EdgeInsets.all(8),
-          height: height,
-          width: width,
-          child: StaggeredGridView.countBuilder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            crossAxisCount: 4,
-            itemCount: images.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Stack(children: [
-                  Container(
-                    padding:
-                        EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 50),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        // color: 100 * (index % 9) == 0
-                        //     ? Colors.pink[50]
-                        //     : Colors.pink[100 * (index % 9)],
-                        borderRadius: BorderRadius.circular(8),
-                        // border: Border.all(color: Colors.black),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              blurRadius: 1,
-                              offset: Offset(2, 2))
-                        ]),
-                    child: SizedBox(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            image: DecorationImage(
-                                image: AssetImage(images[index]),
-                                fit: BoxFit.cover),
-                            boxShadow: [
-                              // BoxShadow(
-                              //     color: Colors.grey.withOpacity(0.5),
-                              //     blurRadius: 1,
-                              //     offset: Offset(2, 2))
-                            ]),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 8,
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          'Hellllo',
-                          style: TextStyle(color: Colors.black, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  )
-                ]),
-              );
-            },
-            // ignore: missing_return
-            staggeredTileBuilder: (index) {
-              return new StaggeredTile.count(2, index.isEven ? 3 : 4);
-            },
-            // staggeredTileBuilder: (int index) =>
-            //     new StaggeredTile.count(2, index.isEven ? 2 : 1),
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
-          ),
-        ));
-  }
-}
-// CustomScrollView(
-//   slivers: [
-//     SliverAppBar(
-//       backgroundColor: Colors.white,
-//       leading: IconButton(
-//         onPressed: () {},
-//         icon: Icon(
-//           Icons.menu_rounded,
-//           color: Colors.black,
-//         ),
-//       ),
-//       title: Center(
-//         child: Text(
-//           'Nhật ký',
-//           style: TextStyle(color: Colors.black),
-//         ),
-//       ),
-//       actions: [
-//         IconButton(
+    return
+
+//     Scaffold(
+//         appBar: AppBar(
+//           backgroundColor: Colors.white,
+//           leading: IconButton(
 //             onPressed: () {},
 //             icon: Icon(
-//               Icons.search_rounded,
+//               Icons.menu_rounded,
 //               color: Colors.black,
-//             ))
-//       ],
-//       // floating: true,
-//       floating: true, pinned: true, snap: false,
-//       elevation: 10.0,
-//       expandedHeight: MediaQuery.of(context).size.height * 0.2,
-//       flexibleSpace: FlexibleSpaceBar(
-//         background: Container(
-//           color: Colors.pink[100],
+//             ),
+//           ),
+//           title: Center(
+//             child: isTaped
+//                 ? Container(
+//                     height: 40,
+//                     child: TextField(
+//                         style: TextStyle(
+//                           fontSize: 16,
+//                         ),
+//                         decoration: InputDecoration(
+//                           border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(5)),
+//                         )),
+//                   )
+//                 : Text(
+//                     'Nhật ký',
+//                     style: TextStyle(color: Colors.black),
+//                   ),
+//           ),
+//           actions: [
+//             IconButton(
+//                 onPressed: () {
+//                   setState(() {
+//                     isTaped = !isTaped;
+//                   });
+//                 },
+//                 icon: Icon(
+//                   Icons.search_rounded,
+//                   color: Colors.black,
+//                 ))
+//           ],
 //         ),
-//       ),
-//     ),
-//     // SliverFixedExtentList(
-//     //   itemExtent: 50,
-//     //   delegate: SliverChildBuilderDelegate(
-//     //     (BuildContext context, int index) {
-//     //       return Container(
-//     //         alignment: Alignment.center,
-//     //         color: Colors.lightBlue[100 * (index % 9)],
-//     //         // child: Text('List Item $index'),
-//     //       );
-//     //     },
-//     //   ),
-//     // ),
-//     SliverFillViewport(
-//         viewportFraction: 1,
-//         delegate:
-//             SliverChildBuilderDelegate((BuildContext context, int index) {
-//           return StaggeredGridView.countBuilder(
-//             crossAxisCount: 4,
-//             itemCount: 12,
-//             itemBuilder: (BuildContext context, int index1) =>
-//                 new Container(
-//                     color: Colors.teal[100 * (index1 % 9)],
-//                     child: new Center(
-//                       child: new CircleAvatar(
-//                         backgroundColor: Colors.white,
-//                         child: new Text('$index1'),
+//         body: SingleChildScrollView(
+//           child: Column(
+//             children: [
+//               Container(
+//                 height: 40,
+//               ),
+//               //  SliverFillRemaining()
+//               StaggeredGridView.countBuilder(
+//                 physics: NeverScrollableScrollPhysics(),
+//                 shrinkWrap: true,
+//                 scrollDirection: Axis.vertical,
+//                 crossAxisCount: 4,
+//                 itemCount: images.length,
+//                 itemBuilder: (BuildContext context, int index) {
+//                   return Container(
+//                     child: Stack(children: [
+//                       Container(
+//                         padding: EdgeInsets.only(
+//                             top: 5, left: 5, right: 5, bottom: 50),
+//                         decoration: BoxDecoration(
+//                             color: Colors.white,
+//                             // color: 100 * (index % 9) == 0
+//                             //     ? Colors.pink[50]
+//                             //     : Colors.pink[100 * (index % 9)],
+//                             borderRadius: BorderRadius.circular(8),
+//                             // border: Border.all(color: Colors.black),
+//                             boxShadow: [
+//                               BoxShadow(
+//                                   color: Colors.grey.withOpacity(0.5),
+//                                   blurRadius: 1,
+//                                   offset: Offset(2, 2))
+//                             ]),
+//                         child: SizedBox(
+//                           child: Container(
+//                             decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(8),
+//                                 image: DecorationImage(
+//                                     image: AssetImage(images[index]),
+//                                     fit: BoxFit.cover),
+//                                 boxShadow: [
+//                                   // BoxShadow(
+//                                   //     color: Colors.grey.withOpacity(0.5),
+//                                   //     blurRadius: 1,
+//                                   //     offset: Offset(2, 2))
+//                                 ]),
+//                           ),
+//                         ),
 //                       ),
-//                     )),
-//             staggeredTileBuilder: (int index1) =>
-//                 new StaggeredTile.count(2, index1.isEven ? 2 : 1),
-//             mainAxisSpacing: 4.0,
-//             crossAxisSpacing: 4.0,
-//           );
-//         }, childCount: 1)),
-//   ],
-// );
+//                       Positioned(
+//                         bottom: 8,
+//                         child: Container(
+//                           alignment: Alignment.centerLeft,
+//                           child: Padding(
+//                             padding: const EdgeInsets.all(8),
+//                             child: Text(
+//                               'Hellllo',
+//                               style:
+//                                   TextStyle(color: Colors.black, fontSize: 16),
+//                             ),
+//                           ),
+//                         ),
+//                       )
+//                     ]),
+//                   );
+//                 },
+//                 // ignore: missing_return
+//                 staggeredTileBuilder: (index) {
+//                   return new StaggeredTile.count(2, index.isEven ? 3 : 4);
+//                 },
+//                 // staggeredTileBuilder: (int index) =>
+//                 //     new StaggeredTile.count(2, index.isEven ? 2 : 1),
+//                 mainAxisSpacing: 4.0,
+//                 crossAxisSpacing: 4.0,
+//               ),
+//             ],
+//           ),
+//         ));
+//   }
+// }
+        Scaffold(
+      body: NestedScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        headerSliverBuilder: (context, value) {
+          return [
+            SliverAppBar(
+              backgroundColor: Colors.white,
+              leading: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.menu_rounded,
+                  color: Colors.black,
+                ),
+              ),
+              title: Center(
+                child: Text(
+                  'Nhật ký',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              actions: [
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.search_rounded,
+                      color: Colors.black,
+                    ))
+              ],
+              // floating: true,
+              floating: true, pinned: true, snap: false,
+              elevation: 10.0,
+              expandedHeight: MediaQuery.of(context).size.height * 0.2,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  color: Colors.pink[100],
+                ),
+              ),
+            )
+          ];
+        },
+        body: StaggeredGridView.countBuilder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          crossAxisCount: 4,
+          itemCount: images.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              child: Stack(children: [
+                Container(
+                  padding:
+                      EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 50),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      // color: 100 * (index % 9) == 0
+                      //     ? Colors.pink[50]
+                      //     : Colors.pink[100 * (index % 9)],
+                      borderRadius: BorderRadius.circular(8),
+                      // border: Border.all(color: Colors.black),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 1,
+                            offset: Offset(2, 2))
+                      ]),
+                  child: SizedBox(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                              image: AssetImage(images[index]),
+                              fit: BoxFit.cover),
+                          boxShadow: [
+                            // BoxShadow(
+                            //     color: Colors.grey.withOpacity(0.5),
+                            //     blurRadius: 1,
+                            //     offset: Offset(2, 2))
+                          ]),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 8,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        'Hellllo',
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                )
+              ]),
+            );
+          },
+          // ignore: missing_return
+          staggeredTileBuilder: (index) {
+            return new StaggeredTile.count(2, index.isEven ? 3 : 4);
+          },
+          // staggeredTileBuilder: (int index) =>
+          //     new StaggeredTile.count(2, index.isEven ? 2 : 1),
+          mainAxisSpacing: 4.0,
+          crossAxisSpacing: 4.0,
+        ),
+      ),
+    );
+  }
+}
 // Scaffold(
 //     appBar: AppBar(
 //       backgroundColor: Colors.white,
