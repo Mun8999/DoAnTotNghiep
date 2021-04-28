@@ -8,7 +8,7 @@ class EditImageView extends StatefulWidget {
   _EditImageViewState createState() => _EditImageViewState();
 }
 
-double width, height;
+double? width, height;
 List<MyIcon> icons = [];
 
 class _EditImageViewState extends State<EditImageView> {

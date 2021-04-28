@@ -7,12 +7,12 @@ class LoginViewModel {
   final _userController = BehaviorSubject<String>();
   final _passController = BehaviorSubject<String>();
   final _btnLogin = BehaviorSubject<bool>();
-  var usernameValidation = StreamTransformer<String, String>.fromHandlers(
+  var usernameValidation = StreamTransformer<String, String?>.fromHandlers(
     handleData: (username, sink) {
       sink.add(Validation.validateUsername(username));
     },
   );
-  var passwordValidation = StreamTransformer<String, String>.fromHandlers(
+  var passwordValidation = StreamTransformer<String, String?>.fromHandlers(
     handleData: (password, sink) {
       sink.add(Validation.validatePassword(password));
     },
@@ -27,7 +27,7 @@ class LoginViewModel {
   Sink get loginSink => _btnLogin.sink;
 
   LoginViewModel() {
-    Rx.combineLatest2(_userController, _passController, (username, password) {
+    Rx.combineLatest2(_userController, _passController, (dynamic username, dynamic password) {
       return Validation.validateUsername(username) == null &&
           Validation.validatePassword(password) == null;
     }).listen((enable) {

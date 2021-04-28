@@ -14,7 +14,7 @@ bool isObscured = true;
 LoginViewModel loginViewModel = LoginViewModel();
 TextEditingController userController = new TextEditingController(),
     passController = new TextEditingController();
-double widthOfContext, heightOfContext;
+double? widthOfContext, heightOfContext;
 bool isTapLogin = true;
 
 class _LoginViewState extends State<LoginView> {
@@ -62,7 +62,7 @@ class _LoginViewState extends State<LoginView> {
       height: heightOfContext,
       width: widthOfContext,
       decoration: BoxDecoration(
-        color: Colors.pink[100].withOpacity(0.3),
+        color: Colors.pink[100]!.withOpacity(0.3),
         image: DecorationImage(
             colorFilter: ColorFilter.mode(
                 Colors.pink.withOpacity(0.2), BlendMode.dstATop),
@@ -84,7 +84,7 @@ class _LoginViewState extends State<LoginView> {
             buildIcon(),
             buildTextIntro(),
             SizedBox(
-              height: heightOfContext * 0.2,
+              height: heightOfContext! * 0.2,
               width: widthOfContext,
             ),
             //Set login container
@@ -106,7 +106,7 @@ class _LoginViewState extends State<LoginView> {
               ),
             ),
             SizedBox(
-              height: heightOfContext * 0.01,
+              height: heightOfContext! * 0.01,
             ),
           ],
         ),
@@ -189,8 +189,8 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget buildUsernameWidget() {
-    return StreamBuilder<String>(
-        stream: loginViewModel.userStream,
+    return StreamBuilder<String?>(
+        stream: loginViewModel.userStream as Stream<String?>?,
         builder: (context, snapshot) {
           return TextField(
             controller: userController,
@@ -225,8 +225,8 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget buildPasswordWidget() {
-    return StreamBuilder<String>(
-        stream: loginViewModel.passStream,
+    return StreamBuilder<String?>(
+        stream: loginViewModel.passStream as Stream<String?>?,
         builder: (context, snapshot) {
           return TextField(
             controller: passController,
@@ -269,8 +269,8 @@ class _LoginViewState extends State<LoginView> {
 
   Widget buildIcon() {
     return Container(
-      height: widthOfContext * 0.3,
-      width: widthOfContext * 0.3,
+      height: widthOfContext! * 0.3,
+      width: widthOfContext! * 0.3,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
@@ -357,7 +357,7 @@ class _LoginViewState extends State<LoginView> {
             width: widthOfContext,
             height: 60,
             child: StreamBuilder<bool>(
-                stream: loginViewModel.loginStream,
+                stream: loginViewModel.loginStream as Stream<bool>?,
                 builder: (context, snapshot) {
                   return RaisedButton(
                     onPressed: onLoginPressed,

@@ -106,7 +106,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                               // padding: EdgeInsets.all(10),
                               padding: EdgeInsets.only(left: 10, right: 10),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey[600]),
+                                  border: Border.all(color: Colors.grey[600]!),
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(20),
                                       bottomLeft: Radius.circular(20))),

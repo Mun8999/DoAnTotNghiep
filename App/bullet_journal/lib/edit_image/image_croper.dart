@@ -43,7 +43,7 @@ class _ImageCroperViewState extends State<ImageCroperView> {
     );
   }
 
-  Future<File> cropSquareImage(File file) async {
+  Future<File?> cropSquareImage(File file) async {
     return await ImageCropper.cropImage(
         sourcePath: file.path,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),

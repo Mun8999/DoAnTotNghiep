@@ -1,7 +1,7 @@
 class MyIcon {
-  String id;
-  String name;
-  String path;
+  String? id;
+  late String name;
+  late String path;
   MyIcon(id, name, path) {
     this.id = id;
     this.name = name;
