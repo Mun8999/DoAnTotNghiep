@@ -1,4 +1,4 @@
-import 'package:bullet_journel/snap_photo/snap_photo_viewmodel.dart';
+import 'package:bullet_journal/snap_photo/snap_photo_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class SnapPhotoView extends StatefulWidget {
@@ -66,11 +66,13 @@ class _SnapPhotoViewState extends State<SnapPhotoView> {
             child: Column(
               children: [
                 StreamBuilder<BlendMode>(
-                    stream: editImageViewModel.filterImageStream as Stream<BlendMode>?,
+                    stream: editImageViewModel.filterImageStream
+                        as Stream<BlendMode>?,
                     builder: (context, blendMode) {
                       // print(blendMode.data);
                       return StreamBuilder<double>(
-                          stream: editImageViewModel.sliderStream as Stream<double>?,
+                          stream: editImageViewModel.sliderStream
+                              as Stream<double>?,
                           builder: (context, slider) {
                             return Container(
                               height: width * (4 / 3),
@@ -83,8 +85,8 @@ class _SnapPhotoViewState extends State<SnapPhotoView> {
                                       fit: BoxFit.cover,
                                       colorFilter: ColorFilter.mode(
                                         slider.hasData
-                                            ? Colors.white54
-                                                .withOpacity(slider.data! * 0.01)
+                                            ? Colors.white54.withOpacity(
+                                                slider.data! * 0.01)
                                             : Colors.white.withOpacity(0),
                                         blendMode.data!,
                                       ))),

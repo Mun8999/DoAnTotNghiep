@@ -1,18 +1,18 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:bullet_journel/my_lib/photo_view.dart'
+import 'package:bullet_journal/my_lib/photo_view.dart'
     show
         PhotoViewScaleState,
         PhotoViewHeroAttributes,
         PhotoViewImageTapDownCallback,
         PhotoViewImageTapUpCallback,
         ScaleStateCycle;
-import 'package:bullet_journel/my_lib/src/controller/photo_view_controller.dart';
-import 'package:bullet_journel/my_lib/src/controller/photo_view_controller_delegate.dart';
-import 'package:bullet_journel/my_lib/src/controller/photo_view_scalestate_controller.dart';
-import 'package:bullet_journel/my_lib/src/utils/photo_view_utils.dart';
-import 'package:bullet_journel/my_lib/src/core/photo_view_gesture_detector.dart';
-import 'package:bullet_journel/my_lib/src/core/photo_view_hit_corners.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_controller.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_controller_delegate.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_scalestate_controller.dart';
+import 'package:bullet_journal/my_lib/src/utils/photo_view_utils.dart';
+import 'package:bullet_journal/my_lib/src/core/photo_view_gesture_detector.dart';
+import 'package:bullet_journal/my_lib/src/core/photo_view_hit_corners.dart';
 
 const _defaultDecoration = const BoxDecoration(
   color: const Color.fromRGBO(0, 0, 0, 1.0),

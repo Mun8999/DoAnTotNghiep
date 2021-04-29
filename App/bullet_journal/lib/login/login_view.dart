@@ -1,7 +1,7 @@
 import 'dart:ui';
-import 'package:bullet_journel/assets/icons/db_icons.dart';
-import 'package:bullet_journel/snap_photo/snap_photo_view.dart';
-import 'package:bullet_journel/login/login_viewmodel.dart';
+import 'package:bullet_journal/assets/icons/db_icons.dart';
+import 'package:bullet_journal/snap_photo/snap_photo_view.dart';
+import 'package:bullet_journal/login/login_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

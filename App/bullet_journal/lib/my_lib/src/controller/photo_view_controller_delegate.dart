@@ -2,17 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 
-import 'package:bullet_journel/my_lib/photo_view.dart'
+import 'package:bullet_journal/my_lib/photo_view.dart'
     show
         PhotoViewControllerBase,
         PhotoViewScaleState,
         PhotoViewScaleStateController,
         ScaleStateCycle;
-import 'package:bullet_journel/my_lib/src/core/photo_view_core.dart';
-import 'package:bullet_journel/my_lib/src/photo_view_scale_state.dart';
-import 'package:bullet_journel/my_lib/src/utils/photo_view_utils.dart';
-import 'package:bullet_journel/my_lib/src/controller/photo_view_controller.dart';
-import 'package:bullet_journel/my_lib/src/controller/photo_view_scalestate_controller.dart';
+import 'package:bullet_journal/my_lib/src/core/photo_view_core.dart';
+import 'package:bullet_journal/my_lib/src/photo_view_scale_state.dart';
+import 'package:bullet_journal/my_lib/src/utils/photo_view_utils.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_controller.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_scalestate_controller.dart';
 
 /// A  class to hold internal layout logic to sync both controller states
 ///

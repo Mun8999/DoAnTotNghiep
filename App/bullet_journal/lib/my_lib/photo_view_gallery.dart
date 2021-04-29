@@ -1,10 +1,10 @@
 library photo_view_gallery;
 
 //moi them //moi them //moi them //moi them //moi them //moi them
-import 'package:bullet_journel/my_lib/src/controller/photo_view_controller.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:bullet_journel/my_lib/photo_view.dart' //moi them
+import 'package:bullet_journal/my_lib/photo_view.dart' //moi them
     show
         LoadingBuilder,
         PhotoView,
@@ -13,10 +13,10 @@ import 'package:bullet_journel/my_lib/photo_view.dart' //moi them
         ScaleStateCycle;
 
 // import 'package:my_test/src/controller/photo_view_controller.dart';
-import 'package:bullet_journel/my_lib/src/controller/photo_view_scalestate_controller.dart';
-import 'package:bullet_journel/my_lib/src/core/photo_view_gesture_detector.dart';
-import 'package:bullet_journel/my_lib/src/photo_view_scale_state.dart';
-import 'package:bullet_journel/my_lib/src/utils/photo_view_hero_attributes.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_scalestate_controller.dart';
+import 'package:bullet_journal/my_lib/src/core/photo_view_gesture_detector.dart';
+import 'package:bullet_journal/my_lib/src/photo_view_scale_state.dart';
+import 'package:bullet_journal/my_lib/src/utils/photo_view_hero_attributes.dart';
 
 /// A type definition for a [Function] that receives a index after a page change in [PhotoViewGallery]
 typedef PhotoViewGalleryPageChangedCallback = void Function(int index);

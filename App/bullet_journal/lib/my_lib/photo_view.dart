@@ -2,13 +2,13 @@ library photo_view;
 
 import 'package:flutter/material.dart';
 
-import 'package:bullet_journel/my_lib/src/controller/photo_view_controller.dart';
-import 'package:bullet_journel/my_lib/src/controller/photo_view_scalestate_controller.dart';
-import 'package:bullet_journel/my_lib/src/core/photo_view_core.dart';
-import 'package:bullet_journel/my_lib/src/photo_view_computed_scale.dart';
-import 'package:bullet_journel/my_lib/src/photo_view_scale_state.dart';
-import 'package:bullet_journel/my_lib/src/photo_view_wrappers.dart';
-import 'package:bullet_journel/my_lib/src/utils/photo_view_hero_attributes.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_controller.dart';
+import 'package:bullet_journal/my_lib/src/controller/photo_view_scalestate_controller.dart';
+import 'package:bullet_journal/my_lib/src/core/photo_view_core.dart';
+import 'package:bullet_journal/my_lib/src/photo_view_computed_scale.dart';
+import 'package:bullet_journal/my_lib/src/photo_view_scale_state.dart';
+import 'package:bullet_journal/my_lib/src/photo_view_wrappers.dart';
+import 'package:bullet_journal/my_lib/src/utils/photo_view_hero_attributes.dart';
 
 export '/my_lib/src/controller/photo_view_controller.dart';
 export '/my_lib/src/controller/photo_view_scalestate_controller.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bullet_journel/login/validation.dart';
+import 'package:bullet_journal/login/validation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginViewModel {
@@ -27,7 +27,8 @@ class LoginViewModel {
   Sink get loginSink => _btnLogin.sink;
 
   LoginViewModel() {
-    Rx.combineLatest2(_userController, _passController, (dynamic username, dynamic password) {
+    Rx.combineLatest2(_userController, _passController,
+        (dynamic username, dynamic password) {
       return Validation.validateUsername(username) == null &&
           Validation.validatePassword(password) == null;
     }).listen((enable) {

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
-import 'package:bullet_journel/my_lib/src/utils/ignorable_change_notifier.dart';
+import 'package:bullet_journal/my_lib/src/utils/ignorable_change_notifier.dart';
 
 /// The interface in which controllers will be implemented.
 ///

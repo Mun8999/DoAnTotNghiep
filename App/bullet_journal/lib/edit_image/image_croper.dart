@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bullet_journel/edit_image/utils.dart';
+import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 

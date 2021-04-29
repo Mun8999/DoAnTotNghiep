@@ -1,5 +1,5 @@
-import 'package:bullet_journel/edit_image/image_croper.dart';
-import 'package:bullet_journel/model/icon.dart';
+import 'package:bullet_journal/edit_image/image_croper.dart';
+import 'package:bullet_journal/model/icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
