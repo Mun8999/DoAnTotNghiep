@@ -1,5 +1,4 @@
-// import 'package:bullet_journel/snap_photo/snap_photo_view.dart';
-import 'package:bullet_journal/diary_newsfeed/diary_nf_view.dart';
+import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_view.dart';
 import 'package:bullet_journal/edit_image/edit_image_view.dart';
 import 'package:bullet_journal/login/login_view.dart';
 import 'package:bullet_journal/sticker_widget/sticker_widget_view.dart';

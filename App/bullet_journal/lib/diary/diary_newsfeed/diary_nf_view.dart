@@ -1,6 +1,9 @@
+// import 'dart:html';
 import 'dart:ui';
 
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
+import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
+import 'package:bullet_journal/model/diary.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
@@ -101,6 +104,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                               children: [
                                 TextFormField(
                                   // showCursor: isTapedStatus,
+                                  maxLines: 3,
                                   style: TextStyle(fontSize: 16),
                                   cursorColor: Colors.black,
                                   decoration: InputDecoration(
@@ -167,93 +171,111 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
             scrollDirection: Axis.vertical,
             itemCount: images.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 250,
-                  child: Stack(children: [
-                    Container(
-                      height: 250,
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          // color: 100 * (index % 9) == 0
-                          //     ? Colors.pink[50]
-                          //     : Colors.pink[100 * (index % 9)],
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                blurRadius: 1,
-                                offset: Offset(2, 2))
-                          ]),
-                      // child:
-                    ),
-                    Positioned(
-                      top: 10,
-                      left: index % 2 == 0 ? null : 10,
-                      right: index % 2 != 0 ? null : 10,
-                      child: Stack(
-                        children: [
-                          Container(
-                            height: 200,
-                            width: 150,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: 100 * (index % 9) == 0
-                                    ? Colors.yellow[50]
-                                    : Colors.yellow[100 * (index % 9)]),
-                          ),
-                          Column(
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text('Đom Đóm - Jack',
-                                      style: GoogleFonts.dancingScript(
-                                          fontSize: 16))),
-                              Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                      '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-                                      style: GoogleFonts.dancingScript(
-                                          fontSize: 11)))
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 10,
-                      left: index % 2 == 0 ? 10 : null,
-                      right: index % 2 != 0 ? 10 : null,
-                      child: Container(
-                        height: 200,
-                        width: 200,
+              return InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      Diary diary = Diary(
+                          '1',
+                          'Đom Đóm - Jack',
+                          '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+                          DateTime.now(),
+                          null);
+                      return DiaryEditView(diary);
+                    },
+                  ));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 250,
+                    child: Stack(children: [
+                      Container(
+                        height: 250,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                              image: AssetImage(images[index]),
-                              fit: BoxFit.cover),
+                            color: Colors.black,
+                            // color: 100 * (index % 9) == 0
+                            //     ? Colors.pink[50]
+                            //     : Colors.pink[100 * (index % 9)],
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  blurRadius: 1,
+                                  offset: Offset(3, 3))
+                            ]),
+                        // child:
+                      ),
+                      Positioned(
+                        top: 10,
+                        left: index % 2 == 0 ? null : 10,
+                        right: index % 2 != 0 ? null : 10,
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 200,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: 100 * (index % 9) == 0
+                                      ? Colors.yellow[50]
+                                      : Colors.yellow[100 * (index % 9)]),
+                            ),
+                            Column(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text('Đom Đóm - Jack',
+                                        style: GoogleFonts.dancingScript(
+                                            fontSize: 16))),
+                                Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(
+                                        '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+                                        style: GoogleFonts.dancingScript(
+                                            fontSize: 11)))
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 5,
-                      left: index % 2 == 0 ? 10 : null,
-                      right: index % 2 != 0 ? 10 : null,
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            '09-09-2021',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.7),
-                                fontSize: 16),
+                      Positioned(
+                        top: 10,
+                        left: index % 2 == 0 ? 10 : null,
+                        right: index % 2 != 0 ? 10 : null,
+                        child: Container(
+                          height: 200,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                                image: AssetImage(images[index]),
+                                fit: BoxFit.cover),
                           ),
                         ),
                       ),
-                    )
-                  ]),
+                      Positioned(
+                        bottom: 5,
+                        left: index % 2 == 0 ? 10 : null,
+                        right: index % 2 != 0 ? 10 : null,
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text('9 tháng 9, 2021',
+                                style: GoogleFonts.oswald(
+                                    fontSize: 16,
+                                    color: Colors.white.withOpacity(0.7))
+                                // TextStyle(
+
+                                //     color: Colors.white.withOpacity(0.7),
+                                //     fontSize: 16),
+                                ),
+                          ),
+                        ),
+                      )
+                    ]),
+                  ),
                 ),
               );
             },
