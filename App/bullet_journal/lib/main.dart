@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:bullet_journal/main/my_app.dart';
 import 'package:flutter/material.dart';
 

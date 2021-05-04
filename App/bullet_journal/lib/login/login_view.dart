@@ -274,7 +274,7 @@ class _LoginViewState extends State<LoginView> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
-          image: AssetImage('assets/icons/icon_cat.png'),
+          image: AssetImage('assets/icons/cat_icon.png'),
           fit: BoxFit.contain,
           // colorFilter: ColorFilter.mode(
           //     Colors.pink.withOpacity(0.7), BlendMode.dstATop)

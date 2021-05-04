@@ -1,0 +1,225 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 22/06/2016 15:02
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-addition-plus-sign:before { content: "\f100"; }
+.flaticon-address-book-black-shape:before { content: "\f101"; }
+.flaticon-airplane-facing-left:before { content: "\f102"; }
+.flaticon-arrow-pointing-upwards:before { content: "\f103"; }
+.flaticon-battery-full:before { content: "\f104"; }
+.flaticon-big-black-heart:before { content: "\f105"; }
+.flaticon-black-arrowhead-pointing-up:before { content: "\f106"; }
+.flaticon-black-clipboard:before { content: "\f107"; }
+.flaticon-black-clipboard-1:before { content: "\f108"; }
+.flaticon-black-empty-speech-bubble:before { content: "\f109"; }
+.flaticon-black-lightbulb:before { content: "\f10a"; }
+.flaticon-black-paper-bag:before { content: "\f10b"; }
+.flaticon-black-paper-calendar-with-spring:before { content: "\f10c"; }
+.flaticon-black-shop-tag:before { content: "\f10d"; }
+.flaticon-black-tool-box:before { content: "\f10e"; }
+.flaticon-black-user-shape:before { content: "\f10f"; }
+.flaticon-blank-page-folded-corner:before { content: "\f110"; }
+.flaticon-book-pile:before { content: "\f111"; }
+.flaticon-building-with-columns:before { content: "\f112"; }
+.flaticon-calligraphic-dollar-sign-on-circle:before { content: "\f113"; }
+.flaticon-chat-bubble-with-text:before { content: "\f114"; }
+.flaticon-circular-clock-three-o-clock:before { content: "\f115"; }
+.flaticon-circular-dart-board:before { content: "\f116"; }
+.flaticon-circular-shooting-target:before { content: "\f117"; }
+.flaticon-circular-upload-sign:before { content: "\f118"; }
+.flaticon-closed:before { content: "\f119"; }
+.flaticon-closed-black-briefcase:before { content: "\f11a"; }
+.flaticon-clothes-hanging-tool:before { content: "\f11b"; }
+.flaticon-coconut-tree:before { content: "\f11c"; }
+.flaticon-computing-mouse:before { content: "\f11d"; }
+.flaticon-cotton-t-shirt:before { content: "\f11e"; }
+.flaticon-cup-with-hot-drink:before { content: "\f11f"; }
+.flaticon-cut-triangle-flag:before { content: "\f120"; }
+.flaticon-database:before { content: "\f121"; }
+.flaticon-day-17-calendar:before { content: "\f122"; }
+.flaticon-download-arrow-circle:before { content: "\f123"; }
+.flaticon-draw-dropbox-logo:before { content: "\f124"; }
+.flaticon-draw-recycle-arrows:before { content: "\f125"; }
+.flaticon-email-envelope:before { content: "\f126"; }
+.flaticon-fence-with-grass:before { content: "\f127"; }
+.flaticon-flower-with-dark-petals:before { content: "\f128"; }
+.flaticon-full-tray:before { content: "\f129"; }
+.flaticon-fully-charged-battery-status:before { content: "\f12a"; }
+.flaticon-game-controller:before { content: "\f12b"; }
+.flaticon-growth-chart:before { content: "\f12c"; }
+.flaticon-home-with-hearth:before { content: "\f12d"; }
+.flaticon-increasing-bar-chart:before { content: "\f12e"; }
+.flaticon-insert-picture-icon:before { content: "\f12f"; }
+.flaticon-large-smartphone:before { content: "\f130"; }
+.flaticon-long-calculator:before { content: "\f131"; }
+.flaticon-magnifying-tool:before { content: "\f132"; }
+.flaticon-map-point-flag:before { content: "\f133"; }
+.flaticon-microphone-on-stand:before { content: "\f134"; }
+.flaticon-money-card:before { content: "\f135"; }
+.flaticon-music-player-sign:before { content: "\f136"; }
+.flaticon-notebook:before { content: "\f137"; }
+.flaticon-office-paper-clip:before { content: "\f138"; }
+.flaticon-old-mobile-phone:before { content: "\f139"; }
+.flaticon-old-storage-unit:before { content: "\f13a"; }
+.flaticon-open-laptop-computer:before { content: "\f13b"; }
+.flaticon-open-office-folder:before { content: "\f13c"; }
+.flaticon-paint-color-palette:before { content: "\f13d"; }
+.flaticon-parallel-lines:before { content: "\f13e"; }
+.flaticon-photogram-strips:before { content: "\f13f"; }
+.flaticon-photographer-camera:before { content: "\f140"; }
+.flaticon-picnic-basket:before { content: "\f141"; }
+.flaticon-pie-chart-sliced:before { content: "\f142"; }
+.flaticon-pointer-on-the-map:before { content: "\f143"; }
+.flaticon-power-on-semicircle:before { content: "\f144"; }
+.flaticon-printer-with-document:before { content: "\f145"; }
+.flaticon-projected-presentation:before { content: "\f146"; }
+.flaticon-question-button:before { content: "\f147"; }
+.flaticon-rounded-shop-cart:before { content: "\f148"; }
+.flaticon-screen:before { content: "\f149"; }
+.flaticon-screwdriver-and-wrench-symbol:before { content: "\f14a"; }
+.flaticon-sea-starfish:before { content: "\f14b"; }
+.flaticon-sharp-paper-airplane:before { content: "\f14c"; }
+.flaticon-small-black-cloud:before { content: "\f14d"; }
+.flaticon-small-thunderbolt:before { content: "\f14e"; }
+.flaticon-star-sign:before { content: "\f14f"; }
+.flaticon-tablet-screen:before { content: "\f150"; }
+.flaticon-telephone-call-sign:before { content: "\f151"; }
+.flaticon-temperature-thermometer:before { content: "\f152"; }
+.flaticon-tiny-compass:before { content: "\f153"; }
+.flaticon-toxic-cross:before { content: "\f154"; }
+.flaticon-unlocked-lock:before { content: "\f155"; }
+.flaticon-visitor-identification:before { content: "\f156"; }
+.flaticon-waste-bin-with-cover:before { content: "\f157"; }
+.flaticon-wifi-button:before { content: "\f158"; }
+.flaticon-work-tray:before { content: "\f159"; }
+.flaticon-world-symbol:before { content: "\f15a"; }
+.flaticon-wrapped-present-box:before { content: "\f15b"; }
+.flaticon-written-letter:before { content: "\f15c"; }
+    
+    $font-Flaticon-addition-plus-sign: "\f100";
+    $font-Flaticon-address-book-black-shape: "\f101";
+    $font-Flaticon-airplane-facing-left: "\f102";
+    $font-Flaticon-arrow-pointing-upwards: "\f103";
+    $font-Flaticon-battery-full: "\f104";
+    $font-Flaticon-big-black-heart: "\f105";
+    $font-Flaticon-black-arrowhead-pointing-up: "\f106";
+    $font-Flaticon-black-clipboard: "\f107";
+    $font-Flaticon-black-clipboard-1: "\f108";
+    $font-Flaticon-black-empty-speech-bubble: "\f109";
+    $font-Flaticon-black-lightbulb: "\f10a";
+    $font-Flaticon-black-paper-bag: "\f10b";
+    $font-Flaticon-black-paper-calendar-with-spring: "\f10c";
+    $font-Flaticon-black-shop-tag: "\f10d";
+    $font-Flaticon-black-tool-box: "\f10e";
+    $font-Flaticon-black-user-shape: "\f10f";
+    $font-Flaticon-blank-page-folded-corner: "\f110";
+    $font-Flaticon-book-pile: "\f111";
+    $font-Flaticon-building-with-columns: "\f112";
+    $font-Flaticon-calligraphic-dollar-sign-on-circle: "\f113";
+    $font-Flaticon-chat-bubble-with-text: "\f114";
+    $font-Flaticon-circular-clock-three-o-clock: "\f115";
+    $font-Flaticon-circular-dart-board: "\f116";
+    $font-Flaticon-circular-shooting-target: "\f117";
+    $font-Flaticon-circular-upload-sign: "\f118";
+    $font-Flaticon-closed: "\f119";
+    $font-Flaticon-closed-black-briefcase: "\f11a";
+    $font-Flaticon-clothes-hanging-tool: "\f11b";
+    $font-Flaticon-coconut-tree: "\f11c";
+    $font-Flaticon-computing-mouse: "\f11d";
+    $font-Flaticon-cotton-t-shirt: "\f11e";
+    $font-Flaticon-cup-with-hot-drink: "\f11f";
+    $font-Flaticon-cut-triangle-flag: "\f120";
+    $font-Flaticon-database: "\f121";
+    $font-Flaticon-day-17-calendar: "\f122";
+    $font-Flaticon-download-arrow-circle: "\f123";
+    $font-Flaticon-draw-dropbox-logo: "\f124";
+    $font-Flaticon-draw-recycle-arrows: "\f125";
+    $font-Flaticon-email-envelope: "\f126";
+    $font-Flaticon-fence-with-grass: "\f127";
+    $font-Flaticon-flower-with-dark-petals: "\f128";
+    $font-Flaticon-full-tray: "\f129";
+    $font-Flaticon-fully-charged-battery-status: "\f12a";
+    $font-Flaticon-game-controller: "\f12b";
+    $font-Flaticon-growth-chart: "\f12c";
+    $font-Flaticon-home-with-hearth: "\f12d";
+    $font-Flaticon-increasing-bar-chart: "\f12e";
+    $font-Flaticon-insert-picture-icon: "\f12f";
+    $font-Flaticon-large-smartphone: "\f130";
+    $font-Flaticon-long-calculator: "\f131";
+    $font-Flaticon-magnifying-tool: "\f132";
+    $font-Flaticon-map-point-flag: "\f133";
+    $font-Flaticon-microphone-on-stand: "\f134";
+    $font-Flaticon-money-card: "\f135";
+    $font-Flaticon-music-player-sign: "\f136";
+    $font-Flaticon-notebook: "\f137";
+    $font-Flaticon-office-paper-clip: "\f138";
+    $font-Flaticon-old-mobile-phone: "\f139";
+    $font-Flaticon-old-storage-unit: "\f13a";
+    $font-Flaticon-open-laptop-computer: "\f13b";
+    $font-Flaticon-open-office-folder: "\f13c";
+    $font-Flaticon-paint-color-palette: "\f13d";
+    $font-Flaticon-parallel-lines: "\f13e";
+    $font-Flaticon-photogram-strips: "\f13f";
+    $font-Flaticon-photographer-camera: "\f140";
+    $font-Flaticon-picnic-basket: "\f141";
+    $font-Flaticon-pie-chart-sliced: "\f142";
+    $font-Flaticon-pointer-on-the-map: "\f143";
+    $font-Flaticon-power-on-semicircle: "\f144";
+    $font-Flaticon-printer-with-document: "\f145";
+    $font-Flaticon-projected-presentation: "\f146";
+    $font-Flaticon-question-button: "\f147";
+    $font-Flaticon-rounded-shop-cart: "\f148";
+    $font-Flaticon-screen: "\f149";
+    $font-Flaticon-screwdriver-and-wrench-symbol: "\f14a";
+    $font-Flaticon-sea-starfish: "\f14b";
+    $font-Flaticon-sharp-paper-airplane: "\f14c";
+    $font-Flaticon-small-black-cloud: "\f14d";
+    $font-Flaticon-small-thunderbolt: "\f14e";
+    $font-Flaticon-star-sign: "\f14f";
+    $font-Flaticon-tablet-screen: "\f150";
+    $font-Flaticon-telephone-call-sign: "\f151";
+    $font-Flaticon-temperature-thermometer: "\f152";
+    $font-Flaticon-tiny-compass: "\f153";
+    $font-Flaticon-toxic-cross: "\f154";
+    $font-Flaticon-unlocked-lock: "\f155";
+    $font-Flaticon-visitor-identification: "\f156";
+    $font-Flaticon-waste-bin-with-cover: "\f157";
+    $font-Flaticon-wifi-button: "\f158";
+    $font-Flaticon-work-tray: "\f159";
+    $font-Flaticon-world-symbol: "\f15a";
+    $font-Flaticon-wrapped-present-box: "\f15b";
+    $font-Flaticon-written-letter: "\f15c";
