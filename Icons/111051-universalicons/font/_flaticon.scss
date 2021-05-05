@@ -1,0 +1,725 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 22/06/2016 15:06
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-angry-face:before { content: "\f100"; }
+.flaticon-angry-face-of-square-shape-and-straight-lines:before { content: "\f101"; }
+.flaticon-angry-face-of-square-shape-outline:before { content: "\f102"; }
+.flaticon-arrow-pointing-to-left:before { content: "\f103"; }
+.flaticon-arrow-turning-to-right:before { content: "\f104"; }
+.flaticon-arrows-circle:before { content: "\f105"; }
+.flaticon-audio-headset-tool:before { content: "\f106"; }
+.flaticon-bad-face:before { content: "\f107"; }
+.flaticon-bars-graphic:before { content: "\f108"; }
+.flaticon-bars-graphic-1:before { content: "\f109"; }
+.flaticon-bars-symbol:before { content: "\f10a"; }
+.flaticon-basket-black-shape:before { content: "\f10b"; }
+.flaticon-battery-almost-full:before { content: "\f10c"; }
+.flaticon-battery-status-sign-with-less-than-half-energy-charge:before { content: "\f10d"; }
+.flaticon-birds-home:before { content: "\f10e"; }
+.flaticon-bishop-chess-piece:before { content: "\f10f"; }
+.flaticon-black-folder-shape-for-interface:before { content: "\f110"; }
+.flaticon-black-golf-ball:before { content: "\f111"; }
+.flaticon-black-hand-pointing-to-right:before { content: "\f112"; }
+.flaticon-black-hand-pointing-up:before { content: "\f113"; }
+.flaticon-black-heart-love-symbol:before { content: "\f114"; }
+.flaticon-black-label-in-horizontal-position:before { content: "\f115"; }
+.flaticon-black-male-user-symbol:before { content: "\f116"; }
+.flaticon-black-open-envelope-back:before { content: "\f117"; }
+.flaticon-black-placeholder-variant:before { content: "\f118"; }
+.flaticon-black-suitcase:before { content: "\f119"; }
+.flaticon-black-triangular-arrowhead-pointing-to-left-direction:before { content: "\f11a"; }
+.flaticon-blind-face:before { content: "\f11b"; }
+.flaticon-blind-square-face:before { content: "\f11c"; }
+.flaticon-boring-face:before { content: "\f11d"; }
+.flaticon-brush-tool:before { content: "\f11e"; }
+.flaticon-bubbles-interface-symbol-for-talk:before { content: "\f11f"; }
+.flaticon-buildings:before { content: "\f120"; }
+.flaticon-calculator:before { content: "\f121"; }
+.flaticon-calendar-page-symbol-on-day-15:before { content: "\f122"; }
+.flaticon-calling-out-symbol-of-auricular-with-arrow:before { content: "\f123"; }
+.flaticon-camera-to-take-photos:before { content: "\f124"; }
+.flaticon-centered-paragraph-text-lines-symbol-for-interface:before { content: "\f125"; }
+.flaticon-check-document-interface-square-symbol:before { content: "\f126"; }
+.flaticon-check-mark-in-a-circle:before { content: "\f127"; }
+.flaticon-check-sign:before { content: "\f128"; }
+.flaticon-checked-page-symbol:before { content: "\f129"; }
+.flaticon-circle-of-arrows-couple:before { content: "\f12a"; }
+.flaticon-circular-clock-symbol-for-interface:before { content: "\f12b"; }
+.flaticon-clock-circular-tool-shape:before { content: "\f12c"; }
+.flaticon-close-hanging-signal-for-commerce:before { content: "\f12d"; }
+.flaticon-cloud-black-shape-with-a-cross:before { content: "\f12e"; }
+.flaticon-cloud-black-shape-with-three-dots-inside:before { content: "\f12f"; }
+.flaticon-cloud-lock:before { content: "\f130"; }
+.flaticon-cloud-with-check-sign:before { content: "\f131"; }
+.flaticon-cloud-with-minus-sign:before { content: "\f132"; }
+.flaticon-clover-black-shape:before { content: "\f133"; }
+.flaticon-cogs-on-wheels-interface-symbol-for-settings-edition-button:before { content: "\f134"; }
+.flaticon-cogwheel:before { content: "\f135"; }
+.flaticon-coins-stack:before { content: "\f136"; }
+.flaticon-color-palette-for-painter:before { content: "\f137"; }
+.flaticon-creative-lightbulb-symbol-black-shape:before { content: "\f138"; }
+.flaticon-credit-card-tool:before { content: "\f139"; }
+.flaticon-cross-delete-or-close-circular-button-interface-symbol:before { content: "\f13a"; }
+.flaticon-cross-gross-symbol:before { content: "\f13b"; }
+.flaticon-cross-in-a-circle:before { content: "\f13c"; }
+.flaticon-dark-cloud-shape:before { content: "\f13d"; }
+.flaticon-diamond-symbol:before { content: "\f13e"; }
+.flaticon-dice-with-five-dots:before { content: "\f13f"; }
+.flaticon-disc-outline-of-gross-line:before { content: "\f140"; }
+.flaticon-discs:before { content: "\f141"; }
+.flaticon-doctor-suitcase-with-a-cross:before { content: "\f142"; }
+.flaticon-document-lock-interface-security-symbol:before { content: "\f143"; }
+.flaticon-document-lock-symbol:before { content: "\f144"; }
+.flaticon-document-rounded-square-interface-symbol-with-text-lines:before { content: "\f145"; }
+.flaticon-document-with-minus-sign:before { content: "\f146"; }
+.flaticon-documents-check-interface-symbol-of-text-lines-in-rounded-square:before { content: "\f147"; }
+.flaticon-documents-plus-symbol-for-interface-with-rounded-square-shape:before { content: "\f148"; }
+.flaticon-documents-rounded-square-symbol:before { content: "\f149"; }
+.flaticon-dollar-coin:before { content: "\f14a"; }
+.flaticon-dollar-coin-symbol:before { content: "\f14b"; }
+.flaticon-dollar-sign:before { content: "\f14c"; }
+.flaticon-down-arrow:before { content: "\f14d"; }
+.flaticon-down-arrow-1:before { content: "\f14e"; }
+.flaticon-down-arrow-in-a-circle:before { content: "\f14f"; }
+.flaticon-down-arrowhead-in-a-circle:before { content: "\f150"; }
+.flaticon-down-arrows:before { content: "\f151"; }
+.flaticon-down-double-arrow:before { content: "\f152"; }
+.flaticon-download-symbol:before { content: "\f153"; }
+.flaticon-emoticon-in-love-of-square-face-shape:before { content: "\f154"; }
+.flaticon-empty-battery-interface-status-symbol:before { content: "\f155"; }
+.flaticon-empty-glass-outline:before { content: "\f156"; }
+.flaticon-equalizer:before { content: "\f157"; }
+.flaticon-euro:before { content: "\f158"; }
+.flaticon-euro-coin:before { content: "\f159"; }
+.flaticon-euro-sign-in-a-circle:before { content: "\f15a"; }
+.flaticon-exclamation-sign-warning-interface-symbol:before { content: "\f15b"; }
+.flaticon-eye-shape-variant-interface-view-symbol:before { content: "\f15c"; }
+.flaticon-eyedropper-black-tool-silhouette:before { content: "\f15d"; }
+.flaticon-eyeglass-of-rectangular-shape:before { content: "\f15e"; }
+.flaticon-eyeglasses-of-circular-shape:before { content: "\f15f"; }
+.flaticon-face-of-silence-with-a-cross-as-mouth:before { content: "\f160"; }
+.flaticon-facebook-logo:before { content: "\f161"; }
+.flaticon-facebook-logo-in-circular-shape:before { content: "\f162"; }
+.flaticon-female-symbol:before { content: "\f163"; }
+.flaticon-floating-tool-to-save-lives:before { content: "\f164"; }
+.flaticon-folder-check-symbol:before { content: "\f165"; }
+.flaticon-folder-with-minus-sign-interface-symbol:before { content: "\f166"; }
+.flaticon-folder-with-plus-sign-for-interface-button-to-add:before { content: "\f167"; }
+.flaticon-four-arrows-interface-symbol-to-maximize-size:before { content: "\f168"; }
+.flaticon-four-arrows-pointing-center-interface-symbol-to-minimize:before { content: "\f169"; }
+.flaticon-free-tag-for-commerce:before { content: "\f16a"; }
+.flaticon-frown-face:before { content: "\f16b"; }
+.flaticon-glass:before { content: "\f16c"; }
+.flaticon-glass-full-of-liquid:before { content: "\f16d"; }
+.flaticon-global-interface-symbol-of-earth-grid:before { content: "\f16e"; }
+.flaticon-graphic-page:before { content: "\f16f"; }
+.flaticon-graphic-page-symbol:before { content: "\f170"; }
+.flaticon-hand-pointing-down:before { content: "\f171"; }
+.flaticon-hand-pointing-to-left-direction:before { content: "\f172"; }
+.flaticon-hand-watch:before { content: "\f173"; }
+.flaticon-happy-face:before { content: "\f174"; }
+.flaticon-hd:before { content: "\f175"; }
+.flaticon-heart-black-shape-symbol:before { content: "\f176"; }
+.flaticon-hearts:before { content: "\f177"; }
+.flaticon-hierarchical-network:before { content: "\f178"; }
+.flaticon-home:before { content: "\f179"; }
+.flaticon-home-black-shape:before { content: "\f17a"; }
+.flaticon-home-black-silhouette:before { content: "\f17b"; }
+.flaticon-home-building-symbol-variant:before { content: "\f17c"; }
+.flaticon-home-interface-symbol-with-a-window-of-squares:before { content: "\f17d"; }
+.flaticon-home-sign:before { content: "\f17e"; }
+.flaticon-horse-black-chess-piece-shape-from-side-view:before { content: "\f17f"; }
+.flaticon-hot-drink-mug:before { content: "\f180"; }
+.flaticon-house:before { content: "\f181"; }
+.flaticon-house-black-shape-for-home-interface-symbol:before { content: "\f182"; }
+.flaticon-id-card-interface-symbol:before { content: "\f183"; }
+.flaticon-image-interface-symbol-with-a-landscape:before { content: "\f184"; }
+.flaticon-images-interface-symbol:before { content: "\f185"; }
+.flaticon-incoming-call-interface-symbol-with-telephone-auricular-and-left-arrow-pointing-to-it:before { content: "\f186"; }
+.flaticon-increase-volume-speaker-interface-symbol:before { content: "\f187"; }
+.flaticon-info-circular-interface-symbol:before { content: "\f188"; }
+.flaticon-information-interface-letter-symbol:before { content: "\f189"; }
+.flaticon-iphone:before { content: "\f18a"; }
+.flaticon-joystick-games-control-tool:before { content: "\f18b"; }
+.flaticon-jpg-picture-square-symbol-for-interface:before { content: "\f18c"; }
+.flaticon-key-in-vertical-position-for-interface-security-symbol:before { content: "\f18d"; }
+.flaticon-king-chess-piece-shape:before { content: "\f18e"; }
+.flaticon-label:before { content: "\f18f"; }
+.flaticon-label-black-shape-rotated-to-left:before { content: "\f190"; }
+.flaticon-laptop:before { content: "\f191"; }
+.flaticon-left-arrow-symbol-in-a-circle:before { content: "\f192"; }
+.flaticon-left-arrowhead:before { content: "\f193"; }
+.flaticon-left-arrowhead-in-a-circle:before { content: "\f194"; }
+.flaticon-left-arrowheads-couple:before { content: "\f195"; }
+.flaticon-left-arrowheads-triangles:before { content: "\f196"; }
+.flaticon-left-arrows:before { content: "\f197"; }
+.flaticon-letter-type-interface-symbol:before { content: "\f198"; }
+.flaticon-lifeline-signal:before { content: "\f199"; }
+.flaticon-link-interface-symbol:before { content: "\f19a"; }
+.flaticon-list-interface-symbol:before { content: "\f19b"; }
+.flaticon-lock-a-folder-interface-symbol:before { content: "\f19c"; }
+.flaticon-lock-page-interface-symbol:before { content: "\f19d"; }
+.flaticon-lock-rectangular-padlock-shape:before { content: "\f19e"; }
+.flaticon-locked-open-folder-interface-symbol:before { content: "\f19f"; }
+.flaticon-magnifying-glass:before { content: "\f1a0"; }
+.flaticon-magnifying-glass-on-bars-graphic:before { content: "\f1a1"; }
+.flaticon-magnifying-glass-with-minus-sign:before { content: "\f1a2"; }
+.flaticon-male-symbol:before { content: "\f1a3"; }
+.flaticon-males-group:before { content: "\f1a4"; }
+.flaticon-man-shape:before { content: "\f1a5"; }
+.flaticon-map-folded-paper:before { content: "\f1a6"; }
+.flaticon-marketing-viral:before { content: "\f1a7"; }
+.flaticon-maximal-volume-audio-interface-symbol-of-a-speaker-side-view-with-lines-representing-sound:before { content: "\f1a8"; }
+.flaticon-minus-pages-sign:before { content: "\f1a9"; }
+.flaticon-minus-sign-in-a-circle:before { content: "\f1aa"; }
+.flaticon-minus-sign-of-horizontal-bar:before { content: "\f1ab"; }
+.flaticon-money-eyes-on-square-face:before { content: "\f1ac"; }
+.flaticon-money-face:before { content: "\f1ad"; }
+.flaticon-monitor-tool-symbol:before { content: "\f1ae"; }
+.flaticon-monitor-with-stats-graphic:before { content: "\f1af"; }
+.flaticon-monthly-calendar:before { content: "\f1b0"; }
+.flaticon-movie-camera:before { content: "\f1b1"; }
+.flaticon-movie-camera-interface-symbol-with-play-triangle:before { content: "\f1b2"; }
+.flaticon-movie-camera-silhouette:before { content: "\f1b3"; }
+.flaticon-movie-film-reel:before { content: "\f1b4"; }
+.flaticon-movie-interface-symbol:before { content: "\f1b5"; }
+.flaticon-movie-photogram:before { content: "\f1b6"; }
+.flaticon-movie-square-sign:before { content: "\f1b7"; }
+.flaticon-music-note:before { content: "\f1b8"; }
+.flaticon-music-square-symbol:before { content: "\f1b9"; }
+.flaticon-musical-note-symbol:before { content: "\f1ba"; }
+.flaticon-musical-note-symbol-1:before { content: "\f1bb"; }
+.flaticon-musical-note-with-song-name-lines:before { content: "\f1bc"; }
+.flaticon-musical-notes-sign:before { content: "\f1bd"; }
+.flaticon-mute-interface-audio-symbol-of-a-speaker-with-a-cross:before { content: "\f1be"; }
+.flaticon-navigate-to-end-right-arrow-symbol-with-vertical-bar:before { content: "\f1bf"; }
+.flaticon-navigate-to-start-letter-k-sign:before { content: "\f1c0"; }
+.flaticon-network-connection:before { content: "\f1c1"; }
+.flaticon-new-tag:before { content: "\f1c2"; }
+.flaticon-news-interface-symbol:before { content: "\f1c3"; }
+.flaticon-no-water-symbol-od-a-drop-with-a-slash:before { content: "\f1c4"; }
+.flaticon-open-black-folder-interface-symbol:before { content: "\f1c5"; }
+.flaticon-open-folder-with-minus-sign:before { content: "\f1c6"; }
+.flaticon-open-folder-with-plus-sign:before { content: "\f1c7"; }
+.flaticon-open-folder-with-verification-sign:before { content: "\f1c8"; }
+.flaticon-open-hanging-signal:before { content: "\f1c9"; }
+.flaticon-opened-back-envelope-with-down-arrow:before { content: "\f1ca"; }
+.flaticon-opened-envelope-back-with-up-arrow:before { content: "\f1cb"; }
+.flaticon-oval-black-speech-bubble:before { content: "\f1cc"; }
+.flaticon-page-code-symbol:before { content: "\f1cd"; }
+.flaticon-page-interface-symbol:before { content: "\f1ce"; }
+.flaticon-page-symbol:before { content: "\f1cf"; }
+.flaticon-page-symbol-1:before { content: "\f1d0"; }
+.flaticon-pages-interface-symbol-of-black-squares:before { content: "\f1d1"; }
+.flaticon-paint-roller-silhouette:before { content: "\f1d2"; }
+.flaticon-paragraph-justified-option-symbol-for-interface-of-five-parallel-horizontal-lines:before { content: "\f1d3"; }
+.flaticon-paragraph-left-alignment-interface-symbol:before { content: "\f1d4"; }
+.flaticon-paragraph-left-alignment-symbol-for-interface:before { content: "\f1d5"; }
+.flaticon-pause-symbol:before { content: "\f1d6"; }
+.flaticon-pawn-black-silhouette:before { content: "\f1d7"; }
+.flaticon-peace-symbol:before { content: "\f1d8"; }
+.flaticon-pen-feather-black-diagonal-shape-of-a-bird-wing:before { content: "\f1d9"; }
+.flaticon-pen-point:before { content: "\f1da"; }
+.flaticon-pen-tool-on-diagonal-position:before { content: "\f1db"; }
+.flaticon-pencil-in-diagonal-position-black-symbol-for-interface:before { content: "\f1dc"; }
+.flaticon-pencil-on-a-square-outline:before { content: "\f1dd"; }
+.flaticon-pencil-tool-symbol-in-diagonal-position-for-interface:before { content: "\f1de"; }
+.flaticon-pencil-write-interface-symbol:before { content: "\f1df"; }
+.flaticon-percentage-symbol:before { content: "\f1e0"; }
+.flaticon-phone-auricular-symbol:before { content: "\f1e1"; }
+.flaticon-phone-cabin-or-small-building-and-a-trash-can:before { content: "\f1e2"; }
+.flaticon-phone-digital-communication-tool:before { content: "\f1e3"; }
+.flaticon-photo-camera-interface-symbol-for-button:before { content: "\f1e4"; }
+.flaticon-piano-square-symbol:before { content: "\f1e5"; }
+.flaticon-pie-graphic:before { content: "\f1e6"; }
+.flaticon-pie-graphic-symbol-for-business-stats:before { content: "\f1e7"; }
+.flaticon-placeholders:before { content: "\f1e8"; }
+.flaticon-planet-earth:before { content: "\f1e9"; }
+.flaticon-planet-earth-1:before { content: "\f1ea"; }
+.flaticon-planet-earth-grid-symbol:before { content: "\f1eb"; }
+.flaticon-plug:before { content: "\f1ec"; }
+.flaticon-plus-page-interface-add-symbol:before { content: "\f1ed"; }
+.flaticon-plus-sign:before { content: "\f1ee"; }
+.flaticon-plus-sign-in-a-dark-cloud-internet-symbol:before { content: "\f1ef"; }
+.flaticon-plus-zoom-magnifying-glass-interface-symbol:before { content: "\f1f0"; }
+.flaticon-pound-coin:before { content: "\f1f1"; }
+.flaticon-power:before { content: "\f1f2"; }
+.flaticon-queen-chess-piece-black-shape:before { content: "\f1f3"; }
+.flaticon-redo-arrow-symbol:before { content: "\f1f4"; }
+.flaticon-rent-hanging-signal:before { content: "\f1f5"; }
+.flaticon-retro-photo-camera-symbol-of-square-shape:before { content: "\f1f6"; }
+.flaticon-right-arrow:before { content: "\f1f7"; }
+.flaticon-right-arrow-in-a-circle:before { content: "\f1f8"; }
+.flaticon-right-arrowhead:before { content: "\f1f9"; }
+.flaticon-right-arrowhead-black-triangular-shape:before { content: "\f1fa"; }
+.flaticon-right-arrowhead-in-a-circle:before { content: "\f1fb"; }
+.flaticon-right-arrowheads:before { content: "\f1fc"; }
+.flaticon-right-arrowheads-1:before { content: "\f1fd"; }
+.flaticon-right-arrows:before { content: "\f1fe"; }
+.flaticon-right-triangular-arrowhead:before { content: "\f1ff"; }
+.flaticon-sad-emoticon-square-face:before { content: "\f200"; }
+.flaticon-sad-face:before { content: "\f201"; }
+.flaticon-sad-face-variant:before { content: "\f202"; }
+.flaticon-sale:before { content: "\f203"; }
+.flaticon-sd-card-rectangular-shape:before { content: "\f204"; }
+.flaticon-shield-black-shape:before { content: "\f205"; }
+.flaticon-shock-face-of-square-shape:before { content: "\f206"; }
+.flaticon-shock-face-of-square-shape-with-opened-oval-mouth:before { content: "\f207"; }
+.flaticon-shocked-face-of-square-shape:before { content: "\f208"; }
+.flaticon-shopping-trolley:before { content: "\f209"; }
+.flaticon-shuffle-arrows-symbol-for-interface:before { content: "\f20a"; }
+.flaticon-silent-face-with-a-cross-mouth-shape:before { content: "\f20b"; }
+.flaticon-smile-face:before { content: "\f20c"; }
+.flaticon-smile-face-of-square-shape-with-closed-happy-eyes:before { content: "\f20d"; }
+.flaticon-smile-face-with-sunglasses:before { content: "\f20e"; }
+.flaticon-smile-square-face:before { content: "\f20f"; }
+.flaticon-smiley-in-love:before { content: "\f210"; }
+.flaticon-smiley-square-face-with-sunglasses:before { content: "\f211"; }
+.flaticon-spade-symbol:before { content: "\f212"; }
+.flaticon-speaker-audio-tool-symbol:before { content: "\f213"; }
+.flaticon-speedometer-circular-tool-symbol-for-speed-control-on-vehicles:before { content: "\f214"; }
+.flaticon-square-of-rounded-corners:before { content: "\f215"; }
+.flaticon-square-with-verification-sign:before { content: "\f216"; }
+.flaticon-star-black-fivepointed-shape:before { content: "\f217"; }
+.flaticon-star-tag-black-shape:before { content: "\f218"; }
+.flaticon-stats:before { content: "\f219"; }
+.flaticon-stats-down:before { content: "\f21a"; }
+.flaticon-stats-graphic:before { content: "\f21b"; }
+.flaticon-stats-graphic-1:before { content: "\f21c"; }
+.flaticon-stats-up-graphic:before { content: "\f21d"; }
+.flaticon-sterling-pound-sign-of-money:before { content: "\f21e"; }
+.flaticon-sterling-pounds-coin:before { content: "\f21f"; }
+.flaticon-stethoscope-medical-tool:before { content: "\f220"; }
+.flaticon-straight-face:before { content: "\f221"; }
+.flaticon-suitcases:before { content: "\f222"; }
+.flaticon-sun-shape:before { content: "\f223"; }
+.flaticon-surprised-face:before { content: "\f224"; }
+.flaticon-tablet-tool:before { content: "\f225"; }
+.flaticon-tag-black-shape:before { content: "\f226"; }
+.flaticon-tags-shapes:before { content: "\f227"; }
+.flaticon-talk-bubble-with-plus-sign:before { content: "\f228"; }
+.flaticon-talk-face-smiley:before { content: "\f229"; }
+.flaticon-talk-oval-bubble-with-minus-sign:before { content: "\f22a"; }
+.flaticon-text-document-add-button-with-plus-sign:before { content: "\f22b"; }
+.flaticon-text-document-square-rounded-shape-with-minus-sign:before { content: "\f22c"; }
+.flaticon-tower-black-chess-piece-shape:before { content: "\f22d"; }
+.flaticon-trash-black-shape:before { content: "\f22e"; }
+.flaticon-trash-can-with-cover-from-side-view:before { content: "\f22f"; }
+.flaticon-turn-left-arrow-symbol:before { content: "\f230"; }
+.flaticon-tv-monitor-tool:before { content: "\f231"; }
+.flaticon-two-movie-frames:before { content: "\f232"; }
+.flaticon-undo-circular-arrow:before { content: "\f233"; }
+.flaticon-university-graduates-cap-silhouette:before { content: "\f234"; }
+.flaticon-unlock-padlock-interface-silhouette-symbol:before { content: "\f235"; }
+.flaticon-unlock-page-symbol:before { content: "\f236"; }
+.flaticon-up-arrow:before { content: "\f237"; }
+.flaticon-up-arrow-1:before { content: "\f238"; }
+.flaticon-up-arrow-symbol-in-a-circle:before { content: "\f239"; }
+.flaticon-up-arrowhead-in-a-circle:before { content: "\f23a"; }
+.flaticon-up-arrowheads:before { content: "\f23b"; }
+.flaticon-up-arrows:before { content: "\f23c"; }
+.flaticon-upload:before { content: "\f23d"; }
+.flaticon-usb-tool:before { content: "\f23e"; }
+.flaticon-user-check-interface-symbol:before { content: "\f23f"; }
+.flaticon-user-male-black-shape-with-plus-sign:before { content: "\f240"; }
+.flaticon-user-symbol:before { content: "\f241"; }
+.flaticon-user-with-cross-sign:before { content: "\f242"; }
+.flaticon-user-with-minus-sign:before { content: "\f243"; }
+.flaticon-user-with-minus-sign-1:before { content: "\f244"; }
+.flaticon-user-with-plus-sign:before { content: "\f245"; }
+.flaticon-users-sign:before { content: "\f246"; }
+.flaticon-usher:before { content: "\f247"; }
+.flaticon-usher-1:before { content: "\f248"; }
+.flaticon-usher-2:before { content: "\f249"; }
+.flaticon-usher-man-with-tie:before { content: "\f24a"; }
+.flaticon-usher-shape:before { content: "\f24b"; }
+.flaticon-video-camera-black-silhouette-symbol:before { content: "\f24c"; }
+.flaticon-warning-exclamation-sign-in-a-circle:before { content: "\f24d"; }
+.flaticon-warning-page-symbol:before { content: "\f24e"; }
+.flaticon-water-drop-black-shape:before { content: "\f24f"; }
+.flaticon-water-drop-shape-outline:before { content: "\f250"; }
+.flaticon-web-square-and-lines-symbol:before { content: "\f251"; }
+.flaticon-wifi-interface-symbol:before { content: "\f252"; }
+.flaticon-window-of-four-rounded-squares:before { content: "\f253"; }
+.flaticon-wink-circular-face-symbol:before { content: "\f254"; }
+.flaticon-winking-smiling-face:before { content: "\f255"; }
+.flaticon-yen-sign:before { content: "\f256"; }
+    
+    $font-Flaticon-angry-face: "\f100";
+    $font-Flaticon-angry-face-of-square-shape-and-straight-lines: "\f101";
+    $font-Flaticon-angry-face-of-square-shape-outline: "\f102";
+    $font-Flaticon-arrow-pointing-to-left: "\f103";
+    $font-Flaticon-arrow-turning-to-right: "\f104";
+    $font-Flaticon-arrows-circle: "\f105";
+    $font-Flaticon-audio-headset-tool: "\f106";
+    $font-Flaticon-bad-face: "\f107";
+    $font-Flaticon-bars-graphic: "\f108";
+    $font-Flaticon-bars-graphic-1: "\f109";
+    $font-Flaticon-bars-symbol: "\f10a";
+    $font-Flaticon-basket-black-shape: "\f10b";
+    $font-Flaticon-battery-almost-full: "\f10c";
+    $font-Flaticon-battery-status-sign-with-less-than-half-energy-charge: "\f10d";
+    $font-Flaticon-birds-home: "\f10e";
+    $font-Flaticon-bishop-chess-piece: "\f10f";
+    $font-Flaticon-black-folder-shape-for-interface: "\f110";
+    $font-Flaticon-black-golf-ball: "\f111";
+    $font-Flaticon-black-hand-pointing-to-right: "\f112";
+    $font-Flaticon-black-hand-pointing-up: "\f113";
+    $font-Flaticon-black-heart-love-symbol: "\f114";
+    $font-Flaticon-black-label-in-horizontal-position: "\f115";
+    $font-Flaticon-black-male-user-symbol: "\f116";
+    $font-Flaticon-black-open-envelope-back: "\f117";
+    $font-Flaticon-black-placeholder-variant: "\f118";
+    $font-Flaticon-black-suitcase: "\f119";
+    $font-Flaticon-black-triangular-arrowhead-pointing-to-left-direction: "\f11a";
+    $font-Flaticon-blind-face: "\f11b";
+    $font-Flaticon-blind-square-face: "\f11c";
+    $font-Flaticon-boring-face: "\f11d";
+    $font-Flaticon-brush-tool: "\f11e";
+    $font-Flaticon-bubbles-interface-symbol-for-talk: "\f11f";
+    $font-Flaticon-buildings: "\f120";
+    $font-Flaticon-calculator: "\f121";
+    $font-Flaticon-calendar-page-symbol-on-day-15: "\f122";
+    $font-Flaticon-calling-out-symbol-of-auricular-with-arrow: "\f123";
+    $font-Flaticon-camera-to-take-photos: "\f124";
+    $font-Flaticon-centered-paragraph-text-lines-symbol-for-interface: "\f125";
+    $font-Flaticon-check-document-interface-square-symbol: "\f126";
+    $font-Flaticon-check-mark-in-a-circle: "\f127";
+    $font-Flaticon-check-sign: "\f128";
+    $font-Flaticon-checked-page-symbol: "\f129";
+    $font-Flaticon-circle-of-arrows-couple: "\f12a";
+    $font-Flaticon-circular-clock-symbol-for-interface: "\f12b";
+    $font-Flaticon-clock-circular-tool-shape: "\f12c";
+    $font-Flaticon-close-hanging-signal-for-commerce: "\f12d";
+    $font-Flaticon-cloud-black-shape-with-a-cross: "\f12e";
+    $font-Flaticon-cloud-black-shape-with-three-dots-inside: "\f12f";
+    $font-Flaticon-cloud-lock: "\f130";
+    $font-Flaticon-cloud-with-check-sign: "\f131";
+    $font-Flaticon-cloud-with-minus-sign: "\f132";
+    $font-Flaticon-clover-black-shape: "\f133";
+    $font-Flaticon-cogs-on-wheels-interface-symbol-for-settings-edition-button: "\f134";
+    $font-Flaticon-cogwheel: "\f135";
+    $font-Flaticon-coins-stack: "\f136";
+    $font-Flaticon-color-palette-for-painter: "\f137";
+    $font-Flaticon-creative-lightbulb-symbol-black-shape: "\f138";
+    $font-Flaticon-credit-card-tool: "\f139";
+    $font-Flaticon-cross-delete-or-close-circular-button-interface-symbol: "\f13a";
+    $font-Flaticon-cross-gross-symbol: "\f13b";
+    $font-Flaticon-cross-in-a-circle: "\f13c";
+    $font-Flaticon-dark-cloud-shape: "\f13d";
+    $font-Flaticon-diamond-symbol: "\f13e";
+    $font-Flaticon-dice-with-five-dots: "\f13f";
+    $font-Flaticon-disc-outline-of-gross-line: "\f140";
+    $font-Flaticon-discs: "\f141";
+    $font-Flaticon-doctor-suitcase-with-a-cross: "\f142";
+    $font-Flaticon-document-lock-interface-security-symbol: "\f143";
+    $font-Flaticon-document-lock-symbol: "\f144";
+    $font-Flaticon-document-rounded-square-interface-symbol-with-text-lines: "\f145";
+    $font-Flaticon-document-with-minus-sign: "\f146";
+    $font-Flaticon-documents-check-interface-symbol-of-text-lines-in-rounded-square: "\f147";
+    $font-Flaticon-documents-plus-symbol-for-interface-with-rounded-square-shape: "\f148";
+    $font-Flaticon-documents-rounded-square-symbol: "\f149";
+    $font-Flaticon-dollar-coin: "\f14a";
+    $font-Flaticon-dollar-coin-symbol: "\f14b";
+    $font-Flaticon-dollar-sign: "\f14c";
+    $font-Flaticon-down-arrow: "\f14d";
+    $font-Flaticon-down-arrow-1: "\f14e";
+    $font-Flaticon-down-arrow-in-a-circle: "\f14f";
+    $font-Flaticon-down-arrowhead-in-a-circle: "\f150";
+    $font-Flaticon-down-arrows: "\f151";
+    $font-Flaticon-down-double-arrow: "\f152";
+    $font-Flaticon-download-symbol: "\f153";
+    $font-Flaticon-emoticon-in-love-of-square-face-shape: "\f154";
+    $font-Flaticon-empty-battery-interface-status-symbol: "\f155";
+    $font-Flaticon-empty-glass-outline: "\f156";
+    $font-Flaticon-equalizer: "\f157";
+    $font-Flaticon-euro: "\f158";
+    $font-Flaticon-euro-coin: "\f159";
+    $font-Flaticon-euro-sign-in-a-circle: "\f15a";
+    $font-Flaticon-exclamation-sign-warning-interface-symbol: "\f15b";
+    $font-Flaticon-eye-shape-variant-interface-view-symbol: "\f15c";
+    $font-Flaticon-eyedropper-black-tool-silhouette: "\f15d";
+    $font-Flaticon-eyeglass-of-rectangular-shape: "\f15e";
+    $font-Flaticon-eyeglasses-of-circular-shape: "\f15f";
+    $font-Flaticon-face-of-silence-with-a-cross-as-mouth: "\f160";
+    $font-Flaticon-facebook-logo: "\f161";
+    $font-Flaticon-facebook-logo-in-circular-shape: "\f162";
+    $font-Flaticon-female-symbol: "\f163";
+    $font-Flaticon-floating-tool-to-save-lives: "\f164";
+    $font-Flaticon-folder-check-symbol: "\f165";
+    $font-Flaticon-folder-with-minus-sign-interface-symbol: "\f166";
+    $font-Flaticon-folder-with-plus-sign-for-interface-button-to-add: "\f167";
+    $font-Flaticon-four-arrows-interface-symbol-to-maximize-size: "\f168";
+    $font-Flaticon-four-arrows-pointing-center-interface-symbol-to-minimize: "\f169";
+    $font-Flaticon-free-tag-for-commerce: "\f16a";
+    $font-Flaticon-frown-face: "\f16b";
+    $font-Flaticon-glass: "\f16c";
+    $font-Flaticon-glass-full-of-liquid: "\f16d";
+    $font-Flaticon-global-interface-symbol-of-earth-grid: "\f16e";
+    $font-Flaticon-graphic-page: "\f16f";
+    $font-Flaticon-graphic-page-symbol: "\f170";
+    $font-Flaticon-hand-pointing-down: "\f171";
+    $font-Flaticon-hand-pointing-to-left-direction: "\f172";
+    $font-Flaticon-hand-watch: "\f173";
+    $font-Flaticon-happy-face: "\f174";
+    $font-Flaticon-hd: "\f175";
+    $font-Flaticon-heart-black-shape-symbol: "\f176";
+    $font-Flaticon-hearts: "\f177";
+    $font-Flaticon-hierarchical-network: "\f178";
+    $font-Flaticon-home: "\f179";
+    $font-Flaticon-home-black-shape: "\f17a";
+    $font-Flaticon-home-black-silhouette: "\f17b";
+    $font-Flaticon-home-building-symbol-variant: "\f17c";
+    $font-Flaticon-home-interface-symbol-with-a-window-of-squares: "\f17d";
+    $font-Flaticon-home-sign: "\f17e";
+    $font-Flaticon-horse-black-chess-piece-shape-from-side-view: "\f17f";
+    $font-Flaticon-hot-drink-mug: "\f180";
+    $font-Flaticon-house: "\f181";
+    $font-Flaticon-house-black-shape-for-home-interface-symbol: "\f182";
+    $font-Flaticon-id-card-interface-symbol: "\f183";
+    $font-Flaticon-image-interface-symbol-with-a-landscape: "\f184";
+    $font-Flaticon-images-interface-symbol: "\f185";
+    $font-Flaticon-incoming-call-interface-symbol-with-telephone-auricular-and-left-arrow-pointing-to-it: "\f186";
+    $font-Flaticon-increase-volume-speaker-interface-symbol: "\f187";
+    $font-Flaticon-info-circular-interface-symbol: "\f188";
+    $font-Flaticon-information-interface-letter-symbol: "\f189";
+    $font-Flaticon-iphone: "\f18a";
+    $font-Flaticon-joystick-games-control-tool: "\f18b";
+    $font-Flaticon-jpg-picture-square-symbol-for-interface: "\f18c";
+    $font-Flaticon-key-in-vertical-position-for-interface-security-symbol: "\f18d";
+    $font-Flaticon-king-chess-piece-shape: "\f18e";
+    $font-Flaticon-label: "\f18f";
+    $font-Flaticon-label-black-shape-rotated-to-left: "\f190";
+    $font-Flaticon-laptop: "\f191";
+    $font-Flaticon-left-arrow-symbol-in-a-circle: "\f192";
+    $font-Flaticon-left-arrowhead: "\f193";
+    $font-Flaticon-left-arrowhead-in-a-circle: "\f194";
+    $font-Flaticon-left-arrowheads-couple: "\f195";
+    $font-Flaticon-left-arrowheads-triangles: "\f196";
+    $font-Flaticon-left-arrows: "\f197";
+    $font-Flaticon-letter-type-interface-symbol: "\f198";
+    $font-Flaticon-lifeline-signal: "\f199";
+    $font-Flaticon-link-interface-symbol: "\f19a";
+    $font-Flaticon-list-interface-symbol: "\f19b";
+    $font-Flaticon-lock-a-folder-interface-symbol: "\f19c";
+    $font-Flaticon-lock-page-interface-symbol: "\f19d";
+    $font-Flaticon-lock-rectangular-padlock-shape: "\f19e";
+    $font-Flaticon-locked-open-folder-interface-symbol: "\f19f";
+    $font-Flaticon-magnifying-glass: "\f1a0";
+    $font-Flaticon-magnifying-glass-on-bars-graphic: "\f1a1";
+    $font-Flaticon-magnifying-glass-with-minus-sign: "\f1a2";
+    $font-Flaticon-male-symbol: "\f1a3";
+    $font-Flaticon-males-group: "\f1a4";
+    $font-Flaticon-man-shape: "\f1a5";
+    $font-Flaticon-map-folded-paper: "\f1a6";
+    $font-Flaticon-marketing-viral: "\f1a7";
+    $font-Flaticon-maximal-volume-audio-interface-symbol-of-a-speaker-side-view-with-lines-representing-sound: "\f1a8";
+    $font-Flaticon-minus-pages-sign: "\f1a9";
+    $font-Flaticon-minus-sign-in-a-circle: "\f1aa";
+    $font-Flaticon-minus-sign-of-horizontal-bar: "\f1ab";
+    $font-Flaticon-money-eyes-on-square-face: "\f1ac";
+    $font-Flaticon-money-face: "\f1ad";
+    $font-Flaticon-monitor-tool-symbol: "\f1ae";
+    $font-Flaticon-monitor-with-stats-graphic: "\f1af";
+    $font-Flaticon-monthly-calendar: "\f1b0";
+    $font-Flaticon-movie-camera: "\f1b1";
+    $font-Flaticon-movie-camera-interface-symbol-with-play-triangle: "\f1b2";
+    $font-Flaticon-movie-camera-silhouette: "\f1b3";
+    $font-Flaticon-movie-film-reel: "\f1b4";
+    $font-Flaticon-movie-interface-symbol: "\f1b5";
+    $font-Flaticon-movie-photogram: "\f1b6";
+    $font-Flaticon-movie-square-sign: "\f1b7";
+    $font-Flaticon-music-note: "\f1b8";
+    $font-Flaticon-music-square-symbol: "\f1b9";
+    $font-Flaticon-musical-note-symbol: "\f1ba";
+    $font-Flaticon-musical-note-symbol-1: "\f1bb";
+    $font-Flaticon-musical-note-with-song-name-lines: "\f1bc";
+    $font-Flaticon-musical-notes-sign: "\f1bd";
+    $font-Flaticon-mute-interface-audio-symbol-of-a-speaker-with-a-cross: "\f1be";
+    $font-Flaticon-navigate-to-end-right-arrow-symbol-with-vertical-bar: "\f1bf";
+    $font-Flaticon-navigate-to-start-letter-k-sign: "\f1c0";
+    $font-Flaticon-network-connection: "\f1c1";
+    $font-Flaticon-new-tag: "\f1c2";
+    $font-Flaticon-news-interface-symbol: "\f1c3";
+    $font-Flaticon-no-water-symbol-od-a-drop-with-a-slash: "\f1c4";
+    $font-Flaticon-open-black-folder-interface-symbol: "\f1c5";
+    $font-Flaticon-open-folder-with-minus-sign: "\f1c6";
+    $font-Flaticon-open-folder-with-plus-sign: "\f1c7";
+    $font-Flaticon-open-folder-with-verification-sign: "\f1c8";
+    $font-Flaticon-open-hanging-signal: "\f1c9";
+    $font-Flaticon-opened-back-envelope-with-down-arrow: "\f1ca";
+    $font-Flaticon-opened-envelope-back-with-up-arrow: "\f1cb";
+    $font-Flaticon-oval-black-speech-bubble: "\f1cc";
+    $font-Flaticon-page-code-symbol: "\f1cd";
+    $font-Flaticon-page-interface-symbol: "\f1ce";
+    $font-Flaticon-page-symbol: "\f1cf";
+    $font-Flaticon-page-symbol-1: "\f1d0";
+    $font-Flaticon-pages-interface-symbol-of-black-squares: "\f1d1";
+    $font-Flaticon-paint-roller-silhouette: "\f1d2";
+    $font-Flaticon-paragraph-justified-option-symbol-for-interface-of-five-parallel-horizontal-lines: "\f1d3";
+    $font-Flaticon-paragraph-left-alignment-interface-symbol: "\f1d4";
+    $font-Flaticon-paragraph-left-alignment-symbol-for-interface: "\f1d5";
+    $font-Flaticon-pause-symbol: "\f1d6";
+    $font-Flaticon-pawn-black-silhouette: "\f1d7";
+    $font-Flaticon-peace-symbol: "\f1d8";
+    $font-Flaticon-pen-feather-black-diagonal-shape-of-a-bird-wing: "\f1d9";
+    $font-Flaticon-pen-point: "\f1da";
+    $font-Flaticon-pen-tool-on-diagonal-position: "\f1db";
+    $font-Flaticon-pencil-in-diagonal-position-black-symbol-for-interface: "\f1dc";
+    $font-Flaticon-pencil-on-a-square-outline: "\f1dd";
+    $font-Flaticon-pencil-tool-symbol-in-diagonal-position-for-interface: "\f1de";
+    $font-Flaticon-pencil-write-interface-symbol: "\f1df";
+    $font-Flaticon-percentage-symbol: "\f1e0";
+    $font-Flaticon-phone-auricular-symbol: "\f1e1";
+    $font-Flaticon-phone-cabin-or-small-building-and-a-trash-can: "\f1e2";
+    $font-Flaticon-phone-digital-communication-tool: "\f1e3";
+    $font-Flaticon-photo-camera-interface-symbol-for-button: "\f1e4";
+    $font-Flaticon-piano-square-symbol: "\f1e5";
+    $font-Flaticon-pie-graphic: "\f1e6";
+    $font-Flaticon-pie-graphic-symbol-for-business-stats: "\f1e7";
+    $font-Flaticon-placeholders: "\f1e8";
+    $font-Flaticon-planet-earth: "\f1e9";
+    $font-Flaticon-planet-earth-1: "\f1ea";
+    $font-Flaticon-planet-earth-grid-symbol: "\f1eb";
+    $font-Flaticon-plug: "\f1ec";
+    $font-Flaticon-plus-page-interface-add-symbol: "\f1ed";
+    $font-Flaticon-plus-sign: "\f1ee";
+    $font-Flaticon-plus-sign-in-a-dark-cloud-internet-symbol: "\f1ef";
+    $font-Flaticon-plus-zoom-magnifying-glass-interface-symbol: "\f1f0";
+    $font-Flaticon-pound-coin: "\f1f1";
+    $font-Flaticon-power: "\f1f2";
+    $font-Flaticon-queen-chess-piece-black-shape: "\f1f3";
+    $font-Flaticon-redo-arrow-symbol: "\f1f4";
+    $font-Flaticon-rent-hanging-signal: "\f1f5";
+    $font-Flaticon-retro-photo-camera-symbol-of-square-shape: "\f1f6";
+    $font-Flaticon-right-arrow: "\f1f7";
+    $font-Flaticon-right-arrow-in-a-circle: "\f1f8";
+    $font-Flaticon-right-arrowhead: "\f1f9";
+    $font-Flaticon-right-arrowhead-black-triangular-shape: "\f1fa";
+    $font-Flaticon-right-arrowhead-in-a-circle: "\f1fb";
+    $font-Flaticon-right-arrowheads: "\f1fc";
+    $font-Flaticon-right-arrowheads-1: "\f1fd";
+    $font-Flaticon-right-arrows: "\f1fe";
+    $font-Flaticon-right-triangular-arrowhead: "\f1ff";
+    $font-Flaticon-sad-emoticon-square-face: "\f200";
+    $font-Flaticon-sad-face: "\f201";
+    $font-Flaticon-sad-face-variant: "\f202";
+    $font-Flaticon-sale: "\f203";
+    $font-Flaticon-sd-card-rectangular-shape: "\f204";
+    $font-Flaticon-shield-black-shape: "\f205";
+    $font-Flaticon-shock-face-of-square-shape: "\f206";
+    $font-Flaticon-shock-face-of-square-shape-with-opened-oval-mouth: "\f207";
+    $font-Flaticon-shocked-face-of-square-shape: "\f208";
+    $font-Flaticon-shopping-trolley: "\f209";
+    $font-Flaticon-shuffle-arrows-symbol-for-interface: "\f20a";
+    $font-Flaticon-silent-face-with-a-cross-mouth-shape: "\f20b";
+    $font-Flaticon-smile-face: "\f20c";
+    $font-Flaticon-smile-face-of-square-shape-with-closed-happy-eyes: "\f20d";
+    $font-Flaticon-smile-face-with-sunglasses: "\f20e";
+    $font-Flaticon-smile-square-face: "\f20f";
+    $font-Flaticon-smiley-in-love: "\f210";
+    $font-Flaticon-smiley-square-face-with-sunglasses: "\f211";
+    $font-Flaticon-spade-symbol: "\f212";
+    $font-Flaticon-speaker-audio-tool-symbol: "\f213";
+    $font-Flaticon-speedometer-circular-tool-symbol-for-speed-control-on-vehicles: "\f214";
+    $font-Flaticon-square-of-rounded-corners: "\f215";
+    $font-Flaticon-square-with-verification-sign: "\f216";
+    $font-Flaticon-star-black-fivepointed-shape: "\f217";
+    $font-Flaticon-star-tag-black-shape: "\f218";
+    $font-Flaticon-stats: "\f219";
+    $font-Flaticon-stats-down: "\f21a";
+    $font-Flaticon-stats-graphic: "\f21b";
+    $font-Flaticon-stats-graphic-1: "\f21c";
+    $font-Flaticon-stats-up-graphic: "\f21d";
+    $font-Flaticon-sterling-pound-sign-of-money: "\f21e";
+    $font-Flaticon-sterling-pounds-coin: "\f21f";
+    $font-Flaticon-stethoscope-medical-tool: "\f220";
+    $font-Flaticon-straight-face: "\f221";
+    $font-Flaticon-suitcases: "\f222";
+    $font-Flaticon-sun-shape: "\f223";
+    $font-Flaticon-surprised-face: "\f224";
+    $font-Flaticon-tablet-tool: "\f225";
+    $font-Flaticon-tag-black-shape: "\f226";
+    $font-Flaticon-tags-shapes: "\f227";
+    $font-Flaticon-talk-bubble-with-plus-sign: "\f228";
+    $font-Flaticon-talk-face-smiley: "\f229";
+    $font-Flaticon-talk-oval-bubble-with-minus-sign: "\f22a";
+    $font-Flaticon-text-document-add-button-with-plus-sign: "\f22b";
+    $font-Flaticon-text-document-square-rounded-shape-with-minus-sign: "\f22c";
+    $font-Flaticon-tower-black-chess-piece-shape: "\f22d";
+    $font-Flaticon-trash-black-shape: "\f22e";
+    $font-Flaticon-trash-can-with-cover-from-side-view: "\f22f";
+    $font-Flaticon-turn-left-arrow-symbol: "\f230";
+    $font-Flaticon-tv-monitor-tool: "\f231";
+    $font-Flaticon-two-movie-frames: "\f232";
+    $font-Flaticon-undo-circular-arrow: "\f233";
+    $font-Flaticon-university-graduates-cap-silhouette: "\f234";
+    $font-Flaticon-unlock-padlock-interface-silhouette-symbol: "\f235";
+    $font-Flaticon-unlock-page-symbol: "\f236";
+    $font-Flaticon-up-arrow: "\f237";
+    $font-Flaticon-up-arrow-1: "\f238";
+    $font-Flaticon-up-arrow-symbol-in-a-circle: "\f239";
+    $font-Flaticon-up-arrowhead-in-a-circle: "\f23a";
+    $font-Flaticon-up-arrowheads: "\f23b";
+    $font-Flaticon-up-arrows: "\f23c";
+    $font-Flaticon-upload: "\f23d";
+    $font-Flaticon-usb-tool: "\f23e";
+    $font-Flaticon-user-check-interface-symbol: "\f23f";
+    $font-Flaticon-user-male-black-shape-with-plus-sign: "\f240";
+    $font-Flaticon-user-symbol: "\f241";
+    $font-Flaticon-user-with-cross-sign: "\f242";
+    $font-Flaticon-user-with-minus-sign: "\f243";
+    $font-Flaticon-user-with-minus-sign-1: "\f244";
+    $font-Flaticon-user-with-plus-sign: "\f245";
+    $font-Flaticon-users-sign: "\f246";
+    $font-Flaticon-usher: "\f247";
+    $font-Flaticon-usher-1: "\f248";
+    $font-Flaticon-usher-2: "\f249";
+    $font-Flaticon-usher-man-with-tie: "\f24a";
+    $font-Flaticon-usher-shape: "\f24b";
+    $font-Flaticon-video-camera-black-silhouette-symbol: "\f24c";
+    $font-Flaticon-warning-exclamation-sign-in-a-circle: "\f24d";
+    $font-Flaticon-warning-page-symbol: "\f24e";
+    $font-Flaticon-water-drop-black-shape: "\f24f";
+    $font-Flaticon-water-drop-shape-outline: "\f250";
+    $font-Flaticon-web-square-and-lines-symbol: "\f251";
+    $font-Flaticon-wifi-interface-symbol: "\f252";
+    $font-Flaticon-window-of-four-rounded-squares: "\f253";
+    $font-Flaticon-wink-circular-face-symbol: "\f254";
+    $font-Flaticon-winking-smiling-face: "\f255";
+    $font-Flaticon-yen-sign: "\f256";

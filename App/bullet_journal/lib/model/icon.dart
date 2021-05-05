@@ -1,7 +1,8 @@
+// @dart=2.9
 class MyIcon {
-  String? id;
-  late String name;
-  late String path;
+  String id;
+  String name;
+  String path;
   MyIcon(id, name, path) {
     this.id = id;
     this.name = name;
