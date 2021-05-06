@@ -17,10 +17,12 @@ class DiaryEditView extends StatefulWidget {
   _DiaryEditViewState createState() => _DiaryEditViewState();
 }
 
-Size size;
+Size size, sizeImage = Size(0, 0);
 bool _isEditButtonTaped = false;
 FocusNode _focusTyping = FocusNode();
-
+Offset _offsetImage = Offset(0, 0);
+bool _isDragged = false;
+File _imageDragged;
 // bool _isTitleTaped = false, _isContentTaped = false;
 // TextEditingController _titleController = TextEditingController(),
 //     _contentController = TextEditingController();
@@ -30,6 +32,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+    var height = MediaQuery.of(context).padding.top + kToolbarHeight;
     final SnackBar snackBar = SnackBar(
         content: Padding(
       padding: EdgeInsets.all(5),
@@ -93,65 +96,87 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                 color: Colors.white,
                 child: Stack(
                   children: [
-                    ImageListWidget(imageFiles),
                     SingleChildScrollView(
                       physics: NeverScrollableScrollPhysics(),
                       child: Container(
                         height: size.height,
                         width: size.width,
                         color: Colors.transparent,
+                        padding: EdgeInsets.all(10),
                         child: Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, left: 10, right: 10),
-                              child: TextFormField(
-                                // controller: _titleController,
-                                initialValue: widget.diary.getDiaryTitle,
-                                readOnly: !_isEditButtonTaped,
-                                onTap: () {
-                                  if (_isEditButtonTaped == false)
-                                    Scaffold.of(context).showSnackBar(snackBar);
-                                },
-                                minLines: 1,
-                                maxLines: 3,
-                                cursorColor: Colors.yellow[900],
-                                style: GoogleFonts.dancingScript(
-                                    fontSize: 25, color: Colors.yellow[900]),
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Chủ đề',
-                                    hintStyle: TextStyle(
-                                        color: Colors.yellow[900]
-                                            .withOpacity(0.6))),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, right: 10, bottom: 10),
-                              child: TextFormField(
-                                // controller: _contentController,
-                                initialValue: widget.diary.getDiaryContent,
-                                readOnly: !_isEditButtonTaped,
-                                focusNode: _focusTyping,
-                                onTap: () {
-                                  if (_isEditButtonTaped == false)
-                                    Scaffold.of(context).showSnackBar(snackBar);
-                                },
-                                cursorColor: Colors.yellow[800],
-                                minLines: 1,
-                                maxLines: 50,
-                                style: GoogleFonts.dancingScript(
-                                    fontSize: 20, color: Colors.yellow[800]),
-                                decoration: InputDecoration(
+                            TextFormField(
+                              // controller: _titleController,
+                              initialValue: widget.diary.getDiaryTitle,
+                              readOnly: !_isEditButtonTaped,
+                              onTap: () {
+                                if (_isEditButtonTaped == false)
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                              },
+                              minLines: 1,
+                              maxLines: 3,
+                              cursorColor: Colors.brown[800],
+                              style: GoogleFonts.dancingScript(
+                                  fontSize: 25, color: Colors.brown[800]),
+                              decoration: InputDecoration(
                                   border: InputBorder.none,
-                                ),
+                                  hintText: 'Chủ đề',
+                                  hintStyle: TextStyle(
+                                      color:
+                                          Colors.brown[700].withOpacity(0.6))),
+                            ),
+                            TextFormField(
+                              // controller: _contentController,
+                              initialValue: widget.diary.getDiaryContent,
+                              readOnly: !_isEditButtonTaped,
+                              focusNode: _focusTyping,
+                              onTap: () {
+                                if (_isEditButtonTaped == false)
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                              },
+                              cursorColor: Colors.brown[500],
+                              minLines: 1,
+                              maxLines: 50,
+                              style: GoogleFonts.dancingScript(
+                                  fontSize: 20, color: Colors.brown[500]),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
                               ),
                             ),
+                            ImageListWidget(imageFiles),
                           ],
                         ),
                       ),
                     ),
+                    Positioned(
+                        left: _offsetImage.dx,
+                        top: _offsetImage.dy - height,
+                        child: _imageDragged != null
+                            ? Draggable(
+                                feedback: Container(
+                                  height: size.width * 0.5,
+                                  width: size.width * 0.5,
+                                  child: Opacity(
+                                    opacity: 0.5,
+                                    child: ClipRRect(
+                                      child: Image.file(_imageDragged),
+                                    ),
+                                  ),
+                                ),
+                                childWhenDragging: Container(),
+                                onDraggableCanceled: (velocity, offset) {
+                                  setState(() {
+                                    _offsetImage = offset;
+                                  });
+                                },
+                                child: Container(
+                                  height: size.width * 0.5,
+                                  width: size.width * 0.5,
+                                  child: ClipRRect(
+                                    child: Image.file(_imageDragged),
+                                  ),
+                                ))
+                            : Container())
                   ],
                 ),
               ),
@@ -326,15 +351,38 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   Widget ImageListWidget(List<File> imageFiles) {
     return Container(
-      height: size.height,
+      height: size.height * 0.5,
       width: size.width,
       child: GridView.count(
         crossAxisCount: 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
         children: imageFiles
-            .map((imageFile) => ClipRRect(
-                  child: Image.file(imageFile),
+            .asMap()
+            .entries
+            .map((imageFile) => Draggable(
+                  feedback: Container(
+                    height: size.width * 0.5,
+                    width: size.width * 0.5,
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: ClipRRect(
+                        child: Image.file(imageFile.value),
+                      ),
+                    ),
+                  ),
+                  childWhenDragging: Container(),
+                  child: ClipRRect(
+                    child: Image.file(imageFile.value),
+                  ),
+                  onDraggableCanceled: (velocity, offset) {
+                    setState(() {
+                      imageFiles.removeAt(imageFile.key);
+                      _imageDragged = imageFile.value;
+                      _offsetImage = offset;
+                      sizeImage = Size(size.width * 0.5, size.width * 0.5);
+                    });
+                  },
                 ))
             .toList(),
       ),

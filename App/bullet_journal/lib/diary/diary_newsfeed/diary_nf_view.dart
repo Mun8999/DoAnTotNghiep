@@ -7,7 +7,6 @@ import 'package:bullet_journal/model/diary.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DiaryNewFeedsView extends StatefulWidget {
@@ -90,7 +89,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                           //   thickness: 1,
                           // ),
                           Container(
-                            margin: EdgeInsets.all(15),
+                            margin: EdgeInsets.all(10),
                             height: MediaQuery.of(context).size.height * 0.125,
                             // padding: EdgeInsets.all(10),
                             padding: EdgeInsets.only(left: 10, right: 10),
@@ -122,30 +121,30 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                                         padding: const EdgeInsets.only(
                                             top: 10, right: 10, bottom: 10),
                                         child: SvgPicture.asset(
-                                          'assets/icons/emotion_icon.svg',
+                                          'assets/icons/emotion/smile-face.svg',
                                           height: 25,
                                           width: 25,
-                                          color: Colors.red[400],
+                                          color: Colors.yellow[900],
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 10, right: 10, bottom: 10),
                                         child: SvgPicture.asset(
-                                          'assets/icons/location_icon.svg',
+                                          'assets/icons/insert-picture-icon.svg',
                                           height: 25,
                                           width: 25,
-                                          color: Colors.red[400],
+                                          color: Colors.yellow[900],
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 10, bottom: 10),
                                         child: SvgPicture.asset(
-                                          'assets/icons/picture_icon.svg',
+                                          'assets/icons/pointer-on-the-map.svg',
                                           height: 25,
                                           width: 25,
-                                          color: Colors.red[400],
+                                          color: Colors.yellow[900],
                                         ),
                                       ),
                                     ],
@@ -165,7 +164,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
       body: Container(
           height: size.height,
           color: Colors.white,
-          child: ListView.builder(
+          child: ListView.separated(
             /// de o day de khong scroll theo cai nay
             physics: NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -186,7 +185,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                   ));
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(left: 5, right: 5),
                   child: Container(
                     height: 250,
                     child: Stack(children: [
@@ -197,57 +196,89 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                             // color: 100 * (index % 9) == 0
                             //     ? Colors.pink[50]
                             //     : Colors.pink[100 * (index % 9)],
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
                                   color: Colors.grey.withOpacity(0.5),
-                                  blurRadius: 1,
-                                  offset: Offset(3, 3))
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3))
                             ]),
                         // child:
                       ),
                       Positioned(
-                        top: 10,
-                        left: index % 2 == 0 ? null : 10,
-                        right: index % 2 != 0 ? null : 10,
+                        top: 5,
+                        left: index % 2 == 0 ? null : 5,
+                        right: index % 2 != 0 ? null : 5,
                         child: Stack(
                           children: [
                             Container(
                               height: 200,
-                              width: 150,
+                              width: 170,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: index % 2 != 0
+                                          ? Radius.circular(10)
+                                          : Radius.zero,
+                                      bottomLeft: index % 2 != 0
+                                          ? Radius.circular(10)
+                                          : Radius.zero,
+                                      topRight: index % 2 == 0
+                                          ? Radius.circular(10)
+                                          : Radius.zero,
+                                      bottomRight: index % 2 == 0
+                                          ? Radius.circular(10)
+                                          : Radius.zero),
                                   color: 100 * (index % 9) == 0
                                       ? Colors.yellow[50]
                                       : Colors.yellow[100 * (index % 9)]),
                             ),
-                            Column(
-                              children: [
-                                Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text('Đom Đóm - Jack',
+                            Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Text('Đom Đóm - Jack',
                                         style: GoogleFonts.dancingScript(
-                                            fontSize: 16))),
-                                Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text(
+                                            fontSize: 16,
+                                            color: Colors.brown[800],
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
                                         '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
                                         style: GoogleFonts.dancingScript(
-                                            fontSize: 11)))
-                              ],
+                                            fontSize: 13,
+                                            color: Colors.brown[500]))
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       ),
                       Positioned(
-                        top: 10,
-                        left: index % 2 == 0 ? 10 : null,
-                        right: index % 2 != 0 ? 10 : null,
+                        top: 5,
+                        left: index % 2 == 0 ? 5 : null,
+                        right: index % 2 != 0 ? 5 : null,
                         child: Container(
                           height: 200,
                           width: 200,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.only(
+                                topLeft: index % 2 == 0
+                                    ? Radius.circular(10)
+                                    : Radius.zero,
+                                bottomLeft: index % 2 == 0
+                                    ? Radius.circular(10)
+                                    : Radius.zero,
+                                topRight: index % 2 != 0
+                                    ? Radius.circular(10)
+                                    : Radius.zero,
+                                bottomRight: index % 2 != 0
+                                    ? Radius.circular(10)
+                                    : Radius.zero),
                             image: DecorationImage(
                                 image: AssetImage(images[index]),
                                 fit: BoxFit.cover),
@@ -277,6 +308,11 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                     ]),
                   ),
                 ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                height: 30,
               );
             },
           )),
