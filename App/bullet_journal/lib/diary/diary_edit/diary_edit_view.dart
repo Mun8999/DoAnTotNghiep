@@ -148,7 +148,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                         ),
                       ),
                     ),
-                    Positioned(
+                    new Positioned(
                         left: _offsetImage.dx,
                         top: _offsetImage.dy - height,
                         child: _imageDragged != null
@@ -167,6 +167,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                 onDraggableCanceled: (velocity, offset) {
                                   setState(() {
                                     _offsetImage = offset;
+                                    // _imageDragged = null;
                                   });
                                 },
                                 child: Container(
@@ -376,6 +377,9 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                     child: Image.file(imageFile.value),
                   ),
                   onDraggableCanceled: (velocity, offset) {
+                    imageFiles.forEach((element) {
+                      print(element);
+                    });
                     setState(() {
                       imageFiles.removeAt(imageFile.key);
                       _imageDragged = imageFile.value;

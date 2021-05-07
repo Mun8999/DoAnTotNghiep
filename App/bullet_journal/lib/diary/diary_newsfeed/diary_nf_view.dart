@@ -238,6 +238,9 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                               child: Center(
                                 child: Column(
                                   children: [
+                                    SizedBox(
+                                      height: 10,
+                                    ),
                                     Text('Đom Đóm - Jack',
                                         style: GoogleFonts.dancingScript(
                                             fontSize: 16,
