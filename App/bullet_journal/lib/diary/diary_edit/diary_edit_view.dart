@@ -1,13 +1,15 @@
 // @dart=2.9
 import 'dart:io';
-
 import 'package:bullet_journal/edit_image/utils.dart';
+import 'package:bullet_journal/model/calender.dart';
 // import 'package:bullet_journal/image_cropper/image_cropper.dart';
 import 'package:bullet_journal/model/diary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
+
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class DiaryEditView extends StatefulWidget {
@@ -73,6 +75,9 @@ class _DiaryEditViewState extends State<DiaryEditView> {
             IconButton(
               onPressed: () {
                 // showMyBottomSheet();
+                // DateTime dateTime = DateTime(2021, 1, 1);
+                // String weekday = DateFormat.EEEE().format(dateTime);
+                // print(weekday);
                 setState(() {
                   _focusTyping.requestFocus();
                   _isEditButtonTaped = true;

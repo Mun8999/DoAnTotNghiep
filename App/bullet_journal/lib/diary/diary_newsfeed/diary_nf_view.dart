@@ -1,4 +1,4 @@
-// import 'dart:html';
+// @dart=2.9
 import 'dart:ui';
 
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
@@ -94,7 +94,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                             // padding: EdgeInsets.all(10),
                             padding: EdgeInsets.only(left: 10, right: 10),
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey[600]!),
+                                border: Border.all(color: Colors.grey[600]),
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(20),
                                     bottomLeft: Radius.circular(20))),
@@ -178,8 +178,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                           '1',
                           'Đom Đóm - Jack',
                           '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-                          DateTime.now(),
-                          null);
+                          DateTime.now());
                       return DiaryEditView(diary);
                     },
                   ));

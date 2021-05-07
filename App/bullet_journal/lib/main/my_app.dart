@@ -1,3 +1,4 @@
+import 'package:bullet_journal/daily_task/daily_task_nf_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_view.dart';
 import 'package:bullet_journal/edit_image/edit_image_view.dart';
 import 'package:bullet_journal/login/login_view.dart';
@@ -24,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bullet Journal App',
-      home: DiaryNewFeedsView(),
+      home: DailyNewsFeedView(),
     );
   }
 }
