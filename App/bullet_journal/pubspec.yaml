@@ -62,6 +62,7 @@ flutter:
     - assets/icons/
     - assets/icons/edit/
     - assets/icons/emotion/
+    - assets/icons/menu/
     # - assets/images/bg_login_1.jpg
     # - assets/images/bg_login_2.jpg
     # - assets/images/bg_login_3.jpg

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:photo_view/photo_view.dart';
 
 class StickerView extends StatefulWidget {
@@ -22,41 +23,19 @@ List<String> stickers = [
 ];
 // bool isMoved = false;
 Color caughtColor = Colors.deepPurple;
-Offset _pos = Offset(100, 100);
+// Offset _pos = Offset(10, 10);
 
 class _StickerViewState extends State<StickerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // body: SafeArea(child: LayoutBuilder(
-        //   builder: (context, constraints) {
-        //     return Container(
-        //       width: MediaQuery.of(context).size.width,
-        //       height: MediaQuery.of(context).size.height,
-        //       color: Colors.black,
-        //       child: PhotoView(
-        //         imageProvider: AssetImage(stickers[0]),
-        //         customSize: Size(40, 40),
-        //       ));
-        //   },
-        // )
-
         body: SafeArea(
       child: Container(
           color: Colors.green,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: Stack(
-            children: [
-              Container(
-                height: 40,
-                width: 40,
-                color: Colors.red,
-                child: PhotoView(
-                  imageProvider: AssetImage(''),
-                ),
-              )
-            ],
+          child: PhotoView(
+            imageProvider: AssetImage('assets/icons/cat_icon.png'),
           )
           // Stack(
           //   children: [

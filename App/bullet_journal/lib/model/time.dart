@@ -6,13 +6,13 @@ class MyDateTime {
   MyStringDate _stringDate;
   MyTime _time;
   MyDateTime(DateTime dateTime) {
-    this._date = MyDate(dateTime.day, dateTime.month, dateTime.year,
-        DateFormat.E().format(dateTime));
+    this._date =
+        MyDate(dateTime.day, dateTime.month, dateTime.year, dateTime.weekday);
     this._stringDate = MyStringDate(
         DateFormat.d().format(dateTime),
         DateFormat.MMM().format(dateTime),
         DateFormat.y().format(dateTime),
-        DateFormat.E().format(dateTime));
+        dateTime.weekday);
     if (dateTime.hour != null)
       this._time = MyTime(dateTime.hour, dateTime.minute, dateTime.second);
   }
@@ -35,8 +35,8 @@ class MyTime {
 
 class MyDate {
   int _day, _month, _year;
-  String _weekday;
-  MyDate(int day, int month, int year, String weekday) {
+  int _weekday;
+  MyDate(int day, int month, int year, int weekday) {
     this._day = day;
     this._month = month;
     this._year = year;
@@ -45,14 +45,14 @@ class MyDate {
   int get getDay => this._day;
   int get getMonth => this._month;
   int get getYear => this._year;
-  String get getWeekday => this._weekday;
+  int get getWeekday => this._weekday;
 }
 
 class MyStringDate {
   String _stringDay, _stringMonth, _stringYear;
-  String _weekday;
-  MyStringDate(String stringDate, String stringMonth, String stringYear,
-      String weekday) {
+  int _weekday;
+  MyStringDate(
+      String stringDate, String stringMonth, String stringYear, int weekday) {
     this._stringDay = stringDate;
     this._stringMonth = stringMonth;
     this._stringYear = stringYear;
@@ -61,5 +61,5 @@ class MyStringDate {
   String get getStringDay => this._stringDay;
   String get getStringMonth => this._stringMonth;
   String get getStringYear => this._stringYear;
-  String get getWeekday => this._weekday;
+  int get getWeekday => this._weekday;
 }
