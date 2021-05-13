@@ -72,6 +72,7 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
               sliver: SliverSafeArea(
                   top: false,
                   sliver: SliverAppBar(
+                    automaticallyImplyLeading: false,
                     backgroundColor: Colors.white,
                     actions: [
                       IconButton(
@@ -112,7 +113,6 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                     child: Container(
                                       child: DropdownButtonHideUnderline(
                                           child: DropdownButton(
-                                        // focusColor: Colors.yellow[800],
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 25,
