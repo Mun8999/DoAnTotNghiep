@@ -1,8 +1,10 @@
 // @dart=2.9
+import 'dart:async';
 import 'dart:io';
+import 'package:bullet_journal/edit_image/image_croper.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:bullet_journal/model/calender.dart';
-// import 'package:bullet_journal/image_cropper/image_cropper.dart';
+import 'dart:ui' as ui;
 import 'package:bullet_journal/model/diary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,7 +12,6 @@ import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:focused_menu/focused_menu.dart';
-import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class DiaryEditView extends StatefulWidget {
@@ -20,25 +21,21 @@ class DiaryEditView extends StatefulWidget {
   _DiaryEditViewState createState() => _DiaryEditViewState();
 }
 
-Size size, sizeImage = Size(0, 0);
+Size size;
+// sizeImage = Size(0, 0);
 bool _isEditButtonTaped = false;
 FocusNode _focusTyping = FocusNode();
-Offset _offsetImage = Offset(0, 0);
-bool _isDragged = false;
-File _imageDragged;
-List<Widget> listWidget;
-// int _imageIndex = -1;
-// bool _isTitleTaped = false, _isContentTaped = false;
-// TextEditingController _titleController = TextEditingController(),
-//     _contentController = TextEditingController();
-List<File> imageFiles = [];
+List<File> _imageFiles = [];
+List<Size> _imageSizes = [];
+List<Offset> _imageOffsets = [];
+double _space;
 
 class _DiaryEditViewState extends State<DiaryEditView> {
   @override
   Widget build(BuildContext context) {
-    listWidget = [];
     size = MediaQuery.of(context).size;
-    var height = MediaQuery.of(context).padding.top + kToolbarHeight;
+    _space = MediaQuery.of(context).padding.top + kToolbarHeight;
+
     final SnackBar snackBar = SnackBar(
         content: Padding(
       padding: EdgeInsets.all(5),
@@ -78,10 +75,6 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           actions: [
             IconButton(
               onPressed: () {
-                // showMyBottomSheet();
-                // DateTime dateTime = DateTime(2021, 1, 1);
-                // String weekday = DateFormat.EEEE().format(dateTime);
-                // print(weekday);
                 setState(() {
                   _focusTyping.requestFocus();
                   _isEditButtonTaped = true;
@@ -98,64 +91,62 @@ class _DiaryEditViewState extends State<DiaryEditView> {
         ),
         body: Builder(
           builder: (context) {
-            return SingleChildScrollView(
-              child: Container(
-                height: size.height * 2,
-                width: size.width * 2,
-                color: Colors.white,
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        TextFormField(
-                          // controller: _titleController,
-                          initialValue: widget.diary.getDiaryTitle,
-                          readOnly: !_isEditButtonTaped,
-                          onTap: () {
-                            if (_isEditButtonTaped == false)
-                              Scaffold.of(context).showSnackBar(snackBar);
-                          },
-                          minLines: 1,
-                          maxLines: 3,
-                          cursorColor: Colors.brown[800],
-                          style: GoogleFonts.dancingScript(
-                              fontSize: 25, color: Colors.brown[800]),
-                          decoration: InputDecoration(
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: Container(
+                    height: size.height,
+                    width: size.width,
+                    color: Colors.white,
+                    child: Stack(children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(children: [
+                          TextFormField(
+                            // controller: _titleController,
+                            initialValue: widget.diary.getDiaryTitle,
+                            readOnly: !_isEditButtonTaped,
+                            onTap: () {
+                              if (_isEditButtonTaped == false)
+                                Scaffold.of(context).showSnackBar(snackBar);
+                            },
+                            minLines: 1,
+                            maxLines: 3,
+                            cursorColor: Colors.brown[800],
+                            style: GoogleFonts.dancingScript(
+                                fontSize: 25, color: Colors.brown[800]),
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Chủ đề',
+                                hintStyle: TextStyle(
+                                    color: Colors.brown[700].withOpacity(0.6))),
+                          ),
+                          TextFormField(
+                            // controller: _contentController,
+                            initialValue: widget.diary.getDiaryContent,
+                            readOnly: !_isEditButtonTaped,
+                            focusNode: _focusTyping,
+                            onTap: () {
+                              if (_isEditButtonTaped == false)
+                                Scaffold.of(context).showSnackBar(snackBar);
+                            },
+                            cursorColor: Colors.brown[500],
+                            minLines: 1,
+                            maxLines: 50,
+                            style: GoogleFonts.dancingScript(
+                                fontSize: 20, color: Colors.brown[500]),
+                            decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Chủ đề',
-                              hintStyle: TextStyle(
-                                  color: Colors.brown[700].withOpacity(0.6))),
-                        ),
-                        TextFormField(
-                          // controller: _contentController,
-                          initialValue: widget.diary.getDiaryContent,
-                          readOnly: !_isEditButtonTaped,
-                          focusNode: _focusTyping,
-                          onTap: () {
-                            if (_isEditButtonTaped == false)
-                              Scaffold.of(context).showSnackBar(snackBar);
-                          },
-                          cursorColor: Colors.brown[500],
-                          minLines: 1,
-                          maxLines: 50,
-                          style: GoogleFonts.dancingScript(
-                              fontSize: 20, color: Colors.brown[500]),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
+                            ),
                           ),
-                        ),
-                        ImageListWidget(imageFiles),
-                        Container(
-                          height: size.height,
-                          width: size.width,
-                          child: Stack(
-                            children: listWidget,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                          // ImageListWidget(imageFiles)
+                        ]),
+                      ),
+                      ..._imageFiles
+                          .asMap()
+                          .entries
+                          .map((e) => addImageWidget(e.value, e.key, _space))
+                          .toList(),
+                    ])),
               ),
             );
           },
@@ -179,8 +170,15 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                       final file = await Utils.pickMedia(
                           isGallery: true, cropImage: cropImage);
                       if (file == null) return;
-                      setState(() => imageFiles.add(file));
-                      print('file' + file.path);
+                      setState(() {
+                        _imageFiles.add(file);
+                        _imageOffsets.add(Offset.zero);
+                      });
+                      Image image = Image.file(file);
+                      // Size size = Size(image.width, image.height);
+                      // _imageSizes.add(size);
+                      print('image size' + image.width.toString());
+                      // print('file' + file.path);
                     },
                     child: Container(
                       height: 30,
@@ -291,6 +289,27 @@ class _DiaryEditViewState extends State<DiaryEditView> {
               //   style: TextStyle(color: Colors.white),
               // )
               ),
+        ));
+  }
+
+  Widget addImageWidget(File imageFile, int index, double space) {
+    if (imageFile == null) return null;
+    return Positioned(
+        key: ValueKey(index),
+        left: _imageOffsets[index].dx,
+        top: _imageOffsets[index].dy == 0 ? 0 : _imageOffsets[index].dy - space,
+        child: Draggable(
+          feedback: _WidgetFeedbackDrag(imageFile),
+          childWhenDragging: Container(),
+          child: _WidgetChildDrag(imageFile, index),
+          onDraggableCanceled: (velocity, offset) {
+            setState(() {
+              print('\n' + _imageOffsets[index].toString());
+              _imageOffsets[index] = offset;
+              print('\n' + imageFile.toString());
+              print('\n' + _imageOffsets[index].toString());
+            });
+          },
         ));
   }
 
@@ -425,65 +444,133 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     );
   }
 
-  Widget ImageListWidget(List<File> imageFiles) {
+  Widget _WidgetChildDrag(File imageFile, int index) {
     return Container(
-      height: size.height * 0.5,
-      width: size.width,
-      child: GridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        children: imageFiles
-            .asMap()
-            .entries
-            .map((imageFile) => Draggable(
-                  feedback: Container(
-                    height: size.width * 0.5,
-                    width: size.width * 0.5,
-                    child: Opacity(
-                      opacity: 0.5,
-                      child: ClipRRect(
-                        child: Image.file(imageFile.value),
-                      ),
-                    ),
-                  ),
-                  childWhenDragging: Container(),
-                  child: Container(
-                    height: size.width * 0.5,
-                    width: size.width * 0.5,
-                    child: ClipRRect(
-                      child: Image.file(imageFile.value),
-                    ),
-                  ),
-                  onDraggableCanceled: (velocity, offset) {
-                    imageFiles.forEach((element) {
-                      print(element);
-                    });
-                    setState(() {
-                      imageFiles.removeAt(imageFile.key);
-                      // _imageIndex = imageFile.key;
-                      _imageDragged = imageFile.value;
-                      _offsetImage = offset;
-                      sizeImage = Size(size.width * 0.5, size.width * 0.5);
-                      listWidget.add(
-                        Container(
-                          height: size.width * 0.5,
-                          width: size.width * 0.5,
-                          child: Opacity(
-                            opacity: 0.5,
-                            child: ClipRRect(
-                              child: Image.file(imageFile.value),
-                            ),
-                          ),
-                        ),
-                      );
-                    });
-                  },
-                ))
-            .toList(),
+      height: size.width * 0.6,
+      width: size.width * 0.6,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 15,
+            child: Container(
+              height: size.width * 0.5,
+              width: size.width * 0.5,
+              child: ClipRRect(
+                child: Image.file(imageFile),
+              ),
+            ),
+          ),
+          Positioned(
+              top: 0,
+              right: 25,
+              child: Container(
+                height: 30,
+                width: 30,
+                decoration:
+                    BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+                child: IconButton(
+                    alignment: Alignment.center,
+                    iconSize: 15,
+                    onPressed: () {
+                      setState(() {
+                        imageFiles.removeAt(index);
+                      });
+                    },
+                    icon: Icon(
+                      Icons.close_rounded,
+                      color: Colors.white,
+                    )),
+              )),
+        ],
       ),
     );
   }
+
+  Widget _WidgetFeedbackDrag(File imageFile) {
+    return Opacity(
+      opacity: 0.5,
+      child: Container(
+        height: size.width * 0.6,
+        width: size.width * 0.6,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 15,
+              child: Container(
+                height: size.width * 0.5,
+                width: size.width * 0.5,
+                child: ClipRRect(
+                  child: Image.file(imageFile),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Widget ImageListWidget(List<File> imageFiles) {
+  //   if (imageFiles.isEmpty) return Container();
+
+  //   return Container(
+  //     height: size.height * 0.5,
+  //     width: size.width,
+  //     child: GridView.count(
+  //       physics: NeverScrollableScrollPhysics(),
+  //       crossAxisCount: 2,
+  //       crossAxisSpacing: 12,
+  //       mainAxisSpacing: 12,
+  //       children: imageFiles
+  //           .asMap()
+  //           .entries
+  //           .map((imageFile) => Draggable(
+  //                 feedback: Container(
+  //                   height: size.width * 0.5,
+  //                   width: size.width * 0.5,
+  //                   child: Opacity(
+  //                     opacity: 0.5,
+  //                     child: ClipRRect(
+  //                       child: Image.file(imageFile.value),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 childWhenDragging: Container(
+  //                   height: size.width * 0.5,
+  //                   width: size.width * 0.5,
+  //                   child: Opacity(
+  //                     opacity: 0.5,
+  //                     child: ClipRRect(
+  //                       child: Image.file(imageFile.value),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 child: Container(
+  //                   height: size.width * 0.5,
+  //                   width: size.width * 0.5,
+  //                   child: ClipRRect(
+  //                     child: Image.file(imageFile.value),
+  //                   ),
+  //                 ),
+  //                 onDraggableCanceled: (velocity, offset) {
+  //                   imageFiles.forEach((element) {
+  //                     print(element);
+  //                   });
+
+  //                   setState(() {
+  //                     addImageWidget(imageFile.value, offset);
+  //                     imageFiles.removeAt(imageFile.key);
+
+  //                     // _imageDragged = imageFile.value;
+  //                     // _offsetImage = offset;
+  //                     // sizeImage = Size(size.width * 0.5, size.width * 0.5);
+  //                   });
+  //                 },
+  //               ))
+  //           .toList(),
+  //     ),
+  //   );
+  // }
 }
 ///// detect keyyyyyyy
 // RawKeyboardListener(

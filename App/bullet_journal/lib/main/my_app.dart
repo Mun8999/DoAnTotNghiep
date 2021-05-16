@@ -1,6 +1,7 @@
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/home/home_view.dart';
 import 'package:bullet_journal/sticker_widget/sticker_widget_view.dart';
+import 'package:bullet_journal/test/test.dart';
 // import 'package:bullet_journel/login/login_view.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bullet Journal App',
+      debugShowCheckedModeBanner: false,
       home: HomeView(),
     );
   }
