@@ -1,17 +1,30 @@
 // @dart=2.9
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:bullet_journal/model/component.dart';
 
 class MyImage extends Component {
   int _imageId;
-  String _imagePath;
-  MyImage(int imageId, String imagePath, Offset offset) : super(offset) {
+  File _imageFile;
+  setImageId(int imageId) => this._imageId = imageId;
+  setImageFile(File imageFile) => this._imageFile = imageFile;
+  MyImage(File imageFile, Offset offset, Size size, {int imageId})
+      : super(offset, size) {
     this._imageId = imageId;
-    this._imagePath = imagePath;
+    this._imageFile = imageFile;
   }
+  String toString() {
+    return '>>Id: ' +
+        this._imageId.toString() +
+        '\nFile: ' +
+        this._imageFile.toString() +
+        '\nOffset: ' +
+        getOffset.toString() +
+        '\nState: ' +
+        getState.toString();
+  }
+
   int get getImageId => this._imageId;
-  String get getImagePath => this._imagePath;
-  Offset get getImageOffset => this.getOffset;
-  double get getImageOpacity => this.getOpacity;
+  File get getImageFile => this._imageFile;
 }
