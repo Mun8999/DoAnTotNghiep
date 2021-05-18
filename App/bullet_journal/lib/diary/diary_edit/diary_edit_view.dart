@@ -8,10 +8,11 @@ import 'package:bullet_journal/model/image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geocoder/model.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+// import 'package:geocoder/geocoder.dart';
+// import 'package:geocoder/model.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:focused_menu/focused_menu.dart';
 
@@ -26,36 +27,16 @@ class DiaryEditView extends StatefulWidget {
 Size size;
 bool _isEditButtonTaped = false;
 FocusNode _focusTyping = FocusNode();
-// List<File> _imageFiles = [];
-// List<Offset> _imageOffsets = [];
 List<MyImage> _images = [];
-DiaryEditViewModel _diaryEditViewModel;
+DiaryEditViewModel _diaryEditViewModel = DiaryEditViewModel();
 double _space;
 double _imageWidth;
 double _imageHeight;
 Size _imageSize;
-String address;
-// var address;
 
 class _DiaryEditViewState extends State<DiaryEditView> {
   @override
   void initState() {
-    // List<Address> address;
-    Future<Position> position = _determinePosition();
-    _getLocation() async {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      // debugPrint('location: ${position.latitude}');
-      final coordinates =
-          new Coordinates(position.latitude, position.longitude);
-      var addresses =
-          await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      var first = addresses.first;
-      print("${first.addressLine}");
-      address = first.addressLine;
-    }
-
-    _getLocation();
     super.initState();
   }
 
@@ -66,7 +47,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     _imageHeight = size.width * 0.6;
     _imageSize = Size(_imageWidth, _imageHeight);
     _space = MediaQuery.of(context).padding.top + kToolbarHeight;
-    _diaryEditViewModel = DiaryEditViewModel();
+
     // final SnackBar snackBar = SnackBar(
     //     content: Padding(
     //   padding: EdgeInsets.all(5),
@@ -136,22 +117,56 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                   e.value.getImageFile, e.key, _space))
                               .toList() +
                           [
-                            address != null
-                                ? Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      padding: const EdgeInsets.all(10),
-                                      child: Text(address.split(', ')[0] +
-                                          ', ' +
-                                          address.split(', ')[1] +
-                                          ',\nQuận ' +
-                                          address.split(', ')[2] +
-                                          ', ' +
-                                          address.split(', ')[3]),
-                                    ))
-                                : Container(),
+                            StreamBuilder<String>(
+                                stream: _diaryEditViewModel.getAddressStream,
+                                initialData: '',
+                                builder: (context, address) {
+                                  return address.data.isNotEmpty
+                                      ? Positioned(
+                                          right: 0,
+                                          bottom: 0,
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.all(10),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/pointer-on-the-map.svg',
+                                                    color: Colors.black,
+                                                    height: 20,
+                                                    width: 20,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 10,
+                                                          right: 10,
+                                                          bottom: 10),
+                                                  child: Text(
+                                                    address.data,
+                                                    style: GoogleFonts.koHo(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    // textAlign: TextAlign.end,
+                                                    // style: TextStyle(
+                                                    //     fontWeight:
+                                                    //         FontWeight.bold)
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ))
+                                      : Container();
+                                })
                           ]
                       //   [
                       //   Padding(
@@ -222,8 +237,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  InkWell(
-                    onTap: () async {
+                  IconButton(
+                    onPressed: () async {
                       final file = await Utils.pickMedia(
                           isGallery: true, cropImage: cropImage);
                       if (file == null) return;
@@ -233,7 +248,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                         _images.add(myImage);
                       });
                     },
-                    child: Container(
+                    icon: Container(
                       height: 30,
                       width: 30,
                       child: SvgPicture.asset(
@@ -242,9 +257,9 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                       ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
+                  IconButton(
+                    onPressed: () {},
+                    icon: Container(
                       height: 30,
                       width: 30,
                       child: SvgPicture.asset(
@@ -263,16 +278,16 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                     openWithTap: true,
                     menuOffset: 5,
                     bottomOffsetHeight: 80.0,
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      // decoration: BoxDecoration(
-                      //     borderRadius:
-                      //         BorderRadius.all(Radius.circular(15.0))),
-                      child: SvgPicture.asset(
-                        'assets/icons/emotion/smile-face.svg',
-                        color: Colors.white,
+                    child: IconButton(
+                      icon: Container(
+                        height: 30,
+                        width: 30,
+                        child: SvgPicture.asset(
+                          'assets/icons/emotion/smile-face.svg',
+                          color: Colors.white,
+                        ),
                       ),
+                      onPressed: () {},
                     ),
                     onPressed: () {},
                     menuItems: <FocusedMenuItem>[
@@ -311,22 +326,28 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                           onPressed: () {}),
                     ],
                   ),
-                  Container(
-                    height: 30,
-                    width: 30,
-                    child: SvgPicture.asset(
-                      'assets/icons/pointer-on-the-map.svg',
-                      color: Colors.white,
+                  IconButton(
+                    onPressed: () {},
+                    icon: Container(
+                      height: 30,
+                      width: 30,
+                      child: SvgPicture.asset(
+                        'assets/icons/pointer-on-the-map.svg',
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  Container(
-                    height: 30,
-                    width: 30,
-                    child: SvgPicture.asset(
-                      'assets/icons/black-shop-tag.svg',
-                      color: Colors.white,
+                  IconButton(
+                    onPressed: () {},
+                    icon: Container(
+                      height: 30,
+                      width: 30,
+                      child: SvgPicture.asset(
+                        'assets/icons/black-shop-tag.svg',
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
+                  )
                 ],
               )
               // Text(
@@ -678,43 +699,6 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   // }
 }
 
-Future<Position> _determinePosition() async {
-  bool serviceEnabled;
-  LocationPermission permission;
-
-  // Test if location services are enabled.
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the
-    // App to enable the location services.
-    return Future.error('Location services are disabled.');
-  }
-
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
-      return Future.error('Location permissions are denied');
-    }
-  }
-
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately.
-    return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-  }
-
-  // When we reach here, permissions are granted and we can
-  // continue accessing the position of the device.
-  return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high);
-}
 ////ha dang tessst
 // // ignore: must_be_immutable
 // class DragItem extends StatefulWidget {

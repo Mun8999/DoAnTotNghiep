@@ -1,8 +1,10 @@
+// @dart=2.9
 import 'package:bullet_journal/daily_task/daily_task_nf_view.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_view.dart';
 import 'package:bullet_journal/journey_newsfeed/journey_newsfeed_view.dart';
 import 'package:bullet_journal/model/diary.dart';
+import 'package:bullet_journal/model/location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -21,6 +23,11 @@ List<String> menuImages = [
 List<String> menus = ['Nhật ký', 'Hoạt động', 'Chuyến đi', 'Ghi chú'];
 
 class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;

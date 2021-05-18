@@ -4,6 +4,7 @@ import 'dart:ui';
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/model/diary.dart';
+import 'package:bullet_journal/model/location.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';

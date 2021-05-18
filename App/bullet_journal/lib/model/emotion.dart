@@ -3,7 +3,21 @@ class Emotion {
   String _emotionId;
   String _emotionName;
   String _emotionImage;
-  List _emotions = [
+  Emotion(String emotionId, String emotionName, String emotionImage) {
+    this._emotionId = emotionId;
+    this._emotionName = emotionName;
+    this._emotionImage = emotionImage;
+  }
+  String toString() =>
+      this._emotionId + ' - ' + this._emotionName + ' - ' + this._emotionImage;
+  String get getEmotionId => _emotionId;
+  String get getEmotionName => _emotionName;
+  String get getEmotionImage => _emotionImage;
+}
+
+class ListEmotion {
+  ListEmotion();
+  List<Emotion> _emotions = [
     Emotion('angry', 'Giận dữ', 'assets/icons/emotion/angry-face.svg'),
     Emotion('bad', 'Tệ', 'assets/icons/emotion/bad-face.svg'),
     Emotion('surprised', 'Bất ngờ', 'assets/icons/emotion/blind-face.svg'),
@@ -24,13 +38,5 @@ class Emotion {
     Emotion('wink', 'Có động lực',
         'assets/icons/emotion/wink-circular-face-symbol.svg'),
   ];
-  Emotion(String emotionId, String emotionName, String emotionImage) {
-    this._emotionId = emotionId;
-    this._emotionName = emotionName;
-    this._emotionImage = emotionImage;
-  }
-  List<Emotion> get getListEmotion => _emotions;
-  String get getEmotionId => _emotionId;
-  String get getEmotionName => _emotionName;
-  String get getEmotionImage => _emotionImage;
+  List<Emotion> get getEmotions => this._emotions;
 }

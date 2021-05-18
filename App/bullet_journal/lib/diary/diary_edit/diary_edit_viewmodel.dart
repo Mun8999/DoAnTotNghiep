@@ -1,25 +1,25 @@
 // @dart=2.9
-import 'package:bullet_journal/model/image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bullet_journal/model/emotion.dart';
+import 'package:bullet_journal/model/location.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DiaryEditViewModel {
-  final _imagesController = new BehaviorSubject<List<MyImage>>();
-  final _imageController = new BehaviorSubject<MyImage>();
-  // List<MyImage> _images = [];
-  DiaryEditViewModel() {
-    // _imagesController.sink.add([]);
-  }
-  // addImageData(MyImage image) {
-  //   print('>Stream' + image.toString());
-  //   // _images = _imagesController.stream.value;
-  //   _images.add(image);
-  //   _imagesController.sink.add(_images);
-  // }
-  addImageData(MyImage image) {
-    _imageController.sink.add(image);
+  final _addressController = new BehaviorSubject<String>();
+  final _emotionController = new BehaviorSubject<Emotion>();
+  MyAddress _myAddress;
+  ListEmotion _emotions;
+  initState() async {
+    _emotions = ListEmotion();
+    _emotions.getEmotions.forEach((element) {
+      print(element.toString());
+    });
+    _myAddress = MyAddress();
+    await _myAddress.initAddress();
+    _addressController.sink.add(_myAddress.getFullAddress());
   }
 
-  Stream get getImageStream => _imageController.stream;
-  Stream get getImagesStream => _imagesController.stream;
+  DiaryEditViewModel() {
+    initState();
+  }
+  Stream get getAddressStream => this._addressController;
 }
