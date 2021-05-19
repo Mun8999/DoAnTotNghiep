@@ -9,9 +9,8 @@ class MyAddress extends MyLocation {
   initAddress() async {
     await _myLocation.innitLocation();
     print('innitAddress');
-    // String a = _myLocation.getCurrentAddress;
     if (_myLocation.getCurrentAddress != null) {
-      print('abc' + _myLocation.getCurrentAddress);
+      // print('abc' + _myLocation.getCurrentAddress);
       String _numberStreetString = _myLocation.getCurrentAddress.split(', ')[0];
       _numberStreet = _numberStreetString.split(' ');
       this._number = _myLocation.getCurrentAddress.split(' ')[0];
@@ -23,12 +22,12 @@ class MyAddress extends MyLocation {
       this._district = _myLocation.getCurrentAddress.split(', ')[2];
       this._city = _myLocation.getCurrentAddress.split(', ')[3];
       this._nation = _myLocation.getCurrentAddress.split(', ')[4];
-      print('\n' + this._number);
-      print('\n' + this._street);
-      print('\n' + this._ward);
-      print('\n' + this._district);
-      print('\n' + this._city);
-      print('\n' + this._nation);
+      // print('\n' + this._number);
+      // print('\n' + this._street);
+      // print('\n' + this._ward);
+      // print('\n' + this._district);
+      // print('\n' + this._city);
+      // print('\n' + this._nation);
     }
   }
 
