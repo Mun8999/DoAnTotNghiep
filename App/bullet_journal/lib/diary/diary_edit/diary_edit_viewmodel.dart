@@ -7,26 +7,30 @@ class DiaryEditViewModel {
   /// Variables
   final _addressController = new BehaviorSubject<String>();
   final _emotionController = new BehaviorSubject<List<Emotion>>();
-  final _bottomStateController = new BehaviorSubject<int>();
+  final _bottomStateController = new BehaviorSubject<List<bool>>();
   final _emotionStatus = new BehaviorSubject<Emotion>();
   MyAddress _myAddress;
   ListEmotion _emotions;
+  List<bool> _bottomState;
 
   /// Contructor
   DiaryEditViewModel() {
     initState();
   }
   initState() {
+    _setBottomState();
     _setEmotionController();
     _setAddressController();
   }
 
   _setEmotionController() {
     _emotions = ListEmotion();
-    // _emotions.getEmotions.forEach((element) {
-    //   print(element.toString());
-    // });
     _emotionController.sink.add(_emotions.getEmotions);
+  }
+
+  _setBottomState() {
+    _bottomState = [false, false, false, false, false];
+    this._bottomStateController.sink.add(_bottomState);
   }
 
   _setAddressController() async {
@@ -35,8 +39,11 @@ class DiaryEditViewModel {
     _addressController.sink.add(_myAddress.getFullAddress());
   }
 
-  setBottomStateController(int state) =>
-      this._bottomStateController.sink.add(state);
+  setBottomStateController(int index, bool state) {
+    _bottomState[index] = state;
+    this._bottomStateController.sink.add(_bottomState);
+  }
+
   setEmotionStatus(Emotion emotion) => this._emotionStatus.sink.add(emotion);
 
   /// Get stream

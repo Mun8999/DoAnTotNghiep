@@ -1,18 +1,29 @@
 // @dart=2.9
+import 'package:bullet_journal/model/component.dart';
+import 'package:flutter/cupertino.dart';
+
 class Emotion {
   String _emotionId;
   String _emotionName;
   String _emotionImage;
-  Emotion(String emotionId, String emotionName, String emotionImage) {
+  Component _component;
+  Emotion(String emotionId, String emotionName, String emotionImage,
+      {Component component}) {
     this._emotionId = emotionId;
     this._emotionName = emotionName;
     this._emotionImage = emotionImage;
+    // if (component == null)
+    //   this._component = Component(Offset.zero, Size.zero);
+    // else
+    this._component = component;
   }
+  setEmotionComponent(Component component) => this._component = component;
   String toString() =>
       this._emotionId + ' - ' + this._emotionName + ' - ' + this._emotionImage;
-  String get getEmotionId => _emotionId;
-  String get getEmotionName => _emotionName;
-  String get getEmotionImage => _emotionImage;
+  String get getEmotionId => this._emotionId;
+  String get getEmotionName => this._emotionName;
+  String get getEmotionImage => this._emotionImage;
+  Component get getEmotionComponent => this._component;
 }
 
 class ListEmotion {
@@ -48,7 +59,7 @@ class ListEmotion {
     Emotion('happy', 'Hạnh phúc', 'assets/icons/emotion/050-unicorn.svg'),
     Emotion('money', 'Vui vì có tiền', 'assets/icons/emotion/008-unicorn.svg'),
     Emotion('sad', 'Hoang mang', 'assets/icons/emotion/015-unicorn.svg'),
-    Emotion('smile', 'Giận dữ', 'assets/icons/emotion/017-unicorn.svg'),
+    Emotion('smile', 'Đúng đắn', 'assets/icons/emotion/017-unicorn.svg'),
     // Emotion('smile_with_sunglasses', 'Thật ngầu',
     //     'assets/icons/emotion/018-unicorn.svg'),
     // Emotion('straight', 'Tức giận', 'assets/icons/emotion/019-unicorn.svg'),
