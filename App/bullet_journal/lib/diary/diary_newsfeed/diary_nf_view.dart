@@ -165,160 +165,301 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
       body: Container(
           height: size.height,
           color: Colors.white,
-          child: ListView.separated(
-            /// de o day de khong scroll theo cai nay
-            physics: NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      Diary diary = Diary(
-                          '1',
-                          'Đom Đóm - Jack',
-                          '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-                          DateTime.now());
-                      return DiaryEditView(diary);
-                    },
-                  ));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: Container(
-                    height: 250,
-                    child: Stack(children: [
-                      Container(
-                        height: 250,
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            // color: 100 * (index % 9) == 0
-                            //     ? Colors.pink[50]
-                            //     : Colors.pink[100 * (index % 9)],
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3))
-                            ]),
-                        // child:
-                      ),
-                      Positioned(
-                        top: 5,
-                        left: index % 2 == 0 ? null : 5,
-                        right: index % 2 != 0 ? null : 5,
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 200,
-                              width: 170,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: index % 2 != 0
-                                          ? Radius.circular(10)
-                                          : Radius.zero,
-                                      bottomLeft: index % 2 != 0
-                                          ? Radius.circular(10)
-                                          : Radius.zero,
-                                      topRight: index % 2 == 0
-                                          ? Radius.circular(10)
-                                          : Radius.zero,
-                                      bottomRight: index % 2 == 0
-                                          ? Radius.circular(10)
-                                          : Radius.zero),
-                                  color: 100 * (index % 9) == 0
-                                      ? Colors.yellow[50]
-                                      : Colors.yellow[100 * (index % 9)]),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Center(
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text('Đom Đóm - Jack',
-                                        style: GoogleFonts.dancingScript(
-                                            fontSize: 16,
-                                            color: Colors.brown[800],
-                                            fontWeight: FontWeight.bold)),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                        '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-                                        style: GoogleFonts.dancingScript(
-                                            fontSize: 13,
-                                            color: Colors.brown[500]))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        top: 5,
-                        left: index % 2 == 0 ? 5 : null,
-                        right: index % 2 != 0 ? 5 : null,
-                        child: Container(
-                          height: 200,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: index % 2 == 0
-                                    ? Radius.circular(10)
-                                    : Radius.zero,
-                                bottomLeft: index % 2 == 0
-                                    ? Radius.circular(10)
-                                    : Radius.zero,
-                                topRight: index % 2 != 0
-                                    ? Radius.circular(10)
-                                    : Radius.zero,
-                                bottomRight: index % 2 != 0
-                                    ? Radius.circular(10)
-                                    : Radius.zero),
-                            image: DecorationImage(
-                                image: AssetImage(images[index]),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 5,
-                        left: index % 2 == 0 ? 10 : null,
-                        right: index % 2 != 0 ? 10 : null,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text('9 tháng 9, 2021',
-                                style: GoogleFonts.oswald(
-                                    fontSize: 16,
-                                    color: Colors.white.withOpacity(0.7))
-                                // TextStyle(
+          child: ListView(
+              children:
+                  images.asMap().entries.map((e) => _itemDiaryList(e)).toList())
+          // ListView.separated(
+          //   /// de o day de khong scroll theo cai nay
+          //   physics: NeverScrollableScrollPhysics(),
+          //   scrollDirection: Axis.vertical,
+          //   itemCount: images.length,
+          //   itemBuilder: (context, index) {
+          //     return InkWell(
+          //       onTap: () {
+          //         Navigator.push(context, MaterialPageRoute(
+          //           builder: (context) {
+          //             Diary diary = Diary(
+          //                 '1',
+          //                 'Đom Đóm - Jack',
+          //                 '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+          //                 DateTime.now());
+          //             return DiaryEditView(diary);
+          //           },
+          //         ));
+          //       },
+          //       child: Padding(
+          //         padding: const EdgeInsets.only(left: 5, right: 5),
+          //         child: Container(
+          //           height: 250,
+          //           child: Stack(children: [
+          //             Container(
+          //               height: 250,
+          //               decoration: BoxDecoration(
+          //                   color: Colors.black,
+          //                   // color: 100 * (index % 9) == 0
+          //                   //     ? Colors.pink[50]
+          //                   //     : Colors.pink[100 * (index % 9)],
+          //                   borderRadius: BorderRadius.circular(10),
+          //                   boxShadow: [
+          //                     BoxShadow(
+          //                         color: Colors.grey.withOpacity(0.5),
+          //                         spreadRadius: 5,
+          //                         blurRadius: 7,
+          //                         offset: Offset(0, 3))
+          //                   ]),
+          //               // child:
+          //             ),
+          //             Positioned(
+          //               top: 5,
+          //               left: index % 2 == 0 ? null : 5,
+          //               right: index % 2 != 0 ? null : 5,
+          //               child: Stack(
+          //                 children: [
+          //                   Container(
+          //                     height: 200,
+          //                     width: 170,
+          //                     decoration: BoxDecoration(
+          //                         borderRadius: BorderRadius.only(
+          //                             topLeft: index % 2 != 0
+          //                                 ? Radius.circular(10)
+          //                                 : Radius.zero,
+          //                             bottomLeft: index % 2 != 0
+          //                                 ? Radius.circular(10)
+          //                                 : Radius.zero,
+          //                             topRight: index % 2 == 0
+          //                                 ? Radius.circular(10)
+          //                                 : Radius.zero,
+          //                             bottomRight: index % 2 == 0
+          //                                 ? Radius.circular(10)
+          //                                 : Radius.zero),
+          //                         color: 100 * (index % 9) == 0
+          //                             ? Colors.yellow[50]
+          //                             : Colors.yellow[100 * (index % 9)]),
+          //                   ),
+          //                   Padding(
+          //                     padding: const EdgeInsets.all(5),
+          //                     child: Center(
+          //                       child: Column(
+          //                         children: [
+          //                           SizedBox(
+          //                             height: 10,
+          //                           ),
+          //                           Text('Đom Đóm - Jack',
+          //                               style: GoogleFonts.dancingScript(
+          //                                   fontSize: 16,
+          //                                   color: Colors.brown[800],
+          //                                   fontWeight: FontWeight.bold)),
+          //                           SizedBox(
+          //                             height: 5,
+          //                           ),
+          //                           Text(
+          //                               '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+          //                               style: GoogleFonts.dancingScript(
+          //                                   fontSize: 13,
+          //                                   color: Colors.brown[500]))
+          //                         ],
+          //                       ),
+          //                     ),
+          //                   ),
+          //                 ],
+          //               ),
+          //             ),
+          //             Positioned(
+          //               top: 5,
+          //               left: index % 2 == 0 ? 5 : null,
+          //               right: index % 2 != 0 ? 5 : null,
+          //               child: Container(
+          //                 height: 200,
+          //                 width: 200,
+          //                 decoration: BoxDecoration(
+          //                   borderRadius: BorderRadius.only(
+          //                       topLeft: index % 2 == 0
+          //                           ? Radius.circular(10)
+          //                           : Radius.zero,
+          //                       bottomLeft: index % 2 == 0
+          //                           ? Radius.circular(10)
+          //                           : Radius.zero,
+          //                       topRight: index % 2 != 0
+          //                           ? Radius.circular(10)
+          //                           : Radius.zero,
+          //                       bottomRight: index % 2 != 0
+          //                           ? Radius.circular(10)
+          //                           : Radius.zero),
+          //                   image: DecorationImage(
+          //                       image: AssetImage(images[index]),
+          //                       fit: BoxFit.cover),
+          //                 ),
+          //               ),
+          //             ),
+          //             Positioned(
+          //               bottom: 5,
+          //               left: index % 2 == 0 ? 10 : null,
+          //               right: index % 2 != 0 ? 10 : null,
+          //               child: Container(
+          //                 alignment: Alignment.centerLeft,
+          //                 child: Padding(
+          //                   padding: const EdgeInsets.all(8),
+          //                   child: Text('9 tháng 9, 2021',
+          //                       style: GoogleFonts.oswald(
+          //                           fontSize: 16,
+          //                           color: Colors.white.withOpacity(0.7))
+          //                       // TextStyle(
 
-                                //     color: Colors.white.withOpacity(0.7),
-                                //     fontSize: 16),
-                                ),
-                          ),
-                        ),
-                      )
-                    ]),
-                  ),
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                height: 30,
-              );
-            },
-          )),
+          //                       //     color: Colors.white.withOpacity(0.7),
+          //                       //     fontSize: 16),
+          //                       ),
+          //                 ),
+          //               ),
+          //             )
+          //           ]),
+          //         ),
+          //       ),
+          //     );
+          //   },
+          //   separatorBuilder: (BuildContext context, int index) {
+          //     return SizedBox(
+          //       height: 30,
+          //     );
+          //   },
+          // )
+          ),
     ));
+  }
+
+  Widget _itemDiaryList(MapEntry<int, String> e) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            Diary diary = Diary(
+                '1',
+                'Đom Đóm - Jack',
+                '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+                DateTime.now());
+            return DiaryEditView(diary);
+          },
+        ));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: Container(
+          height: 250,
+          child: Stack(children: [
+            Container(
+              height: 250,
+              decoration: BoxDecoration(
+                  color: Colors.black,
+                  // color: 100 * (index % 9) == 0
+                  //     ? Colors.pink[50]
+                  //     : Colors.pink[100 * (index % 9)],
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3))
+                  ]),
+              // child:
+            ),
+            Positioned(
+              top: 5,
+              left: e.key % 2 == 0 ? null : 5,
+              right: e.key % 2 != 0 ? null : 5,
+              child: Stack(
+                children: [
+                  Container(
+                    height: 200,
+                    width: 170,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: e.key % 2 != 0
+                                ? Radius.circular(10)
+                                : Radius.zero,
+                            bottomLeft: e.key % 2 != 0
+                                ? Radius.circular(10)
+                                : Radius.zero,
+                            topRight: e.key % 2 == 0
+                                ? Radius.circular(10)
+                                : Radius.zero,
+                            bottomRight: e.key % 2 == 0
+                                ? Radius.circular(10)
+                                : Radius.zero),
+                        color: 100 * (e.key % 9) == 0
+                            ? Colors.yellow[50]
+                            : Colors.yellow[100 * (e.key % 9)]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text('Đom Đóm - Jack',
+                              style: GoogleFonts.dancingScript(
+                                  fontSize: 16,
+                                  color: Colors.brown[800],
+                                  fontWeight: FontWeight.bold)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                              '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+                              style: GoogleFonts.dancingScript(
+                                  fontSize: 13, color: Colors.brown[500]))
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 5,
+              left: e.key % 2 == 0 ? 5 : null,
+              right: e.key % 2 != 0 ? 5 : null,
+              child: Container(
+                height: 200,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft:
+                          e.key % 2 == 0 ? Radius.circular(10) : Radius.zero,
+                      bottomLeft:
+                          e.key % 2 == 0 ? Radius.circular(10) : Radius.zero,
+                      topRight:
+                          e.key % 2 != 0 ? Radius.circular(10) : Radius.zero,
+                      bottomRight:
+                          e.key % 2 != 0 ? Radius.circular(10) : Radius.zero),
+                  image: DecorationImage(
+                      image: AssetImage(images[e.key]), fit: BoxFit.cover),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 5,
+              left: e.key % 2 == 0 ? 10 : null,
+              right: e.key % 2 != 0 ? 10 : null,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text('9 tháng 9, 2021',
+                      style: GoogleFonts.oswald(
+                          fontSize: 16, color: Colors.white.withOpacity(0.7))
+                      // TextStyle(
+
+                      //     color: Colors.white.withOpacity(0.7),
+                      //     fontSize: 16),
+                      ),
+                ),
+              ),
+            )
+          ]),
+        ),
+      ),
+    );
   }
 }

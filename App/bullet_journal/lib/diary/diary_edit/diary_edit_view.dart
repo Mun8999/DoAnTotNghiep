@@ -436,7 +436,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                           onPressed: () {
                             _diaryEditViewModel.setBottomStateController(
                                 1, true);
-                            MyText _text = MyText('title', TextStyle(), 'abc',
+                            MyText _text = MyText('title', TextStyle(), '',
                                 Offset(10, 100), Size.zero);
                             _editTexts.add(_text);
                           },
@@ -575,102 +575,102 @@ class _DiaryEditViewState extends State<DiaryEditView> {
         ]);
   }
 
-  void showMyBottomSheet() {
-    showModalBottomSheet<dynamic>(
-      // enableDrag: true,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return Container(
-            margin: EdgeInsets.all(20),
-            // width: size.width - size.width * 0.2,
-            height: size.height * 0.07,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  child: SvgPicture.asset(
-                    'assets/icons/black-shop-tag.svg',
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  height: 30,
-                  width: 30,
-                  child: SvgPicture.asset(
-                    'assets/icons/insert-picture-icon.svg',
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  height: 30,
-                  width: 30,
-                  child: SvgPicture.asset(
-                    'assets/icons/cotton-t-shirt.svg',
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  height: 30,
-                  width: 30,
-                  child: SvgPicture.asset(
-                    'assets/icons/pointer-on-the-map.svg',
-                    color: Colors.white,
-                  ),
-                ),
-                InkWell(
-                    onTap: () {},
-                    child: FocusedMenuHolder(
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        child: SvgPicture.asset(
-                          'assets/icons/smile.svg',
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: () {},
-                      menuItems: <FocusedMenuItem>[
-                        // Add Each FocusedMenuItem  for Menu Options
-                        FocusedMenuItem(
-                            title: Text("Open"),
-                            trailingIcon: Icon(Icons.open_in_new),
-                            onPressed: () {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
-                            }),
-                        FocusedMenuItem(
-                            title: Text("Share"),
-                            trailingIcon: Icon(Icons.share),
-                            onPressed: () {}),
-                        FocusedMenuItem(
-                            title: Text("Favorite"),
-                            trailingIcon: Icon(Icons.favorite_border),
-                            onPressed: () {}),
-                        FocusedMenuItem(
-                            title: Text(
-                              "Delete",
-                              style: TextStyle(color: Colors.redAccent),
-                            ),
-                            trailingIcon: Icon(
-                              Icons.delete,
-                              color: Colors.redAccent,
-                            ),
-                            onPressed: () {}),
-                      ],
-                    )),
-              ],
-            ));
-      },
-    );
-  }
+  // void showMyBottomSheet() {
+  //   showModalBottomSheet<dynamic>(
+  //     // enableDrag: true,
+  //     backgroundColor: Colors.transparent,
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (context) {
+  //       return Container(
+  //           margin: EdgeInsets.all(20),
+  //           // width: size.width - size.width * 0.2,
+  //           height: size.height * 0.07,
+  //           decoration: BoxDecoration(
+  //             color: Colors.black,
+  //             borderRadius: BorderRadius.circular(20),
+  //           ),
+  //           child: Row(
+  //             mainAxisSize: MainAxisSize.min,
+  //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //             children: [
+  //               Container(
+  //                 height: 30,
+  //                 width: 30,
+  //                 child: SvgPicture.asset(
+  //                   'assets/icons/black-shop-tag.svg',
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //               Container(
+  //                 height: 30,
+  //                 width: 30,
+  //                 child: SvgPicture.asset(
+  //                   'assets/icons/insert-picture-icon.svg',
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //               Container(
+  //                 height: 30,
+  //                 width: 30,
+  //                 child: SvgPicture.asset(
+  //                   'assets/icons/cotton-t-shirt.svg',
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //               Container(
+  //                 height: 30,
+  //                 width: 30,
+  //                 child: SvgPicture.asset(
+  //                   'assets/icons/pointer-on-the-map.svg',
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //               InkWell(
+  //                   onTap: () {},
+  //                   child: FocusedMenuHolder(
+  //                     child: Container(
+  //                       height: 30,
+  //                       width: 30,
+  //                       child: SvgPicture.asset(
+  //                         'assets/icons/smile.svg',
+  //                         color: Colors.white,
+  //                       ),
+  //                     ),
+  //                     onPressed: () {},
+  //                     menuItems: <FocusedMenuItem>[
+  //                       // Add Each FocusedMenuItem  for Menu Options
+  //                       FocusedMenuItem(
+  //                           title: Text("Open"),
+  //                           trailingIcon: Icon(Icons.open_in_new),
+  //                           onPressed: () {
+  //                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
+  //                           }),
+  //                       FocusedMenuItem(
+  //                           title: Text("Share"),
+  //                           trailingIcon: Icon(Icons.share),
+  //                           onPressed: () {}),
+  //                       FocusedMenuItem(
+  //                           title: Text("Favorite"),
+  //                           trailingIcon: Icon(Icons.favorite_border),
+  //                           onPressed: () {}),
+  //                       FocusedMenuItem(
+  //                           title: Text(
+  //                             "Delete",
+  //                             style: TextStyle(color: Colors.redAccent),
+  //                           ),
+  //                           trailingIcon: Icon(
+  //                             Icons.delete,
+  //                             color: Colors.redAccent,
+  //                           ),
+  //                           onPressed: () {}),
+  //                     ],
+  //                   )),
+  //             ],
+  //           ));
+  //     },
+  //   );
+  // }
 
   Widget _WidgetChildDrag(File imageFile, int index) {
     return InkWell(
@@ -807,70 +807,94 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   Widget _addEditTextWidget(MapEntry<int, MyText> e, double space) {
     return Positioned(
-      left: e.value.getOffset.dx,
-      top: e.value.getOffset.dy - space,
-      child: Draggable(
-        child: Container(
-          width: size.width / 2,
-          child: TextFormField(
-            // controller: _contentController,
-            initialValue: widget.diary.getDiaryContent,
-            // readOnly: !_isEditButtonTaped,
-            focusNode: _focusTyping,
-            onTap: () {
-              // if (_isEditButtonTaped == false)
-              //   Scaffold.of(context).showSnackBar(snackBar);
-            },
-            cursorColor: Colors.yellow[900],
-            minLines: 1,
-            maxLines: 50,
-            style: GoogleFonts.dancingScript(
-              fontSize: 20,
-              color: Colors.yellow[900],
-            ),
-            decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.black)),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.black)),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.black))),
-          ),
-        ),
-        feedback: Opacity(
-          opacity: 0.5,
-          child: Container(
-            width: size.width / 2,
-            child: TextFormField(
-              // controller: _contentController,
-              initialValue: widget.diary.getDiaryContent,
-              readOnly: !_isEditButtonTaped,
-              focusNode: _focusTyping,
-              onTap: () {
-                // if (_isEditButtonTaped == false)
-                //   Scaffold.of(context).showSnackBar(snackBar);
-              },
-              cursorColor: Colors.brown[500],
-              minLines: 1,
-              maxLines: 50,
-              style: GoogleFonts.dancingScript(
-                  fontSize: 20, color: Colors.brown[500]),
-              decoration: InputDecoration(
-                border: InputBorder.none,
+        left: e.value.getOffset.dx,
+        top: e.value.getOffset.dy - space,
+        child: Material(
+          child: Draggable(
+            child: Material(
+              child: Container(
+                width: size.width * 0.75,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.yellow.withOpacity(0.5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: TextFormField(
+                    initialValue: e.value.getTextContent,
+                    onChanged: (value) {
+                      e.value.setTextContent(value);
+                    },
+                    cursorColor: Colors.yellow[900],
+                    minLines: 1,
+                    maxLines: 50,
+                    style: GoogleFonts.dancingScript(
+                      fontSize: 20,
+                      color: Colors.yellow[900],
+                    ),
+                    decoration: InputDecoration(
+                        hintText: 'Bạn đang nghĩ gì?',
+                        hintStyle: GoogleFonts.dancingScript(
+                          fontSize: 20,
+                          color: Colors.black.withOpacity(0.2),
+                        ),
+                        border: InputBorder.none),
+                  ),
+                ),
               ),
             ),
+            feedback: Material(
+              child: Opacity(
+                opacity: 0.5,
+                child: Container(
+                  width: size.width * 0.75,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.yellow.withOpacity(0.5),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: TextFormField(
+                      // controller: _contentController,
+                      initialValue: e.value.getTextContent,
+                      readOnly: true,
+                      focusNode: _focusTyping,
+                      // onTap: () {
+                      //   // if (_isEditButtonTaped == false)
+                      //   //   Scaffold.of(context).showSnackBar(snackBar);
+                      // },
+                      onChanged: (value) {
+                        e.value.setTextContent(value);
+                      },
+                      cursorColor: Colors.yellow[900],
+                      minLines: 1,
+                      maxLines: 50,
+                      style: GoogleFonts.dancingScript(
+                          fontSize: 20, color: Colors.brown[500]),
+                      decoration: InputDecoration(border: InputBorder.none),
+                      // decoration: InputDecoration(
+                      //     enabledBorder: OutlineInputBorder(
+                      //         borderRadius: BorderRadius.circular(5),
+                      //         borderSide: BorderSide(color: Colors.black)),
+                      //     border: OutlineInputBorder(
+                      //         borderRadius: BorderRadius.circular(5),
+                      //         borderSide: BorderSide(color: Colors.black)),
+                      //     focusedBorder: OutlineInputBorder(
+                      //         borderRadius: BorderRadius.circular(5),
+                      //         borderSide: BorderSide(color: Colors.black))),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            childWhenDragging: Container(),
+            onDraggableCanceled: (velocity, offset) {
+              setState(() {
+                e.value.setOffset(offset);
+              });
+            },
           ),
-        ),
-        onDraggableCanceled: (velocity, offset) {
-          setState(() {
-            e.value.setOffset(offset);
-          });
-        },
-      ),
-    );
+        ));
   }
 }
 
