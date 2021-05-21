@@ -8,6 +8,7 @@ class DailyTaskNewsFeedViewModel {
   List<String> _stringMonths = [];
   List<String> _stringAbbreviationMonths = [];
   final _daysInMonth = BehaviorSubject<int>();
+  final _monthSelectedController = BehaviorSubject<String>();
   Calender _calender = Calender();
 
   DailyTaskNewsFeedViewModel() {
@@ -16,6 +17,10 @@ class DailyTaskNewsFeedViewModel {
     _setAbbreviationMonthData();
     _setMonths();
   }
+  setMonthSelected(String month) {
+    _monthSelectedController.sink.add(month);
+  }
+
   _setYearData() => _years.addAll(_calender.getYear);
 
   _setStringMonthData() => _stringMonths.addAll(_calender.getStringMonth);
@@ -35,4 +40,5 @@ class DailyTaskNewsFeedViewModel {
   List<String> get getStringMonths => this._stringMonths;
   List<String> get getStringAbbreviationMonths =>
       this._stringAbbreviationMonths;
+  Stream get getMonthSelectedStream => this._monthSelectedController.stream;
 }

@@ -166,6 +166,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
           height: size.height,
           color: Colors.white,
           child: ListView(
+              shrinkWrap: false,
               children:
                   images.asMap().entries.map((e) => _itemDiaryList(e)).toList())
           // ListView.separated(
