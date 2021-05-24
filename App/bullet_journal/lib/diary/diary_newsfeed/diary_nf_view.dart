@@ -399,7 +399,8 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                             height: 10,
                           ),
                           Text('Đom Đóm - Jack',
-                              style: GoogleFonts.dancingScript(
+                              style: TextStyle(
+                                  fontFamily: 'DancingScript',
                                   fontSize: 16,
                                   color: Colors.brown[800],
                                   fontWeight: FontWeight.bold)),

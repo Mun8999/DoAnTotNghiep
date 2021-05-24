@@ -40,7 +40,9 @@ dependencies:
   geolocator: ^7.0.3
   geocoder: ^0.2.1
   popup_menu: ^1.0.5
-
+  #csdl
+  hive: ^2.0.4
+  hive_flutter: ^1.0.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -48,6 +50,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  #hive generator
+  build_runner: ^2.0.3
+  hive_generator: ^1.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,27 +73,8 @@ flutter:
     - assets/icons/edit/
     - assets/icons/emotion/
     - assets/icons/menu/
-    # - assets/images/bg_login_1.jpg
-    # - assets/images/bg_login_2.jpg
-    # - assets/images/bg_login_3.jpg
-    # - assets/images/bg_login_4.jpg
-    # - assets/images/bg_login_5.jpg
-    # - assets/images/bg_login_6.png
-    # - assets/images/FB_IMG_1618136235995.jpg
-    # - assets/icons/icon_cat.png
-    #edit icon
-    # - assets/icons/edit/approved.png
-    # - assets/icons/edit/back-arrow.png
-    # - assets/icons/edit/cancel.png
-    # - assets/icons/edit/crop-tool.png
-    # - assets/icons/edit/edit.png
-    # - assets/icons/edit/filter.png
-    # - assets/icons/edit/font.png
-    # - assets/icons/edit/left-arrow.png
-    # - assets/icons/edit/paintbrush.png
-    # - assets/icons/edit/previous.png
-    # - assets/icons/edit/reply.png
-    # - assets/icons/edit/tick.png
+    - assets/fonts/google_fonts/
+   
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -108,6 +94,12 @@ flutter:
     - family:  LoginViewIcon
       fonts:
         - asset: assets/icons/my_icon/LoginViewIcon.ttf
+    - family: DancingScript
+      fonts:
+      - asset: assets/fonts/google_fonts/DancingScript-Bold.ttf
+      - asset: assets/fonts/google_fonts/DancingScript-Medium.ttf
+      - asset: assets/fonts/google_fonts/DancingScript-Regular.ttf
+      - asset: assets/fonts/google_fonts/DancingScript-SemiBold.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

@@ -116,10 +116,10 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                       width: _size.width,
                                       height: 45,
                                       decoration: BoxDecoration(
-                                          color: Colors.yellow[900],
+                                          color: Colors.yellow[600],
                                           borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10))),
+                                              topLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20))),
                                       // child:
                                     ),
                                   ),
@@ -353,9 +353,9 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
       width: _size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+            bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
         // color: Colors.black,
-        border: Border.all(color: Colors.yellow[900], width: 2),
+        border: Border.all(color: Colors.yellow[600], width: 2),
         // boxShadow: [
         //   BoxShadow(
         //       color: Colors.grey.withOpacity(0.5),
@@ -390,7 +390,7 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                           //     ? Colors.transparent
                           //     : Colors.white.withOpacity(0.2),
                           color: index == 20
-                              ? Colors.yellow[900]
+                              ? Colors.yellow[800]
                               : Colors.transparent),
                       alignment: Alignment.center,
                       // && index + 1 % 7 <= _daysInMonth

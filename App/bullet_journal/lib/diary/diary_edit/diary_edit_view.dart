@@ -1,20 +1,24 @@
 // @dart=2.9
 import 'dart:async';
 import 'dart:io';
+import 'package:bullet_journal/database/db_component.dart';
+import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_viewmodel.dart';
+import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_view.dart';
+import 'package:bullet_journal/edit_image/image_croper.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
-// import 'package:bullet_journal/model/component.dart';
+import 'package:bullet_journal/model/component.dart';
 import 'package:bullet_journal/model/diary.dart';
 import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
+import 'package:bullet_journal/database/db_image_demo.dart';
 import 'package:bullet_journal/model/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:focused_menu/focused_menu.dart';
 
 // ignore: must_be_immutable
 class DiaryEditView extends StatefulWidget {
@@ -101,15 +105,49 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                setState(() {
-                  _focusTyping.requestFocus();
-                  _isEditButtonTaped = true;
-                  print('edit' + _isEditButtonTaped.toString());
+              onPressed: () async {
+                var box = await Hive.openBox<ImageDB>('images');
+
+                _images.forEach((image) async {
+                  // final imageBox = Hive.box('images');
+                  ImageDB imageDB = ImageDB(
+                      image.getImageFile.path,
+                      image.getOffset.dx,
+                      image.getOffset.dy,
+                      image.getSize.width,
+                      image.getSize.height,
+                      image.getOpacity);
+                  await box.put(image.getImageId, imageDB);
                 });
+                // _images.forEach((image) async {
+                //   // final imageBox = Hive.box('images');
+                //   ComponentDB imageDB = ComponentDB(
+                //       image.getOffset.dx,
+                //       image.getOffset.dy,
+                //       image.getSize.width,
+                //       image.getSize.height,
+                //       image.getOpacity);
+                //   await box.put(image.getImageId, imageDB);
+                // });
+
+                if (box.length > 0) {
+                  print('>path ' +
+                      box.getAt(1).imagePath +
+                      '\n>offset ' +
+                      box.getAt(1).offset_dx.toString() +
+                      ', ' +
+                      box.getAt(1).offset_dy.toString());
+                }
+
+                // setState(() async {
+
+                //   // _focusTyping.requestFocus();
+                //   // _isEditButtonTaped = true;
+                //   // print('edit' + _isEditButtonTaped.toString());
+                // });
               },
               icon: Icon(
-                Icons.edit,
+                Icons.save_sharp,
                 color: Colors.black,
               ),
             ),
