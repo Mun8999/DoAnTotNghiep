@@ -13,6 +13,7 @@ import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/database/db_image_demo.dart';
 import 'package:bullet_journal/model/text.dart';
+import 'package:bullet_journal/task/daily_task/daily_task_nf_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,9 +52,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _scrollController.addListener(() {
-      // print('\nscrollController' + _scrollController.offset.toString());
-    });
+    _initData();
   }
 
   @override
@@ -106,19 +105,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           actions: [
             IconButton(
               onPressed: () async {
-                var box = await Hive.openBox<ImageDB>('images');
+                _diaryEditViewModel.saveImage(_images);
 
-                _images.forEach((image) async {
-                  // final imageBox = Hive.box('images');
-                  ImageDB imageDB = ImageDB(
-                      image.getImageFile.path,
-                      image.getOffset.dx,
-                      image.getOffset.dy,
-                      image.getSize.width,
-                      image.getSize.height,
-                      image.getOpacity);
-                  await box.put(image.getImageId, imageDB);
-                });
                 // _images.forEach((image) async {
                 //   // final imageBox = Hive.box('images');
                 //   ComponentDB imageDB = ComponentDB(
@@ -129,15 +117,6 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                 //       image.getOpacity);
                 //   await box.put(image.getImageId, imageDB);
                 // });
-
-                if (box.length > 0) {
-                  print('>path ' +
-                      box.getAt(1).imagePath +
-                      '\n>offset ' +
-                      box.getAt(1).offset_dx.toString() +
-                      ', ' +
-                      box.getAt(1).offset_dy.toString());
-                }
 
                 // setState(() async {
 
@@ -597,6 +576,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   Widget _addImageWidget(File imageFile, int index, double space) {
     // print('1.chay do thang cha roi nè');
+
     _images[index].setImageId(index);
     if (imageFile == null) return null;
 
@@ -969,45 +949,62 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           ),
         ));
   }
-}
 
-void showPopUp(GlobalKey key, List<Emotion> emotions) {
-  PopupMenu menu = PopupMenu(
-    backgroundColor: Colors.black,
-    lineColor: Colors.yellow[900],
-    maxColumn: 5,
-    items: emotions.asMap().entries.map((e) => MenuEmtionItem(e)).toList(),
-    onClickMenu: (item) {
-      Emotion _emotion = emotions
-          .firstWhere((element) => element.getEmotionName == item.menuTitle);
+  void showPopUp(GlobalKey key, List<Emotion> emotions) {
+    PopupMenu menu = PopupMenu(
+      backgroundColor: Colors.black,
+      lineColor: Colors.yellow[900],
+      maxColumn: 5,
+      items: emotions.asMap().entries.map((e) => MenuEmtionItem(e)).toList(),
+      onClickMenu: (item) {
+        Emotion _emotion = emotions
+            .firstWhere((element) => element.getEmotionName == item.menuTitle);
 
-      // Component _component = Component(Offset(10, 150), Size(0, 0));
+        // Component _component = Component(Offset(10, 150), Size(0, 0));
 
-      // _emotion.setEmotionComponent(_component);
-      // print('\nshowPopUp' +
-      //     _emotion.getEmotionComponent.getOffset.dx.toString() +
-      //     _emotion.getEmotionComponent.getOffset.dy.toString());
-      print(_emotion.getEmotionName);
-      _diaryEditViewModel.setEmotionStatus(_emotion);
-      _diaryEditViewModel.setBottomStateController(2, true);
-      // _emotionOffset
-    },
-    onDismiss: () {},
-  );
-  menu.show(widgetKey: key);
-}
+        // _emotion.setEmotionComponent(_component);
+        // print('\nshowPopUp' +
+        //     _emotion.getEmotionComponent.getOffset.dx.toString() +
+        //     _emotion.getEmotionComponent.getOffset.dy.toString());
+        print(_emotion.getEmotionName);
+        _diaryEditViewModel.setEmotionStatus(_emotion);
+        _diaryEditViewModel.setBottomStateController(2, true);
+        // _emotionOffset
+      },
+      onDismiss: () {},
+    );
+    menu.show(widgetKey: key);
+  }
 
-MenuItem MenuEmtionItem(MapEntry<int, Emotion> e) {
-  return MenuItem(
-      textStyle: TextStyle(
-          color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-      title: e.value.getEmotionName,
-      image: Padding(
-        padding: const EdgeInsets.only(bottom: 5),
-        child: SvgPicture.asset(
-          e.value.getEmotionImage,
-        ),
-      ));
+  MenuItem MenuEmtionItem(MapEntry<int, Emotion> e) {
+    return MenuItem(
+        textStyle: TextStyle(
+            color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+        title: e.value.getEmotionName,
+        image: Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: SvgPicture.asset(
+            e.value.getEmotionImage,
+          ),
+        ));
+  }
+
+  Future _initData() async {
+    await _innitImage();
+  }
+
+  Future _innitImage() async {
+    var imageBox = await Hive.openBox<ImageDB>('images');
+    if (imageBox.length == 0) return;
+    MyImage myImage;
+    imageBox.toMap().values.toList().forEach((image) async {
+      myImage = MyImage(
+          File(image.imagePath),
+          Offset(image.offset_dx, image.offset_dy),
+          Size(image.size_width, image.size_height));
+      await _images.add(myImage);
+    });
+  }
 }
 
 /// grid view

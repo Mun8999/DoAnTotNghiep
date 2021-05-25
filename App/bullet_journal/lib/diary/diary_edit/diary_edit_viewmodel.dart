@@ -1,6 +1,9 @@
 // @dart=2.9
+import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/model/emotion.dart';
+import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/location.dart';
+import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DiaryEditViewModel {
@@ -52,4 +55,29 @@ class DiaryEditViewModel {
   Stream get getBottomStateStream => this._bottomStateController.stream;
   Stream get getEmotionStatusStream => this._emotionStatus.stream;
   Sink get getEmotionStatusSink => this._emotionStatus.sink;
+
+  Future<void> saveImage(List<MyImage> images) async {
+    if (images.length == 0) return;
+    var imageBox = await Hive.openBox<ImageDB>('images');
+    ImageDB imageDB;
+    images.forEach((image) async {
+      // final imageBox = Hive.box('images');
+      imageDB = ImageDB(
+          image.getImageFile.path,
+          image.getOffset.dx,
+          image.getOffset.dy,
+          image.getSize.width,
+          image.getSize.height,
+          image.getOpacity);
+      await imageBox.put(image.getImageId, imageDB);
+    });
+    imageBox.values.toList().forEach((element) {
+      print('>path ' +
+          element.imagePath +
+          '\n>offset ' +
+          element.offset_dx.toString() +
+          ', ' +
+          element.offset_dy.toString());
+    });
+  }
 }
