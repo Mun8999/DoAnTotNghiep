@@ -3,6 +3,7 @@ import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/location.dart';
+import 'package:bullet_journal/model/text.dart';
 import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -80,4 +81,6 @@ class DiaryEditViewModel {
           element.offset_dy.toString());
     });
   }
+
+  void saveText(List<MyText> editTexts) {}
 }

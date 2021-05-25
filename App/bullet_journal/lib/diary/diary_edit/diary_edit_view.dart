@@ -1,19 +1,13 @@
 // @dart=2.9
 import 'dart:async';
 import 'dart:io';
-import 'package:bullet_journal/database/db_component.dart';
 import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_viewmodel.dart';
-import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_view.dart';
-import 'package:bullet_journal/edit_image/image_croper.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
-import 'package:bullet_journal/model/component.dart';
 import 'package:bullet_journal/model/diary.dart';
 import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
-import 'package:bullet_journal/database/db_image_demo.dart';
 import 'package:bullet_journal/model/text.dart';
-import 'package:bullet_journal/task/daily_task/daily_task_nf_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -105,8 +99,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           actions: [
             IconButton(
               onPressed: () async {
-                _diaryEditViewModel.saveImage(_images);
-
+                await _diaryEditViewModel.saveImage(_images);
+                _diaryEditViewModel.saveText(_editTexts);
                 // _images.forEach((image) async {
                 //   // final imageBox = Hive.box('images');
                 //   ComponentDB imageDB = ComponentDB(
@@ -138,14 +132,17 @@ class _DiaryEditViewState extends State<DiaryEditView> {
             return SafeArea(
               child: SingleChildScrollView(
                 controller: _scrollController,
+
                 // physics: NeverScrollableScrollPhysics(),
                 child: Container(
                     height: size.height * 2,
                     width: size.width,
                     color: Colors.white,
                     child: StreamBuilder<List<bool>>(
+                        initialData: [false, false, false, false, false],
                         stream: _diaryEditViewModel.getBottomStateStream,
                         builder: (context, bottomButton) {
+                          // print('143: ' + bottomButton.data[3].toString());
                           return Stack(
                               children: _images
                                       .asMap()
@@ -323,11 +320,17 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                             .getAddressStream,
                                         initialData: '',
                                         builder: (context, address) {
+                                          // if (address.data.isNotEmpty &&
+                                          //     bottomButton.data[3]) {
+                                          //   print(
+                                          //       '322 address: ' + address.data);
+                                          // }
                                           return address.data.isNotEmpty &&
                                                   bottomButton.data[3]
                                               ? Positioned(
                                                   right: 0,
-                                                  bottom: 0,
+                                                  bottom: size.height +
+                                                      size.height * 0.22,
                                                   child: Container(
                                                     margin: EdgeInsets.only(
                                                         left: 10, right: 10),
@@ -439,6 +442,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
               initialData: [false, false, false, false, false],
               stream: _diaryEditViewModel.getBottomStateStream,
               builder: (context, bottomButton) {
+                // print('438: ' + bottomButton.data[3].toString());
                 return Container(
                     margin: EdgeInsets.all(20),
                     height: size.height * 0.07,
@@ -576,9 +580,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   Widget _addImageWidget(File imageFile, int index, double space) {
     // print('1.chay do thang cha roi nè');
-
+    if (imageFile == null && _images.length == 0) return null;
     _images[index].setImageId(index);
-    if (imageFile == null) return null;
 
     return Positioned(
         left: _images[index].getOffset.dx,
@@ -991,19 +994,28 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   Future _initData() async {
     await _innitImage();
+    _initBottomState();
   }
 
   Future _innitImage() async {
+    if (_images.length > 0) return;
     var imageBox = await Hive.openBox<ImageDB>('images');
     if (imageBox.length == 0) return;
     MyImage myImage;
-    imageBox.toMap().values.toList().forEach((image) async {
+    imageBox.toMap().values.toList().forEach((image) {
       myImage = MyImage(
           File(image.imagePath),
           Offset(image.offset_dx, image.offset_dy),
           Size(image.size_width, image.size_height));
-      await _images.add(myImage);
+      _images.add(myImage);
     });
+  }
+
+  void _initBottomState() {
+    print("images length> " + _images.length.toString());
+    if (_images.length > 0) {
+      _diaryEditViewModel.setBottomStateController(0, true);
+    }
   }
 }
 
