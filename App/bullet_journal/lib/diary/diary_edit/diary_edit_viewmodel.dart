@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'package:bullet_journal/database/db_image.dart';
+import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/location.dart';
@@ -82,5 +83,39 @@ class DiaryEditViewModel {
     });
   }
 
-  void saveText(List<MyText> editTexts) {}
+  Future<void> saveText(List<MyText> editTexts) async {
+    if (editTexts.length == 0) return;
+    // var textBox = await Hive.openBox<TextDB>('texts');
+    var textBox = await Hive.openBox<TextDB>('texts');
+    TextDB textDB;
+    editTexts.forEach((text) async {
+      // final imageBox = Hive.box('images');
+      textDB = TextDB(
+          textContent: text.getTextContent,
+          offset_dx: text.getOffset.dx,
+          offset_dy: text.getOffset.dy,
+          size_width: 0,
+          size_height: 0,
+          opacity: 0);
+      // textDB = TextDB(text.getOffset.dx, text.getOffset.dy, text.getSize.width,
+      //     text.getSize.height, text.getOpacity,
+      //     textType: '',
+      //     textContent: text.getTextContent,
+      //     textLine: 1,
+      //     textFont: '',
+      //     textWeight: '',
+      //     textColor: '',
+      //     textSize: 20,
+      //     backgroundColor: '');
+      await textBox.put(text.getTextId, textDB);
+    });
+    textBox.values.toList().forEach((element) {
+      print('>content ' +
+          element.textContent +
+          '\n>offset ' +
+          element.offset_dx.toString() +
+          ', ' +
+          element.offset_dy.toString());
+    });
+  }
 }

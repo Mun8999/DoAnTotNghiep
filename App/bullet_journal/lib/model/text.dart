@@ -1,6 +1,6 @@
 // @dart=2.9
 import 'package:bullet_journal/model/component.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class MyText extends Component {
   int _textId;

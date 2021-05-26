@@ -9,7 +9,7 @@ part of 'db_component.dart';
 
 class ComponentDBAdapter extends TypeAdapter<ComponentDB> {
   @override
-  final int typeId = 1;
+  final int typeId = 2;
 
   @override
   ComponentDB read(BinaryReader reader) {

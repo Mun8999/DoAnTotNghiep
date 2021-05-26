@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:bullet_journal/database/db_image.dart';
+import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_viewmodel.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:bullet_journal/model/diary.dart';
@@ -9,6 +10,7 @@ import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/text.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -100,7 +102,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
             IconButton(
               onPressed: () async {
                 await _diaryEditViewModel.saveImage(_images);
-                _diaryEditViewModel.saveText(_editTexts);
+                await _diaryEditViewModel.saveText(_editTexts);
                 // _images.forEach((image) async {
                 //   // final imageBox = Hive.box('images');
                 //   ComponentDB imageDB = ComponentDB(
@@ -860,6 +862,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   }
 
   Widget _addEditTextWidget(MapEntry<int, MyText> e, double space) {
+    e.value.setTextId(e.key);
     return Positioned(
         left: e.value.getOffset.dx,
         top: e.value.getOffset.dy - space,
@@ -993,11 +996,12 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   }
 
   Future _initData() async {
-    await _innitImage();
+    await _initText();
+    await _initImage();
     _initBottomState();
   }
 
-  Future _innitImage() async {
+  Future _initImage() async {
     if (_images.length > 0) return;
     var imageBox = await Hive.openBox<ImageDB>('images');
     if (imageBox.length == 0) return;
@@ -1013,9 +1017,44 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   void _initBottomState() {
     print("images length> " + _images.length.toString());
+    print("texts length> " + _editTexts.length.toString());
     if (_images.length > 0) {
       _diaryEditViewModel.setBottomStateController(0, true);
     }
+    if (_editTexts.length > 0) {
+      _diaryEditViewModel.setBottomStateController(1, true);
+    }
+  }
+
+  Future _initText() async {
+    // if (_editTexts.length > 0) return;
+    await Hive.openBox<TextDB>('texts');
+    var textBox = await Hive.box<TextDB>('texts');
+    if (textBox.length == 0) return;
+    MyText myText;
+    print('> 1034 text length: ' + textBox.length.toString());
+    print('\n1035 text content: ' +
+        textBox.name +
+        textBox.values.first.toString());
+
+    // textBox.toMap().values.toList().forEach((text) {
+    //   // myText = MyText('', TextStyle(), text.textContent,
+    //   //     Offset(text.offset_dx, text.offset_dy), Size.zero);
+
+    //   // print('>test>\n>content: ' +
+    //   //     myText.getTextContent +
+    //   //     '\n>offset: ' +
+    //   //     myText.getOffset.dx.toString() +
+    //   //     ', ' +
+    //   //     myText.getOffset.dy.toString());
+    //   // print('>test>\n>content: ' +
+    //   //     text.textContent +
+    //   //     '\n>offset: ' +
+    //   //     text.offset_dx.toString() +
+    //   //     ', ' +
+    //   //     text.offset_dy.toString());
+    //   // _editTexts.add(myText);
+    // });
   }
 }
 

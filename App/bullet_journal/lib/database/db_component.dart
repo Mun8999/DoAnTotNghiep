@@ -3,8 +3,8 @@
 import 'package:hive/hive.dart';
 part 'db_component.g.dart';
 
-@HiveType(typeId: 1)
-class ComponentDB {
+@HiveType(typeId: 2)
+class ComponentDB extends HiveObject {
   @HiveField(0)
   double offset_dx;
   @HiveField(1)
