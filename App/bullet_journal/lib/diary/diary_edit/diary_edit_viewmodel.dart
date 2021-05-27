@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:bullet_journal/database/db_emotion.dart';
 import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/model/emotion.dart';
@@ -61,9 +62,9 @@ class DiaryEditViewModel {
   Future<void> saveImage(List<MyImage> images) async {
     if (images.length == 0) return;
     var imageBox = await Hive.openBox<ImageDB>('images');
+    await imageBox.clear();
     ImageDB imageDB;
     images.forEach((image) async {
-      // final imageBox = Hive.box('images');
       imageDB = ImageDB(
           image.getImageFile.path,
           image.getOffset.dx,
@@ -71,7 +72,8 @@ class DiaryEditViewModel {
           image.getSize.width,
           image.getSize.height,
           image.getOpacity);
-      await imageBox.put(image.getImageId, imageDB);
+      // imageBox.put(image.getImageId, imageDB);
+      imageBox.add(imageDB);
     });
     imageBox.values.toList().forEach((element) {
       print('>path ' +
@@ -81,41 +83,54 @@ class DiaryEditViewModel {
           ', ' +
           element.offset_dy.toString());
     });
+    await imageBox.close();
   }
 
   Future<void> saveText(List<MyText> editTexts) async {
     if (editTexts.length == 0) return;
     // var textBox = await Hive.openBox<TextDB>('texts');
     var textBox = await Hive.openBox<TextDB>('texts');
+    await textBox.clear();
     TextDB textDB;
     editTexts.forEach((text) async {
-      // final imageBox = Hive.box('images');
       textDB = TextDB(
-          textContent: text.getTextContent,
-          offset_dx: text.getOffset.dx,
-          offset_dy: text.getOffset.dy,
-          size_width: 0,
-          size_height: 0,
-          opacity: 0);
-      // textDB = TextDB(text.getOffset.dx, text.getOffset.dy, text.getSize.width,
-      //     text.getSize.height, text.getOpacity,
-      //     textType: '',
-      //     textContent: text.getTextContent,
-      //     textLine: 1,
-      //     textFont: '',
-      //     textWeight: '',
-      //     textColor: '',
-      //     textSize: 20,
-      //     backgroundColor: '');
-      await textBox.put(text.getTextId, textDB);
+          '',
+          text.getTextContent,
+          2,
+          'textFont',
+          'textWeight',
+          'textColor',
+          1,
+          'backgroundColor',
+          text.getOffset.dx,
+          text.getOffset.dy,
+          0,
+          0,
+          0);
+      // textBox.put(text.getTextId, textDB);
+      textBox.add(textDB);
     });
     textBox.values.toList().forEach((element) {
-      print('>content ' +
-          element.textContent +
-          '\n>offset ' +
-          element.offset_dx.toString() +
-          ', ' +
-          element.offset_dy.toString());
+      print('>content ' + element.textContent);
     });
+    await textBox.close();
+  }
+
+  Future<void> saveEmotion(Emotion emotion) async {
+    if (emotion == null) return;
+    var emotionBox = await Hive.openBox<EmotionDB>('emotion');
+    emotionBox.clear();
+    EmotionDB emotionDB = EmotionDB(
+        emotion.getEmotionId,
+        emotion.getEmotionName,
+        emotion.getEmotionImage,
+        emotion.getEmotionComponent.getOffset.dx,
+        emotion.getEmotionComponent.getOffset.dy,
+        emotion.getEmotionComponent.getSize.width,
+        emotion.getEmotionComponent.getSize.height,
+        emotion.getEmotionComponent.getOpacity);
+    await emotionBox.add(emotionDB);
+    print('133> emotion: ' + emotionBox.getAt(0).emotionImage);
+    await emotionBox.close();
   }
 }

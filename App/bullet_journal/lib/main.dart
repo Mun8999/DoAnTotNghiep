@@ -1,5 +1,7 @@
 // @dart=2.9
+import 'package:bullet_journal/database/db_address.dart';
 import 'package:bullet_journal/database/db_component.dart';
+import 'package:bullet_journal/database/db_emotion.dart';
 import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/main/my_app.dart';
@@ -13,8 +15,10 @@ Future main() async {
   await Hive
     ..initFlutter()
     ..registerAdapter(ImageDBAdapter())
-    ..registerAdapter(ComponentDBAdapter())
-    ..registerAdapter(TextDBAdapter());
+    ..registerAdapter(TextDBAdapter())
+    ..registerAdapter(EmotionDBAdapter())
+    ..registerAdapter(AddressDBAdapter())
+    ..registerAdapter(ComponentDBAdapter());
   // Hive.registerAdapter(PersonAdapter());
   // var box = await Hive.openBox<Person>('db');
   // await Hive.openBox<Person>('person1');

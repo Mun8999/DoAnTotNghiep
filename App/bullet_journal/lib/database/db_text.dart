@@ -1,5 +1,4 @@
 // @dart=2.9
-import 'package:flutter/material.dart';
 
 import 'package:bullet_journal/database/db_component.dart';
 import 'package:hive/hive.dart';
@@ -23,20 +22,21 @@ class TextDB extends ComponentDB {
   int textSize;
   @HiveField(12)
   String backgroundColor;
+
   TextDB(
-      {@required String textType,
-      @required String textContent,
-      @required int textLine,
-      @required String textFont,
-      @required String textWeight,
-      @required String textColor,
-      @required int textSize,
-      @required String backgroundColor,
-      @required double offset_dx,
-      @required double offset_dy,
-      @required double size_width,
-      @required double size_height,
-      @required double opacity})
+      String textType,
+      String textContent,
+      int textLine,
+      String textFont,
+      String textWeight,
+      String textColor,
+      int textSize,
+      String backgroundColor,
+      double offset_dx,
+      double offset_dy,
+      double size_width,
+      double size_height,
+      double opacity)
       : super(offset_dx, offset_dy, size_width, size_height, opacity) {
     this.textType = textType;
     this.textFont = textFont;
@@ -47,4 +47,23 @@ class TextDB extends ComponentDB {
     this.textContent = textContent;
     this.textLine = textLine;
   }
+  // TextDB(
+  // String textType,
+  // String textContent,
+  // int textLine,
+  // String textFont,
+  // String textWeight,
+  // String textColor,
+  // int textSize,
+  // String backgroundColor,
+  // ) {
+  // this.textType = textType;
+  // this.textFont = textFont;
+  // this.textWeight = textWeight;
+  // this.textColor = textColor;
+  // this.textSize = textSize;
+  // this.backgroundColor = backgroundColor;
+  // this.textContent = textContent;
+  // this.textLine = textLine;
+  // }
 }

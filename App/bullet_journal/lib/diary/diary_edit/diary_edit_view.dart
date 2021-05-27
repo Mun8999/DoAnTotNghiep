@@ -1,10 +1,12 @@
 // @dart=2.9
 import 'dart:async';
 import 'dart:io';
+import 'package:bullet_journal/database/db_emotion.dart';
 import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_viewmodel.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
+import 'package:bullet_journal/model/component.dart';
 import 'package:bullet_journal/model/diary.dart';
 import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
@@ -39,6 +41,7 @@ double _imageHeight;
 Size _imageSize;
 
 Offset _emotionOffset;
+Emotion _emotion;
 bool _emotionEditState = false;
 
 List<MyText> _editTexts = [];
@@ -103,6 +106,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
               onPressed: () async {
                 await _diaryEditViewModel.saveImage(_images);
                 await _diaryEditViewModel.saveText(_editTexts);
+                await _diaryEditViewModel.saveEmotion(_emotion);
                 // _images.forEach((image) async {
                 //   // final imageBox = Hive.box('images');
                 //   ComponentDB imageDB = ComponentDB(
@@ -172,6 +176,15 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                           //     _innitOffset.toString());
                                           _emotionOffset = _innitOffset;
                                         }
+                                        if (emotion.hasData) {
+                                          _emotion = Emotion(
+                                              emotion.data.getEmotionId,
+                                              emotion.data.getEmotionName,
+                                              emotion.data.getEmotionImage,
+                                              component: Component(
+                                                  Offset(10, 150), Size.zero));
+                                        }
+
                                         return emotion.hasData &&
                                                 bottomButton.data[2]
                                             ? Positioned(
@@ -762,7 +775,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                       child: IconButton(
                           alignment: Alignment.center,
                           iconSize: 15,
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               _images[index].setState(3);
                               if (_images[index].getState == 3) {
@@ -996,13 +1009,13 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   }
 
   Future _initData() async {
-    await _initText();
     await _initImage();
+    await _initText();
+    await _initEmotion();
     _initBottomState();
   }
 
   Future _initImage() async {
-    if (_images.length > 0) return;
     var imageBox = await Hive.openBox<ImageDB>('images');
     if (imageBox.length == 0) return;
     MyImage myImage;
@@ -1013,6 +1026,28 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           Size(image.size_width, image.size_height));
       _images.add(myImage);
     });
+    await imageBox.close();
+  }
+
+  Future _initText() async {
+    var textBox = await Hive.openBox<TextDB>('texts');
+    if (textBox.length == 0) return;
+    textBox.values.toList().forEach((element) {
+      print('>content ' + element.textContent + '\n>offset ');
+      _editTexts.add(MyText('', TextStyle(), element.textContent,
+          Offset(element.offset_dx, element.offset_dy), size));
+    });
+    await textBox.close();
+  }
+
+  Future _initEmotion() async {
+    var emotionBox = await Hive.openBox<EmotionDB>('emotion');
+    if (emotionBox.length == 0) return;
+    EmotionDB emotionDB = emotionBox.getAt(0);
+    _diaryEditViewModel.setEmotionStatus(Emotion(
+        emotionDB.emotionId, emotionDB.emotionName, emotionDB.emotionName));
+    await emotionBox.close();
+    _diaryEditViewModel.setBottomStateController(2, true);
   }
 
   void _initBottomState() {
@@ -1024,37 +1059,6 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     if (_editTexts.length > 0) {
       _diaryEditViewModel.setBottomStateController(1, true);
     }
-  }
-
-  Future _initText() async {
-    // if (_editTexts.length > 0) return;
-    await Hive.openBox<TextDB>('texts');
-    var textBox = await Hive.box<TextDB>('texts');
-    if (textBox.length == 0) return;
-    MyText myText;
-    print('> 1034 text length: ' + textBox.length.toString());
-    print('\n1035 text content: ' +
-        textBox.name +
-        textBox.values.first.toString());
-
-    // textBox.toMap().values.toList().forEach((text) {
-    //   // myText = MyText('', TextStyle(), text.textContent,
-    //   //     Offset(text.offset_dx, text.offset_dy), Size.zero);
-
-    //   // print('>test>\n>content: ' +
-    //   //     myText.getTextContent +
-    //   //     '\n>offset: ' +
-    //   //     myText.getOffset.dx.toString() +
-    //   //     ', ' +
-    //   //     myText.getOffset.dy.toString());
-    //   // print('>test>\n>content: ' +
-    //   //     text.textContent +
-    //   //     '\n>offset: ' +
-    //   //     text.offset_dx.toString() +
-    //   //     ', ' +
-    //   //     text.offset_dy.toString());
-    //   // _editTexts.add(myText);
-    // });
   }
 }
 

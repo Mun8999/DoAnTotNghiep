@@ -1,35 +1,48 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // @dart=2.9
 
-part of 'db_image_demo.dart';
+part of 'db_address.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ImageDataAdapter extends TypeAdapter<ImageData> {
+class AddressDBAdapter extends TypeAdapter<AddressDB> {
   @override
-  final int typeId = 0;
+  final int typeId = 4;
 
   @override
-  ImageData read(BinaryReader reader) {
+  AddressDB read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ImageData()
-      ..imageId = fields[0] as int
-      ..imageFile = fields[1] as String;
+    return AddressDB(
+      fields[5] as String,
+      fields[0] as double,
+      fields[1] as double,
+      fields[2] as double,
+      fields[3] as double,
+      fields[4] as double,
+    );
   }
 
   @override
-  void write(BinaryWriter writer, ImageData obj) {
+  void write(BinaryWriter writer, AddressDB obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(6)
+      ..writeByte(5)
+      ..write(obj.address)
       ..writeByte(0)
-      ..write(obj.imageId)
+      ..write(obj.offset_dx)
       ..writeByte(1)
-      ..write(obj.imageFile);
+      ..write(obj.offset_dy)
+      ..writeByte(2)
+      ..write(obj.size_width)
+      ..writeByte(3)
+      ..write(obj.size_height)
+      ..writeByte(4)
+      ..write(obj.opacity);
   }
 
   @override
@@ -38,7 +51,7 @@ class ImageDataAdapter extends TypeAdapter<ImageData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ImageDataAdapter &&
+      other is AddressDBAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
