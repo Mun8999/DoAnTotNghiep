@@ -117,7 +117,8 @@ class DiaryEditViewModel {
   }
 
   Future<void> saveEmotion(Emotion emotion) async {
-    if (emotion == null) return;
+    // if (emotion.getEmotionComponent.getState == 3) return;
+    // print('121>12321312312321');
     var emotionBox = await Hive.openBox<EmotionDB>('emotion');
     emotionBox.clear();
     EmotionDB emotionDB = EmotionDB(
@@ -128,9 +129,10 @@ class DiaryEditViewModel {
         emotion.getEmotionComponent.getOffset.dy,
         emotion.getEmotionComponent.getSize.width,
         emotion.getEmotionComponent.getSize.height,
-        emotion.getEmotionComponent.getOpacity);
+        emotion.getEmotionComponent.getOpacity,
+        state: emotion.getEmotionComponent.getState);
     await emotionBox.add(emotionDB);
-    print('133> emotion: ' + emotionBox.getAt(0).emotionImage);
+    // print('133> emotion: ' + emotion.getEmotionImage);
     await emotionBox.close();
   }
 }

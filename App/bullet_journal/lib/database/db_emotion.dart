@@ -5,11 +5,11 @@ part 'db_emotion.g.dart';
 
 @HiveType(typeId: 3)
 class EmotionDB extends ComponentDB {
-  @HiveField(5)
-  String emotionId;
   @HiveField(6)
-  String emotionName;
+  String emotionId;
   @HiveField(7)
+  String emotionName;
+  @HiveField(8)
   String emotionImage;
   EmotionDB(
       String emotionId,
@@ -19,8 +19,10 @@ class EmotionDB extends ComponentDB {
       double offset_dy,
       double size_width,
       double size_height,
-      double opacity)
-      : super(offset_dx, offset_dy, size_width, size_height, opacity) {
+      double opacity,
+      {int state})
+      : super(offset_dx, offset_dy, size_width, size_height, opacity,
+            state: state) {
     this.emotionId = emotionId;
     this.emotionName = emotionName;
     this.emotionImage = emotionImage;

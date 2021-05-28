@@ -18,20 +18,20 @@ class AddressDBAdapter extends TypeAdapter<AddressDB> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AddressDB(
-      fields[5] as String,
+      fields[6] as String,
       fields[0] as double,
       fields[1] as double,
       fields[2] as double,
       fields[3] as double,
       fields[4] as double,
-    );
+    )..state = fields[5] as int;
   }
 
   @override
   void write(BinaryWriter writer, AddressDB obj) {
     writer
+      ..writeByte(7)
       ..writeByte(6)
-      ..writeByte(5)
       ..write(obj.address)
       ..writeByte(0)
       ..write(obj.offset_dx)
@@ -42,7 +42,9 @@ class AddressDBAdapter extends TypeAdapter<AddressDB> {
       ..writeByte(3)
       ..write(obj.size_height)
       ..writeByte(4)
-      ..write(obj.opacity);
+      ..write(obj.opacity)
+      ..writeByte(5)
+      ..write(obj.state);
   }
 
   @override

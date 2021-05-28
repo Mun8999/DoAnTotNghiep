@@ -5,7 +5,7 @@ part 'db_address.g.dart';
 
 @HiveType(typeId: 4)
 class AddressDB extends ComponentDB {
-  @HiveField(5)
+  @HiveField(6)
   String address;
   AddressDB(String address, double offset_dx, double offset_dy,
       double size_width, double size_height, double opacity)

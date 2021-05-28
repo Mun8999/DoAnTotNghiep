@@ -3,7 +3,7 @@
 import 'package:hive/hive.dart';
 part 'db_component.g.dart';
 
-@HiveType(typeId: 2)
+@HiveType(typeId: 0)
 class ComponentDB extends HiveObject {
   @HiveField(0)
   double offset_dx;
@@ -15,13 +15,17 @@ class ComponentDB extends HiveObject {
   double size_height;
   @HiveField(4)
   double opacity;
+  @HiveField(5)
+  int state;
   ComponentDB(double offset_dx, double offset_dy, double size_width,
-      double size_height, double opacity) {
+      double size_height, double opacity,
+      {int state = 1}) {
     this.offset_dx = offset_dx;
     this.offset_dy = offset_dy;
     this.size_width = size_width;
     this.size_height = size_height;
     this.opacity = opacity;
+    this.state = state;
   }
   // double get getOffsetDx => this._offset_dx;
   // double get getOffsetDy => this._offset_dy;

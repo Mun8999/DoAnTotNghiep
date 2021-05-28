@@ -18,7 +18,8 @@ Future main() async {
     ..registerAdapter(TextDBAdapter())
     ..registerAdapter(EmotionDBAdapter())
     ..registerAdapter(AddressDBAdapter())
-    ..registerAdapter(ComponentDBAdapter());
+    ..registerAdapter(
+        ComponentDBAdapter()); // bai hoc xuong mau> class extend phai de o cuoi cung nha -_-
   // Hive.registerAdapter(PersonAdapter());
   // var box = await Hive.openBox<Person>('db');
   // await Hive.openBox<Person>('person1');

@@ -40,7 +40,6 @@ double _imageWidth;
 double _imageHeight;
 Size _imageSize;
 
-Offset _emotionOffset;
 Emotion _emotion;
 bool _emotionEditState = false;
 
@@ -106,6 +105,9 @@ class _DiaryEditViewState extends State<DiaryEditView> {
               onPressed: () async {
                 await _diaryEditViewModel.saveImage(_images);
                 await _diaryEditViewModel.saveText(_editTexts);
+                // _diaryEditViewModel.getEmotionStatusSink.
+                print('109> emotion state: ' +
+                    _emotion.getEmotionComponent.getState.toString());
                 await _diaryEditViewModel.saveEmotion(_emotion);
                 // _images.forEach((image) async {
                 //   // final imageBox = Hive.box('images');
@@ -161,35 +163,59 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                       stream: _diaryEditViewModel
                                           .getEmotionStatusStream,
                                       builder: (context, emotion) {
-                                        if (_emotionOffset == null) {
-                                          Offset _innitOffset = Offset(10, 150);
+                                        // if (_emotion == null) {
+                                        //   Component component = Component(
+                                        //       Offset(10, 150), Size.zero);
+                                        //   _emotion
+                                        //       .setEmotionComponent(component);
+                                        //   _diaryEditViewModel
+                                        //       .setEmotionStatus(_emotion);
+                                        // }
 
-                                          ///test
-                                          // print(_scrollController.offset);
-                                          // if (_scrollController.offset > 0)
-                                          //   _innitOffset = _innitOffset +
-                                          //       Offset(0,
-                                          //           _scrollController.offset);
-
-                                          ///test
-                                          // print('innitOffset' +
-                                          //     _innitOffset.toString());
-                                          _emotionOffset = _innitOffset;
-                                        }
-                                        if (emotion.hasData) {
+                                        if (emotion.hasData &&
+                                            emotion.data.getEmotionComponent
+                                                    .getState !=
+                                                3) {
+                                          // print('174>> emotion state: ' +
+                                          //     emotion.data.getEmotionComponent
+                                          //         .getState
+                                          //         .toString());
                                           _emotion = Emotion(
                                               emotion.data.getEmotionId,
                                               emotion.data.getEmotionName,
                                               emotion.data.getEmotionImage,
                                               component: Component(
-                                                  Offset(10, 150), Size.zero));
+                                                  emotion
+                                                      .data
+                                                      .getEmotionComponent
+                                                      .getOffset,
+                                                  Size.zero));
+                                          // print('175> emotion offset: ' +
+                                          //     _emotion
+                                          //         .getEmotionComponent.getOffset
+                                          //         .toString());
                                         }
+                                        // if (_emotionOffset == null) {
+                                        //   Offset _innitOffset = Offset(10, 150);
+                                        //   _emotionOffset = _innitOffset;
+                                        // }
 
                                         return emotion.hasData &&
-                                                bottomButton.data[2]
+                                                emotion.data.getEmotionComponent
+                                                        .getState !=
+                                                    3
                                             ? Positioned(
-                                                left: _emotionOffset.dx,
-                                                top: _emotionOffset.dy - _space,
+                                                left: emotion
+                                                    .data
+                                                    .getEmotionComponent
+                                                    .getOffset
+                                                    .dx,
+                                                top: emotion
+                                                        .data
+                                                        .getEmotionComponent
+                                                        .getOffset
+                                                        .dy -
+                                                    _space,
                                                 child: Draggable(
                                                   feedback: Opacity(
                                                     opacity: 0.5,
@@ -287,6 +313,13 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                                                       .setBottomStateController(
                                                                           2,
                                                                           false);
+                                                                  _emotion
+                                                                      .getEmotionComponent
+                                                                      .setState(
+                                                                          3);
+                                                                  _diaryEditViewModel
+                                                                      .setEmotionStatus(
+                                                                          _emotion);
                                                                 },
                                                                 child: _emotionEditState
                                                                     ? Container(
@@ -310,20 +343,29 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                                       Container(),
                                                   onDraggableCanceled:
                                                       (velocity, offset) {
+                                                    // kiem tra vi tri co ngoai man hinh ko?
                                                     if (!_checkEmotionOfffset(
                                                         offset)) return;
-                                                    setState(() {
-                                                      if (_scrollController
-                                                              .offset >
-                                                          0) {
-                                                        offset = offset +
-                                                            Offset(
-                                                                0,
-                                                                _scrollController
-                                                                    .offset);
-                                                      }
-                                                      _emotionOffset = offset;
-                                                    });
+                                                    print('327>>>>>>>offset ' +
+                                                        offset.toString());
+                                                    // cong toa do neu nguoi dung cuon xuong
+                                                    if (_scrollController
+                                                            .offset >
+                                                        0) {
+                                                      offset = offset +
+                                                          Offset(
+                                                              0,
+                                                              _scrollController
+                                                                  .offset);
+                                                    }
+                                                    // gan lai vi tri cho stream sau khi di chuyen
+                                                    _emotion
+                                                        .setEmotionComponent(
+                                                            Component(
+                                                                offset, size));
+                                                    _diaryEditViewModel
+                                                        .setEmotionStatus(
+                                                            _emotion);
                                                   },
                                                 ),
                                               )
@@ -879,69 +921,78 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     return Positioned(
         left: e.value.getOffset.dx,
         top: e.value.getOffset.dy - space,
-        child: Material(
+        child: Container(
+          width: size.width * 0.75,
+          // color: Colors.transparent,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.yellow.withOpacity(0.5),
+          ),
           child: Draggable(
-            child: Material(
+            child: TextFormField(
+                initialValue: e.value.getTextContent,
+                onChanged: (value) {
+                  e.value.setTextContent(value);
+                },
+                cursorColor: Colors.yellow[900],
+                minLines: 1,
+                maxLines: 50,
+                style: GoogleFonts.dancingScript(
+                  fontSize: 20,
+                  color: Colors.yellow[900],
+                ),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(10))
+                // InputDecoration(
+                //   fillColor: Colors.yellow.withOpacity(0.5),
+                //   filled: true,
+                //   border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.all(Radius.circular(10)),
+                //       borderSide: BorderSide(
+                //           color: Colors.transparent,
+                //           width: 0,
+                //           style: BorderStyle.none)),
+                //   enabled: true,
+                //   enabledBorder: OutlineInputBorder(
+                //       borderRadius: BorderRadius.all(Radius.circular(10)),
+                //       borderSide: BorderSide(
+                //           color: Colors.transparent,
+                //           width: 0,
+                //           style: BorderStyle.none)),
+                //   contentPadding: const EdgeInsets.all(10),
+                //   hintText: 'Bạn đang nghĩ gì?',
+                //   hintStyle: GoogleFonts.dancingScript(
+                //     fontSize: 20,
+                //     color: Colors.black.withOpacity(0.2),
+                //   ),
+                // )
+                ),
+            feedback: Opacity(
+              opacity: 0.5,
               child: Container(
                 width: size.width * 0.75,
+                // color: Colors.transparent,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.yellow.withOpacity(0.5),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
+                child: Material(
+                  color: Colors.yellow,
                   child: TextFormField(
-                    initialValue: e.value.getTextContent,
-                    onChanged: (value) {
-                      e.value.setTextContent(value);
-                    },
-                    cursorColor: Colors.yellow[900],
-                    minLines: 1,
-                    maxLines: 50,
-                    style: GoogleFonts.dancingScript(
-                      fontSize: 20,
-                      color: Colors.yellow[900],
-                    ),
-                    decoration: InputDecoration(
-                        hintText: 'Bạn đang nghĩ gì?',
-                        hintStyle: GoogleFonts.dancingScript(
-                          fontSize: 20,
-                          color: Colors.black.withOpacity(0.2),
-                        ),
-                        border: InputBorder.none),
-                  ),
-                ),
-              ),
-            ),
-            feedback: Material(
-              child: Opacity(
-                opacity: 0.5,
-                child: Container(
-                  width: size.width * 0.75,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.yellow.withOpacity(0.5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: TextFormField(
                       // controller: _contentController,
                       initialValue: e.value.getTextContent,
                       readOnly: true,
                       focusNode: _focusTyping,
-                      // onTap: () {
-                      //   // if (_isEditButtonTaped == false)
-                      //   //   Scaffold.of(context).showSnackBar(snackBar);
-                      // },
-                      onChanged: (value) {
-                        e.value.setTextContent(value);
-                      },
                       cursorColor: Colors.yellow[900],
                       minLines: 1,
                       maxLines: 50,
                       style: GoogleFonts.dancingScript(
                           fontSize: 20, color: Colors.brown[500]),
-                      decoration: InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(10))
+
                       // decoration: InputDecoration(
                       //     enabledBorder: OutlineInputBorder(
                       //         borderRadius: BorderRadius.circular(5),
@@ -952,8 +1003,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                       //     focusedBorder: OutlineInputBorder(
                       //         borderRadius: BorderRadius.circular(5),
                       //         borderSide: BorderSide(color: Colors.black))),
-                    ),
-                  ),
+                      ),
                 ),
               ),
             ),
@@ -976,7 +1026,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
       maxColumn: 5,
       items: emotions.asMap().entries.map((e) => MenuEmtionItem(e)).toList(),
       onClickMenu: (item) {
-        Emotion _emotion = emotions
+        _emotion = emotions
             .firstWhere((element) => element.getEmotionName == item.menuTitle);
 
         // Component _component = Component(Offset(10, 150), Size(0, 0));
@@ -986,6 +1036,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
         //     _emotion.getEmotionComponent.getOffset.dx.toString() +
         //     _emotion.getEmotionComponent.getOffset.dy.toString());
         print(_emotion.getEmotionName);
+        _emotion.setEmotionComponent(Component(Offset(10, 150), Size.zero));
         _diaryEditViewModel.setEmotionStatus(_emotion);
         _diaryEditViewModel.setBottomStateController(2, true);
         // _emotionOffset
@@ -1041,18 +1092,22 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   }
 
   Future _initEmotion() async {
+    // _emotion=Emotion(emotionId, emotionName, emotionImage)
     var emotionBox = await Hive.openBox<EmotionDB>('emotion');
     if (emotionBox.length == 0) return;
     EmotionDB emotionDB = emotionBox.getAt(0);
+    if (emotionDB.state == 3) return;
     _diaryEditViewModel.setEmotionStatus(Emotion(
-        emotionDB.emotionId, emotionDB.emotionName, emotionDB.emotionName));
+        emotionDB.emotionId, emotionDB.emotionName, emotionDB.emotionImage,
+        component: Component(
+            Offset(emotionDB.offset_dx, emotionDB.offset_dy), Size.zero)));
     await emotionBox.close();
     _diaryEditViewModel.setBottomStateController(2, true);
   }
 
   void _initBottomState() {
-    print("images length> " + _images.length.toString());
-    print("texts length> " + _editTexts.length.toString());
+    print("1101>images length " + _images.length.toString());
+    print("1102>texts length " + _editTexts.length.toString());
     if (_images.length > 0) {
       _diaryEditViewModel.setBottomStateController(0, true);
     }

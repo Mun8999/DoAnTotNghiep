@@ -9,7 +9,7 @@ part of 'db_component.dart';
 
 class ComponentDBAdapter extends TypeAdapter<ComponentDB> {
   @override
-  final int typeId = 2;
+  final int typeId = 0;
 
   @override
   ComponentDB read(BinaryReader reader) {
@@ -23,13 +23,14 @@ class ComponentDBAdapter extends TypeAdapter<ComponentDB> {
       fields[2] as double,
       fields[3] as double,
       fields[4] as double,
+      state: fields[5] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, ComponentDB obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.offset_dx)
       ..writeByte(1)
@@ -39,7 +40,9 @@ class ComponentDBAdapter extends TypeAdapter<ComponentDB> {
       ..writeByte(3)
       ..write(obj.size_height)
       ..writeByte(4)
-      ..write(obj.opacity);
+      ..write(obj.opacity)
+      ..writeByte(5)
+      ..write(obj.state);
   }
 
   @override

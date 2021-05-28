@@ -18,41 +18,41 @@ class TextDBAdapter extends TypeAdapter<TextDB> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TextDB(
-      fields[5] as String,
       fields[6] as String,
-      fields[7] as int,
-      fields[8] as String,
+      fields[7] as String,
+      fields[8] as int,
       fields[9] as String,
       fields[10] as String,
-      fields[11] as int,
-      fields[12] as String,
+      fields[11] as String,
+      fields[12] as int,
+      fields[13] as String,
       fields[0] as double,
       fields[1] as double,
       fields[2] as double,
       fields[3] as double,
       fields[4] as double,
-    );
+    )..state = fields[5] as int;
   }
 
   @override
   void write(BinaryWriter writer, TextDB obj) {
     writer
-      ..writeByte(13)
-      ..writeByte(5)
-      ..write(obj.textType)
+      ..writeByte(14)
       ..writeByte(6)
-      ..write(obj.textContent)
+      ..write(obj.textType)
       ..writeByte(7)
-      ..write(obj.textLine)
+      ..write(obj.textContent)
       ..writeByte(8)
-      ..write(obj.textFont)
+      ..write(obj.textLine)
       ..writeByte(9)
-      ..write(obj.textWeight)
+      ..write(obj.textFont)
       ..writeByte(10)
-      ..write(obj.textColor)
+      ..write(obj.textWeight)
       ..writeByte(11)
-      ..write(obj.textSize)
+      ..write(obj.textColor)
       ..writeByte(12)
+      ..write(obj.textSize)
+      ..writeByte(13)
       ..write(obj.backgroundColor)
       ..writeByte(0)
       ..write(obj.offset_dx)
@@ -63,7 +63,9 @@ class TextDBAdapter extends TypeAdapter<TextDB> {
       ..writeByte(3)
       ..write(obj.size_height)
       ..writeByte(4)
-      ..write(obj.opacity);
+      ..write(obj.opacity)
+      ..writeByte(5)
+      ..write(obj.state);
   }
 
   @override

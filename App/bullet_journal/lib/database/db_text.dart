@@ -6,21 +6,21 @@ part 'db_text.g.dart';
 
 @HiveType(typeId: 1)
 class TextDB extends ComponentDB {
-  @HiveField(5)
-  String textType;
   @HiveField(6)
-  String textContent;
+  String textType;
   @HiveField(7)
-  int textLine;
+  String textContent;
   @HiveField(8)
-  String textFont;
+  int textLine;
   @HiveField(9)
-  String textWeight;
+  String textFont;
   @HiveField(10)
-  String textColor;
+  String textWeight;
   @HiveField(11)
-  int textSize;
+  String textColor;
   @HiveField(12)
+  int textSize;
+  @HiveField(13)
   String backgroundColor;
 
   TextDB(
