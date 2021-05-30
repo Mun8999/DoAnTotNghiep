@@ -12,7 +12,6 @@ import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/text.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -1067,6 +1066,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   }
 
   Future _initImage() async {
+    if (_images.length > 0) _images.clear();
     var imageBox = await Hive.openBox<ImageDB>('images');
     if (imageBox.length == 0) return;
     MyImage myImage;
@@ -1081,6 +1081,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   }
 
   Future _initText() async {
+    if (_editTexts.length > 0) _editTexts.clear();
     var textBox = await Hive.openBox<TextDB>('texts');
     if (textBox.length == 0) return;
     textBox.values.toList().forEach((element) {

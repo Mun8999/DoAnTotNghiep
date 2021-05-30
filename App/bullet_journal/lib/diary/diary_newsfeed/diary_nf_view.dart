@@ -2,13 +2,17 @@
 import 'dart:ui';
 
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
+import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
+import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
 import 'package:bullet_journal/model/diary.dart';
-import 'package:bullet_journal/model/location.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class DiaryNewFeedsView extends StatefulWidget {
   @override
@@ -33,13 +37,29 @@ List<String> images = [
   'assets/images/FB_IMG_1619096684228.jpg',
   'assets/images/FB_IMG_1619157271674.jpg'
 ];
-Size size = Size(0, 0);
 // bool isTaped = false, isTapedStatus = false;
+Size size;
+double spacing;
+var diaryBox;
+DiaryNewsFeedViewModel _diaryNewsFeedViewModel;
 
 class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
   @override
+  void initState() {
+    super.initState();
+    openBox();
+    // diaryBox = Hive.openBox<DiaryDB>('diaries');
+  }
+
+  openBox() async {
+    _diaryNewsFeedViewModel = DiaryNewsFeedViewModel();
+    await _diaryNewsFeedViewModel.prepareDB();
+  }
+
+  @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+    spacing = size.width * 0.02;
     return Scaffold(
         body: NestedScrollView(
       physics: NeverScrollableScrollPhysics(),
@@ -76,7 +96,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                   pinned: true,
                   snap: false,
                   elevation: 1,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.23,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.27,
                   flexibleSpace: FlexibleSpaceBar(
                     background: SingleChildScrollView(
                       physics: NeverScrollableScrollPhysics(),
@@ -85,12 +105,8 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.1,
                           ),
-                          // Divider(
-                          //   color: Colors.grey[300],
-                          //   thickness: 1,
-                          // ),
                           Container(
-                            margin: EdgeInsets.all(10),
+                            margin: EdgeInsets.all(spacing),
                             height: MediaQuery.of(context).size.height * 0.125,
                             // padding: EdgeInsets.all(10),
                             padding: EdgeInsets.only(left: 10, right: 10),
@@ -154,6 +170,34 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                               ],
                             ),
                           ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              height: size.height * 0.04,
+                              width: size.width * 0.35,
+                              margin: EdgeInsets.all(spacing),
+                              decoration: BoxDecoration(
+                                  color: Colors.yellow[900],
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.send,
+                                        color: Colors.white,
+                                        size: 16,
+                                      )),
+                                  Text(
+                                    'Lưu bài viết',
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -165,303 +209,321 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
       body: Container(
           height: size.height,
           color: Colors.white,
-          child: ListView(
-              shrinkWrap: false,
-              children:
-                  images.asMap().entries.map((e) => _itemDiaryList(e)).toList())
-          // ListView.separated(
-          //   /// de o day de khong scroll theo cai nay
-          //   physics: NeverScrollableScrollPhysics(),
-          //   scrollDirection: Axis.vertical,
-          //   itemCount: images.length,
-          //   itemBuilder: (context, index) {
-          //     return InkWell(
-          //       onTap: () {
-          //         Navigator.push(context, MaterialPageRoute(
-          //           builder: (context) {
-          //             Diary diary = Diary(
-          //                 '1',
-          //                 'Đom Đóm - Jack',
-          //                 '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-          //                 DateTime.now());
-          //             return DiaryEditView(diary);
-          //           },
-          //         ));
-          //       },
-          //       child: Padding(
-          //         padding: const EdgeInsets.only(left: 5, right: 5),
-          //         child: Container(
-          //           height: 250,
-          //           child: Stack(children: [
-          //             Container(
-          //               height: 250,
-          //               decoration: BoxDecoration(
-          //                   color: Colors.black,
-          //                   // color: 100 * (index % 9) == 0
-          //                   //     ? Colors.pink[50]
-          //                   //     : Colors.pink[100 * (index % 9)],
-          //                   borderRadius: BorderRadius.circular(10),
-          //                   boxShadow: [
-          //                     BoxShadow(
-          //                         color: Colors.grey.withOpacity(0.5),
-          //                         spreadRadius: 5,
-          //                         blurRadius: 7,
-          //                         offset: Offset(0, 3))
-          //                   ]),
-          //               // child:
-          //             ),
-          //             Positioned(
-          //               top: 5,
-          //               left: index % 2 == 0 ? null : 5,
-          //               right: index % 2 != 0 ? null : 5,
-          //               child: Stack(
-          //                 children: [
-          //                   Container(
-          //                     height: 200,
-          //                     width: 170,
-          //                     decoration: BoxDecoration(
-          //                         borderRadius: BorderRadius.only(
-          //                             topLeft: index % 2 != 0
-          //                                 ? Radius.circular(10)
-          //                                 : Radius.zero,
-          //                             bottomLeft: index % 2 != 0
-          //                                 ? Radius.circular(10)
-          //                                 : Radius.zero,
-          //                             topRight: index % 2 == 0
-          //                                 ? Radius.circular(10)
-          //                                 : Radius.zero,
-          //                             bottomRight: index % 2 == 0
-          //                                 ? Radius.circular(10)
-          //                                 : Radius.zero),
-          //                         color: 100 * (index % 9) == 0
-          //                             ? Colors.yellow[50]
-          //                             : Colors.yellow[100 * (index % 9)]),
-          //                   ),
-          //                   Padding(
-          //                     padding: const EdgeInsets.all(5),
-          //                     child: Center(
-          //                       child: Column(
-          //                         children: [
-          //                           SizedBox(
-          //                             height: 10,
-          //                           ),
-          //                           Text('Đom Đóm - Jack',
-          //                               style: GoogleFonts.dancingScript(
-          //                                   fontSize: 16,
-          //                                   color: Colors.brown[800],
-          //                                   fontWeight: FontWeight.bold)),
-          //                           SizedBox(
-          //                             height: 5,
-          //                           ),
-          //                           Text(
-          //                               '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-          //                               style: GoogleFonts.dancingScript(
-          //                                   fontSize: 13,
-          //                                   color: Colors.brown[500]))
-          //                         ],
-          //                       ),
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //             Positioned(
-          //               top: 5,
-          //               left: index % 2 == 0 ? 5 : null,
-          //               right: index % 2 != 0 ? 5 : null,
-          //               child: Container(
-          //                 height: 200,
-          //                 width: 200,
-          //                 decoration: BoxDecoration(
-          //                   borderRadius: BorderRadius.only(
-          //                       topLeft: index % 2 == 0
-          //                           ? Radius.circular(10)
-          //                           : Radius.zero,
-          //                       bottomLeft: index % 2 == 0
-          //                           ? Radius.circular(10)
-          //                           : Radius.zero,
-          //                       topRight: index % 2 != 0
-          //                           ? Radius.circular(10)
-          //                           : Radius.zero,
-          //                       bottomRight: index % 2 != 0
-          //                           ? Radius.circular(10)
-          //                           : Radius.zero),
-          //                   image: DecorationImage(
-          //                       image: AssetImage(images[index]),
-          //                       fit: BoxFit.cover),
-          //                 ),
-          //               ),
-          //             ),
-          //             Positioned(
-          //               bottom: 5,
-          //               left: index % 2 == 0 ? 10 : null,
-          //               right: index % 2 != 0 ? 10 : null,
-          //               child: Container(
-          //                 alignment: Alignment.centerLeft,
-          //                 child: Padding(
-          //                   padding: const EdgeInsets.all(8),
-          //                   child: Text('9 tháng 9, 2021',
-          //                       style: GoogleFonts.oswald(
-          //                           fontSize: 16,
-          //                           color: Colors.white.withOpacity(0.7))
-          //                       // TextStyle(
-
-          //                       //     color: Colors.white.withOpacity(0.7),
-          //                       //     fontSize: 16),
-          //                       ),
-          //                 ),
-          //               ),
-          //             )
-          //           ]),
-          //         ),
-          //       ),
-          //     );
-          //   },
-          //   separatorBuilder: (BuildContext context, int index) {
-          //     return SizedBox(
-          //       height: 30,
-          //     );
-          //   },
-          // )
-          ),
+          child: WatchBoxBuilder(
+            box: Hive.box('diaries'),
+            builder: (BuildContext context, Box<dynamic> box) {
+              return ListView(
+                  children: box.values
+                      .toList()
+                      .asMap()
+                      .entries
+                      .map((e) => _itemDiaryList(e)));
+              // children: images
+              //     .asMap()
+              //     .entries
+              //     .map((e) => _itemDiaryList(e))
+              //     .toList());
+            },
+          )),
     ));
   }
 
-  Widget _itemDiaryList(MapEntry<int, String> e) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            Diary diary = Diary(
-                '1',
-                'Đom Đóm - Jack',
-                '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-                DateTime.now());
-            return DiaryEditView(diary);
-          },
-        ));
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5),
+  Widget _itemDiaryList(MapEntry<int, DiaryDB> item) {
+    return Card(
+      elevation: 10,
+      color: Colors.black,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              Diary diary = Diary(
+                  '1',
+                  'Đom Đóm - Jack',
+                  '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+                  DateTime.now());
+              return DiaryEditView(diary);
+            },
+          ));
+        },
         child: Container(
-          height: 250,
+          height: size.height * 0.27,
           child: Stack(children: [
-            Container(
-              height: 250,
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  // color: 100 * (index % 9) == 0
-                  //     ? Colors.pink[50]
-                  //     : Colors.pink[100 * (index % 9)],
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3))
-                  ]),
-              // child:
-            ),
             Positioned(
-              top: 5,
-              left: e.key % 2 == 0 ? null : 5,
-              right: e.key % 2 != 0 ? null : 5,
-              child: Stack(
-                children: [
-                  Container(
-                    height: 200,
-                    width: 170,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: e.key % 2 != 0
-                                ? Radius.circular(10)
-                                : Radius.zero,
-                            bottomLeft: e.key % 2 != 0
-                                ? Radius.circular(10)
-                                : Radius.zero,
-                            topRight: e.key % 2 == 0
-                                ? Radius.circular(10)
-                                : Radius.zero,
-                            bottomRight: e.key % 2 == 0
-                                ? Radius.circular(10)
-                                : Radius.zero),
-                        color: 100 * (e.key % 9) == 0
-                            ? Colors.yellow[50]
-                            : Colors.yellow[100 * (e.key % 9)]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text('Đom Đóm - Jack',
-                              style: TextStyle(
-                                  fontFamily: 'DancingScript',
-                                  fontSize: 16,
-                                  color: Colors.brown[800],
-                                  fontWeight: FontWeight.bold)),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                              '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-                              style: GoogleFonts.dancingScript(
-                                  fontSize: 13, color: Colors.brown[500]))
-                        ],
+              top: size.width * 0.02,
+              left: item.key % 2 == 0 ? null : size.width * 0.02,
+              right: item.key % 2 != 0 ? null : size.width * 0.02,
+              child: Container(
+                height: size.width * 0.46,
+                width: size.width * 0.46,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: item.key % 2 != 0
+                            ? Radius.circular(10)
+                            : Radius.zero,
+                        bottomLeft: item.key % 2 != 0
+                            ? Radius.circular(10)
+                            : Radius.zero,
+                        topRight: item.key % 2 == 0
+                            ? Radius.circular(10)
+                            : Radius.zero,
+                        bottomRight: item.key % 2 == 0
+                            ? Radius.circular(10)
+                            : Radius.zero),
+                    color: 100 * (item.key % 9) == 0
+                        ? Colors.yellow[50]
+                        : Colors.yellow[100 * (item.key % 9)]),
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      fit: FlexFit.loose,
+                      child: Padding(
+                        padding: EdgeInsets.all(spacing),
+                        child: Text('Đom Đóm - Jack',
+                            style: TextStyle(
+                                fontFamily: 'DancingScript',
+                                fontSize: 15,
+                                color: Colors.brown[800],
+                                fontWeight: FontWeight.bold)),
                       ),
                     ),
-                  ),
-                ],
+                    Flexible(
+                      flex: 8,
+                      fit: FlexFit.loose,
+                      child: Padding(
+                        padding: EdgeInsets.all(spacing),
+                        child: Text(
+                          item.value.diaryContent,
+                          // '" Người giờ còn đây không? Thuyền này liệu còn sang sông? Buổi chiều dài mênh mông. Lòng người giờ hòa hay đông? Hồng mắt em cả bầu trời đỏ hoen..."',
+                          style: TextStyle(
+                            fontFamily: 'DancingScript',
+                            fontSize: 15,
+                            color: Colors.brown[500],
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             Positioned(
-              top: 5,
-              left: e.key % 2 == 0 ? 5 : null,
-              right: e.key % 2 != 0 ? 5 : null,
+              top: size.width * 0.02,
+              left: item.key % 2 == 0 ? size.width * 0.02 : null,
+              right: item.key % 2 != 0 ? size.width * 0.02 : null,
               child: Container(
-                height: 200,
-                width: 200,
+                height: size.width * 0.46,
+                width: size.width * 0.46,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft:
-                          e.key % 2 == 0 ? Radius.circular(10) : Radius.zero,
+                          item.key % 2 == 0 ? Radius.circular(10) : Radius.zero,
                       bottomLeft:
-                          e.key % 2 == 0 ? Radius.circular(10) : Radius.zero,
+                          item.key % 2 == 0 ? Radius.circular(10) : Radius.zero,
                       topRight:
-                          e.key % 2 != 0 ? Radius.circular(10) : Radius.zero,
-                      bottomRight:
-                          e.key % 2 != 0 ? Radius.circular(10) : Radius.zero),
+                          item.key % 2 != 0 ? Radius.circular(10) : Radius.zero,
+                      bottomRight: item.key % 2 != 0
+                          ? Radius.circular(10)
+                          : Radius.zero),
                   image: DecorationImage(
-                      image: AssetImage(images[e.key]), fit: BoxFit.cover),
+                      image: AssetImage(item.value.diaryImage),
+                      fit: BoxFit.cover),
                 ),
               ),
             ),
             Positioned(
-              bottom: 5,
-              left: e.key % 2 == 0 ? 10 : null,
-              right: e.key % 2 != 0 ? 10 : null,
+              bottom: spacing,
+              right: size.width * 0.02,
               child: Container(
                 alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text('9 tháng 9, 2021',
-                      style: GoogleFonts.oswald(
-                          fontSize: 16, color: Colors.white.withOpacity(0.7))
-                      // TextStyle(
+                child: Text('9 tháng 9, 2021',
+                    style: GoogleFonts.oswald(
+                        fontSize: 16, color: Colors.white.withOpacity(0.7))
+                    // TextStyle(
 
-                      //     color: Colors.white.withOpacity(0.7),
-                      //     fontSize: 16),
-                      ),
-                ),
+                    //     color: Colors.white.withOpacity(0.7),
+                    //     fontSize: 16),
+                    ),
               ),
-            )
+            ),
+            Positioned(
+                bottom: size.width * 0.02,
+                left: size.width * 0.02,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.lock_rounded,
+                      color: Colors.white.withOpacity(0.7),
+                      size: size.width * 0.05,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Chỉ mình tôi',
+                          style:
+                              TextStyle(color: Colors.white.withOpacity(0.7))),
+                    )
+                  ],
+                ))
           ]),
         ),
       ),
     );
   }
 }
+// ListView.separated(
+//   /// de o day de khong scroll theo cai nay
+//   physics: NeverScrollableScrollPhysics(),
+//   scrollDirection: Axis.vertical,
+//   itemCount: images.length,
+//   itemBuilder: (context, index) {
+//     return InkWell(
+//       onTap: () {
+//         Navigator.push(context, MaterialPageRoute(
+//           builder: (context) {
+//             Diary diary = Diary(
+//                 '1',
+//                 'Đom Đóm - Jack',
+//                 '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+//                 DateTime.now());
+//             return DiaryEditView(diary);
+//           },
+//         ));
+//       },
+//       child: Padding(
+//         padding: const EdgeInsets.only(left: 5, right: 5),
+//         child: Container(
+//           height: 250,
+//           child: Stack(children: [
+//             Container(
+//               height: 250,
+//               decoration: BoxDecoration(
+//                   color: Colors.black,
+//                   // color: 100 * (index % 9) == 0
+//                   //     ? Colors.pink[50]
+//                   //     : Colors.pink[100 * (index % 9)],
+//                   borderRadius: BorderRadius.circular(10),
+//                   boxShadow: [
+//                     BoxShadow(
+//                         color: Colors.grey.withOpacity(0.5),
+//                         spreadRadius: 5,
+//                         blurRadius: 7,
+//                         offset: Offset(0, 3))
+//                   ]),
+//               // child:
+//             ),
+//             Positioned(
+//               top: 5,
+//               left: index % 2 == 0 ? null : 5,
+//               right: index % 2 != 0 ? null : 5,
+//               child: Stack(
+//                 children: [
+//                   Container(
+//                     height: 200,
+//                     width: 170,
+//                     decoration: BoxDecoration(
+//                         borderRadius: BorderRadius.only(
+//                             topLeft: index % 2 != 0
+//                                 ? Radius.circular(10)
+//                                 : Radius.zero,
+//                             bottomLeft: index % 2 != 0
+//                                 ? Radius.circular(10)
+//                                 : Radius.zero,
+//                             topRight: index % 2 == 0
+//                                 ? Radius.circular(10)
+//                                 : Radius.zero,
+//                             bottomRight: index % 2 == 0
+//                                 ? Radius.circular(10)
+//                                 : Radius.zero),
+//                         color: 100 * (index % 9) == 0
+//                             ? Colors.yellow[50]
+//                             : Colors.yellow[100 * (index % 9)]),
+//                   ),
+//                   Padding(
+//                     padding: const EdgeInsets.all(5),
+//                     child: Center(
+//                       child: Column(
+//                         children: [
+//                           SizedBox(
+//                             height: 10,
+//                           ),
+//                           Text('Đom Đóm - Jack',
+//                               style: GoogleFonts.dancingScript(
+//                                   fontSize: 16,
+//                                   color: Colors.brown[800],
+//                                   fontWeight: FontWeight.bold)),
+//                           SizedBox(
+//                             height: 5,
+//                           ),
+//                           Text(
+//                               '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+//                               style: GoogleFonts.dancingScript(
+//                                   fontSize: 13,
+//                                   color: Colors.brown[500]))
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             Positioned(
+//               top: 5,
+//               left: index % 2 == 0 ? 5 : null,
+//               right: index % 2 != 0 ? 5 : null,
+//               child: Container(
+//                 height: 200,
+//                 width: 200,
+//                 decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.only(
+//                       topLeft: index % 2 == 0
+//                           ? Radius.circular(10)
+//                           : Radius.zero,
+//                       bottomLeft: index % 2 == 0
+//                           ? Radius.circular(10)
+//                           : Radius.zero,
+//                       topRight: index % 2 != 0
+//                           ? Radius.circular(10)
+//                           : Radius.zero,
+//                       bottomRight: index % 2 != 0
+//                           ? Radius.circular(10)
+//                           : Radius.zero),
+//                   image: DecorationImage(
+//                       image: AssetImage(images[index]),
+//                       fit: BoxFit.cover),
+//                 ),
+//               ),
+//             ),
+//             Positioned(
+//               bottom: 5,
+//               left: index % 2 == 0 ? 10 : null,
+//               right: index % 2 != 0 ? 10 : null,
+//               child: Container(
+//                 alignment: Alignment.centerLeft,
+//                 child: Padding(
+//                   padding: const EdgeInsets.all(8),
+//                   child: Text('9 tháng 9, 2021',
+//                       style: GoogleFonts.oswald(
+//                           fontSize: 16,
+//                           color: Colors.white.withOpacity(0.7))
+//                       // TextStyle(
+
+//                       //     color: Colors.white.withOpacity(0.7),
+//                       //     fontSize: 16),
+//                       ),
+//                 ),
+//               ),
+//             )
+//           ]),
+//         ),
+//       ),
+//     );
+//   },
+//   separatorBuilder: (BuildContext context, int index) {
+//     return SizedBox(
+//       height: 30,
+//     );
+//   },
+// )
