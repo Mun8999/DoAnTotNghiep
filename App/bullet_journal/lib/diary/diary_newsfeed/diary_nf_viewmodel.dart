@@ -7,26 +7,28 @@ List<DiaryDB> diaries;
 class DiaryNewsFeedViewModel {
   var diaryBox;
   DiaryNewsFeedViewModel() {
-    prepareDB();
-    getDiaries();
+    // prepareDB();
+    // getDiaries();
   }
-  prepareDB() async {
-    diaryBox = await Hive.box<DiaryDB>('diaries');
-    DiaryDB diaryDB = DiaryDB(DateTime.now(),
-        diaryContent: 'abcdefggggshdg',
-        diaryImage: 'assets/images/FB_IMG_1619006556060.jpg');
+  prepareDB(Box<DiaryDB> box) async {
+    DiaryDB diaryDB;
     for (int i = 0; i < 4; i++) {
-      await addDiary(diaryDB);
+      diaryDB = DiaryDB(
+        DateTime.now(),
+        diaryId: i,
+        diaryContent: 'abcdefggggshdg',
+      );
+      box.add(diaryDB);
     }
   }
 
-  addDiary(DiaryDB diaryDB) async {
-    await diaryBox.add(diaryDB);
-  }
+  // addDiary(DiaryDB diaryDB) async {
+  //   await diaryBox.add(diaryDB);
+  // }
 
-  getDiaries() async {
+  getDiaries(Box<DiaryDB> box) async {
     // var diaryBox = Hive.box<DiaryDB>('diaries');
-    diaryBox.values.toList().forEach((element) {
+    box.values.toList().forEach((element) {
       print('28>Diary content: ' +
           element.diaryContent +
           '\nImage: ' +

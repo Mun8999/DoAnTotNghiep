@@ -1,12 +1,12 @@
 // @dart=2.9
+import 'dart:io';
 import 'dart:ui';
 
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
 import 'package:bullet_journal/database/db_diary.dart';
+import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
-import 'package:bullet_journal/model/diary.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
@@ -19,41 +19,38 @@ class DiaryNewFeedsView extends StatefulWidget {
   _DiaryNewFeedsViewState createState() => _DiaryNewFeedsViewState();
 }
 
-List<String> images = [
-  'assets/images/FB_IMG_1618988919479.jpg',
-  'assets/images/FB_IMG_1619003669083.jpg',
-  'assets/images/FB_IMG_1619004242859.jpg',
-  'assets/images/FB_IMG_1619006556060.jpg',
-  'assets/images/FB_IMG_1619006780237.jpg',
-  'assets/images/FB_IMG_1619007243993.jpg',
-  'assets/images/FB_IMG_1619007315847.jpg',
-  'assets/images/FB_IMG_1619032982645.jpg',
-  'assets/images/FB_IMG_1619035711744.jpg',
-  'assets/images/FB_IMG_1619035803604.jpg',
-  'assets/images/FB_IMG_1619036146750.jpg',
-  'assets/images/FB_IMG_1619036516420.jpg',
-  'assets/images/FB_IMG_1619037184892.jpg',
-  'assets/images/FB_IMG_1619088169362.jpg',
-  'assets/images/FB_IMG_1619096684228.jpg',
-  'assets/images/FB_IMG_1619157271674.jpg'
-];
+// List<String> images = [
+//   'assets/images/FB_IMG_1618988919479.jpg',
+//   'assets/images/FB_IMG_1619003669083.jpg',
+//   'assets/images/FB_IMG_1619004242859.jpg',
+//   'assets/images/FB_IMG_1619006556060.jpg',
+//   'assets/images/FB_IMG_1619006780237.jpg',
+//   'assets/images/FB_IMG_1619007243993.jpg',
+//   'assets/images/FB_IMG_1619007315847.jpg',
+//   'assets/images/FB_IMG_1619032982645.jpg',
+//   'assets/images/FB_IMG_1619035711744.jpg',
+//   'assets/images/FB_IMG_1619035803604.jpg',
+//   'assets/images/FB_IMG_1619036146750.jpg',
+//   'assets/images/FB_IMG_1619036516420.jpg',
+//   'assets/images/FB_IMG_1619037184892.jpg',
+//   'assets/images/FB_IMG_1619088169362.jpg',
+//   'assets/images/FB_IMG_1619096684228.jpg',
+//   'assets/images/FB_IMG_1619157271674.jpg'
+// ];
 // bool isTaped = false, isTapedStatus = false;
 Size size;
 double spacing;
-var diaryBox;
 DiaryNewsFeedViewModel _diaryNewsFeedViewModel;
+Box<DiaryDB> diaryBox;
 
 class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
   @override
   void initState() {
     super.initState();
-    openBox();
-    // diaryBox = Hive.openBox<DiaryDB>('diaries');
-  }
-
-  openBox() async {
     _diaryNewsFeedViewModel = DiaryNewsFeedViewModel();
-    await _diaryNewsFeedViewModel.prepareDB();
+    diaryBox = Hive.box<DiaryDB>('diaries');
+    _diaryNewsFeedViewModel.prepareDB(diaryBox);
+    _diaryNewsFeedViewModel.getDiaries(diaryBox);
   }
 
   @override
@@ -182,13 +179,14 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   IconButton(
                                       onPressed: () {},
                                       icon: Icon(
                                         Icons.send,
                                         color: Colors.white,
-                                        size: 16,
+                                        size: 13,
                                       )),
                                   Text(
                                     'Lưu bài viết',
@@ -209,69 +207,87 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
       body: Container(
           height: size.height,
           color: Colors.white,
-          child: WatchBoxBuilder(
-            box: Hive.box('diaries'),
-            builder: (BuildContext context, Box<dynamic> box) {
-              return ListView(
-                  children: box.values
-                      .toList()
-                      .asMap()
-                      .entries
-                      .map((e) => _itemDiaryList(e)));
-              // children: images
-              //     .asMap()
-              //     .entries
-              //     .map((e) => _itemDiaryList(e))
-              //     .toList());
+          child: ValueListenableBuilder(
+            valueListenable: diaryBox.listenable(),
+            builder: (context, Box<DiaryDB> diaryBox, child) {
+              return ListView.separated(
+                itemBuilder: (BuildContext context, int index) {
+                  return _itemDiaryList(
+                      diaryBox.values.elementAt(index), index);
+                },
+                itemCount: diaryBox.values.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: size.height * 0.03,
+                  );
+                },
+
+                // children: diaryBox.values
+                //     .toList()
+                //     .asMap()
+                //     .entries
+                //     .map((e) => _itemDiaryList(e))
+              );
             },
           )),
     ));
   }
 
-  Widget _itemDiaryList(MapEntry<int, DiaryDB> item) {
-    return Card(
-      elevation: 10,
-      color: Colors.black,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              Diary diary = Diary(
-                  '1',
-                  'Đom Đóm - Jack',
-                  '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
-                  DateTime.now());
-              return DiaryEditView(diary);
-            },
-          ));
-        },
+  Widget _itemDiaryList(DiaryDB item, int index) {
+    return InkWell(
+      onLongPress: () {
+        diaryBox.deleteAt(index);
+      },
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            // Diary diary = Diary(
+            //     '1',
+            //     'Đom Đóm - Jack',
+            //     '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
+            //     DateTime.now());
+
+            return DiaryEditView(item);
+          },
+        ));
+      },
+      child: Padding(
+        padding: EdgeInsets.all(spacing),
         child: Container(
           height: size.height * 0.27,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.black,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
           child: Stack(children: [
             Positioned(
               top: size.width * 0.02,
-              left: item.key % 2 == 0 ? null : size.width * 0.02,
-              right: item.key % 2 != 0 ? null : size.width * 0.02,
+              left: index % 2 == 0 ? null : size.width * 0.02,
+              right: index % 2 != 0 ? null : size.width * 0.02,
               child: Container(
                 height: size.width * 0.46,
                 width: size.width * 0.46,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                        topLeft: item.key % 2 != 0
-                            ? Radius.circular(10)
-                            : Radius.zero,
-                        bottomLeft: item.key % 2 != 0
-                            ? Radius.circular(10)
-                            : Radius.zero,
-                        topRight: item.key % 2 == 0
-                            ? Radius.circular(10)
-                            : Radius.zero,
-                        bottomRight: item.key % 2 == 0
-                            ? Radius.circular(10)
-                            : Radius.zero),
-                    color: 100 * (item.key % 9) == 0
+                        topLeft:
+                            index % 2 != 0 ? Radius.circular(10) : Radius.zero,
+                        bottomLeft:
+                            index % 2 != 0 ? Radius.circular(10) : Radius.zero,
+                        topRight:
+                            index % 2 == 0 ? Radius.circular(10) : Radius.zero,
+                        bottomRight:
+                            index % 2 == 0 ? Radius.circular(10) : Radius.zero),
+                    color: 100 * (index % 9) == 0
                         ? Colors.yellow[50]
-                        : Colors.yellow[100 * (item.key % 9)]),
+                        : Colors.yellow[100 * (index % 9)]),
                 alignment: Alignment.center,
                 child: Column(
                   children: [
@@ -294,7 +310,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                       child: Padding(
                         padding: EdgeInsets.all(spacing),
                         child: Text(
-                          item.value.diaryContent,
+                          item.diaryContent,
                           // '" Người giờ còn đây không? Thuyền này liệu còn sang sông? Buổi chiều dài mênh mông. Lòng người giờ hòa hay đông? Hồng mắt em cả bầu trời đỏ hoen..."',
                           style: TextStyle(
                             fontFamily: 'DancingScript',
@@ -311,24 +327,26 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
             ),
             Positioned(
               top: size.width * 0.02,
-              left: item.key % 2 == 0 ? size.width * 0.02 : null,
-              right: item.key % 2 != 0 ? size.width * 0.02 : null,
+              left: index % 2 == 0 ? size.width * 0.02 : null,
+              right: index % 2 != 0 ? size.width * 0.02 : null,
               child: Container(
                 height: size.width * 0.46,
                 width: size.width * 0.46,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft:
-                          item.key % 2 == 0 ? Radius.circular(10) : Radius.zero,
+                          index % 2 == 0 ? Radius.circular(10) : Radius.zero,
                       bottomLeft:
-                          item.key % 2 == 0 ? Radius.circular(10) : Radius.zero,
+                          index % 2 == 0 ? Radius.circular(10) : Radius.zero,
                       topRight:
-                          item.key % 2 != 0 ? Radius.circular(10) : Radius.zero,
-                      bottomRight: item.key % 2 != 0
-                          ? Radius.circular(10)
-                          : Radius.zero),
+                          index % 2 != 0 ? Radius.circular(10) : Radius.zero,
+                      bottomRight:
+                          index % 2 != 0 ? Radius.circular(10) : Radius.zero),
                   image: DecorationImage(
-                      image: AssetImage(item.value.diaryImage),
+                      image: item.diaryImage.isNotEmpty
+                          ? FileImage(File(item.diaryImage))
+                          : AssetImage(
+                              'assets/images/FB_IMG_1619006556060.jpg'),
                       fit: BoxFit.cover),
                 ),
               ),

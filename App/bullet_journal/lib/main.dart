@@ -8,12 +8,13 @@ import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/main/my_app.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final document = await getApplicationDocumentsDirectory();
+  Hive.init(document.path);
   await Hive
-    ..initFlutter()
     ..registerAdapter(DiaryDBAdapter())
     ..registerAdapter(ImageDBAdapter())
     ..registerAdapter(TextDBAdapter())
@@ -21,6 +22,7 @@ void main() async {
     ..registerAdapter(AddressDBAdapter())
     ..registerAdapter(
         ComponentDBAdapter()); // bai hoc xuong mau> class extend phai de o cuoi cung nha -_-
+
   await Hive.openBox<DiaryDB>('diaries');
   runApp(MyApp());
   // SystemChrome.setEnabledSystemUIOverlays(

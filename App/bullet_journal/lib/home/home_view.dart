@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:bullet_journal/database/db_diary.dart';
 import 'package:hive/hive.dart';
 import 'package:bullet_journal/task/daily_task/daily_task_nf_view.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
@@ -121,7 +122,7 @@ class _HomeViewState extends State<HomeView> {
                   {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (context) {
-                        Diary diary = Diary('', '', '', DateTime.now());
+                        DiaryDB diary = DiaryDB(DateTime.now());
                         return DiaryEditView(diary);
                       },
                     ));
