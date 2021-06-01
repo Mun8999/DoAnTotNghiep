@@ -49,7 +49,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
     super.initState();
     _diaryNewsFeedViewModel = DiaryNewsFeedViewModel();
     diaryBox = Hive.box<DiaryDB>('diaries');
-    _diaryNewsFeedViewModel.prepareDB(diaryBox);
+    // _diaryNewsFeedViewModel.prepareDB(diaryBox);
     _diaryNewsFeedViewModel.getDiaries(diaryBox);
   }
 
@@ -68,19 +68,38 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                 top: false,
                 sliver: SliverAppBar(
                   backgroundColor: Colors.white,
-                  leading: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.menu_rounded,
-                      color: Colors.black,
+                  leadingWidth: 150,
+                  leading: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'YoL',
+                          style: GoogleFonts.sacramento(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          'YoS',
+                          style: GoogleFonts.righteous(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.yellow[900],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  title: Center(
-                    child: Text(
-                      'Nhật ký',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
+                  // title: Center(
+                  //   child: Text(
+                  //     'Nhật ký',
+                  //     style: TextStyle(color: Colors.black),
+                  //   ),
+                  // ),
                   actions: [
                     IconButton(
                         onPressed: () {},
@@ -167,35 +186,35 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                               ],
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                              height: size.height * 0.04,
-                              width: size.width * 0.35,
-                              margin: EdgeInsets.all(spacing),
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow[900],
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.send,
-                                        color: Colors.white,
-                                        size: 13,
-                                      )),
-                                  Text(
-                                    'Lưu bài viết',
-                                    style: TextStyle(color: Colors.white),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
+                          // Align(
+                          //   alignment: Alignment.centerRight,
+                          //   child: Container(
+                          //     height: size.height * 0.04,
+                          //     width: size.width * 0.35,
+                          //     margin: EdgeInsets.all(spacing),
+                          //     decoration: BoxDecoration(
+                          //         color: Colors.yellow[900],
+                          //         borderRadius: BorderRadius.circular(10)),
+                          //     child: Row(
+                          //       mainAxisSize: MainAxisSize.min,
+                          //       mainAxisAlignment: MainAxisAlignment.start,
+                          //       crossAxisAlignment: CrossAxisAlignment.center,
+                          //       children: [
+                          //         IconButton(
+                          //             onPressed: () {},
+                          //             icon: Icon(
+                          //               Icons.send,
+                          //               color: Colors.white,
+                          //               size: 13,
+                          //             )),
+                          //         Text(
+                          //           'Lưu bài viết',
+                          //           style: TextStyle(color: Colors.white),
+                          //         )
+                          //       ],
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                     ),
@@ -234,6 +253,12 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
   }
 
   Widget _itemDiaryList(DiaryDB item, int index) {
+    print('237> diary box: ' + diaryBox.name);
+    print('\ncontent: ' +
+        diaryBox.getAt(index).diaryContent +
+        '\nImage: ' +
+        diaryBox.getAt(index).diaryImage);
+///////////////123
     return InkWell(
       onLongPress: () {
         diaryBox.deleteAt(index);
@@ -291,19 +316,19 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    Flexible(
-                      flex: 2,
-                      fit: FlexFit.loose,
-                      child: Padding(
-                        padding: EdgeInsets.all(spacing),
-                        child: Text('Đom Đóm - Jack',
-                            style: TextStyle(
-                                fontFamily: 'DancingScript',
-                                fontSize: 15,
-                                color: Colors.brown[800],
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
+                    // Flexible(
+                    //   flex: 2,
+                    //   fit: FlexFit.loose,
+                    //   child: Padding(
+                    //     padding: EdgeInsets.all(spacing),
+                    //     child: Text('Đom Đóm - Jack',
+                    //         style: TextStyle(
+                    //             fontFamily: 'DancingScript',
+                    //             fontSize: 15,
+                    //             color: Colors.brown[800],
+                    //             fontWeight: FontWeight.bold)),
+                    //   ),
+                    // ),
                     Flexible(
                       flex: 8,
                       fit: FlexFit.loose,
@@ -315,7 +340,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                           style: TextStyle(
                             fontFamily: 'DancingScript',
                             fontSize: 15,
-                            color: Colors.brown[500],
+                            color: Colors.brown[700],
                           ),
                           textAlign: TextAlign.left,
                         ),
@@ -353,10 +378,16 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
             ),
             Positioned(
               bottom: spacing,
-              right: size.width * 0.02,
+              left: index % 2 != 0 ? size.width * 0.02 : null,
+              right: index % 2 == 0 ? size.width * 0.02 : null,
               child: Container(
                 alignment: Alignment.centerLeft,
-                child: Text('9 tháng 9, 2021',
+                child: Text(
+                    item.diaryTime.day.toString() +
+                        ' tháng ' +
+                        item.diaryTime.month.toString() +
+                        ', ' +
+                        item.diaryTime.year.toString(),
                     style: GoogleFonts.oswald(
                         fontSize: 16, color: Colors.white.withOpacity(0.7))
                     // TextStyle(
@@ -367,24 +398,24 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
               ),
             ),
             Positioned(
-                bottom: size.width * 0.02,
-                left: size.width * 0.02,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.lock_rounded,
-                      color: Colors.white.withOpacity(0.7),
-                      size: size.width * 0.05,
+              bottom: size.width * 0.02,
+              left: index % 2 == 0 ? size.width * 0.02 : null,
+              right: index % 2 != 0 ? size.width * 0.02 : null,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                    item.diaryTime.hour.toString() +
+                        ':' +
+                        item.diaryTime.minute.toString(),
+                    style: GoogleFonts.oswald(
+                        fontSize: 16, color: Colors.white.withOpacity(0.7))
+                    // TextStyle(
+
+                    //     color: Colors.white.withOpacity(0.7),
+                    //     fontSize: 16),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Chỉ mình tôi',
-                          style:
-                              TextStyle(color: Colors.white.withOpacity(0.7))),
-                    )
-                  ],
-                ))
+              ),
+            )
           ]),
         ),
       ),

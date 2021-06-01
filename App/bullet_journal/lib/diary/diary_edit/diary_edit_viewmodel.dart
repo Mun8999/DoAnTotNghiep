@@ -3,7 +3,6 @@ import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/database/db_emotion.dart';
 import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/database/db_text.dart';
-import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_view.dart';
 import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/location.dart';
@@ -62,18 +61,31 @@ class DiaryEditViewModel {
   Sink get getEmotionStatusSink => this._emotionStatus.sink;
   Future<void> saveDiary(DiaryDB diaryBD, List<MyImage> images,
       List<MyText> editTexts, Emotion emotion) async {
-    _saveImage(images, diaryBD);
-    _saveText(editTexts, diaryBD);
+    var textBox =
+        await Hive.openBox<TextDB>('texts' + diaryBD.diaryId.toString());
+    await textBox.clear();
+    var imageBox =
+        await Hive.openBox<ImageDB>('images' + diaryBD.diaryId.toString());
+    await imageBox.clear();
+    // emotion.getEmotionComponent.setState(3);
+    _saveImage(images, diaryBD, imageBox);
+    _saveText(editTexts, diaryBD, textBox);
     _saveEmotion(emotion, diaryBD);
+    diaryBD.diaryTime = DateTime.now();
     var diaryBox = Hive.box<DiaryDB>('diaries');
     await diaryBox.putAt(diaryBD.diaryId, diaryBD);
   }
 
-  Future<void> _saveImage(List<MyImage> images, DiaryDB diaryBD) async {
-    if (images.length == 0) return;
-    var imageBox =
-        await Hive.openBox<ImageDB>('images' + diaryBD.diaryId.toString());
-    await imageBox.clear();
+  Future<void> _saveImage(
+      List<MyImage> images, DiaryDB diaryBD, Box<ImageDB> imageBox) async {
+    if (images.length == 0) {
+      diaryBD.diaryImage = '';
+      return;
+    }
+    // var imageBox =
+    //     await Hive.openBox<ImageDB>('images' + diaryBD.diaryId.toString());
+    // await imageBox.clear();
+
     ImageDB imageDB;
     images.forEach((image) async {
       imageDB = ImageDB(
@@ -98,12 +110,17 @@ class DiaryEditViewModel {
     await imageBox.close();
   }
 
-  Future<void> _saveText(List<MyText> editTexts, DiaryDB diaryBD) async {
-    if (editTexts.length == 0) return;
+  Future<void> _saveText(
+      List<MyText> editTexts, DiaryDB diaryBD, Box<TextDB> textBox) async {
+    if (editTexts.length == 0) {
+      diaryBD.diaryContent = '';
+      return;
+    }
     // var textBox = await Hive.openBox<TextDB>('texts');
-    var textBox =
-        await Hive.openBox<TextDB>('texts' + diaryBD.diaryId.toString());
-    await textBox.clear();
+    // var textBox =
+    //     await Hive.openBox<TextDB>('texts' + diaryBD.diaryId.toString());
+    // await textBox.clear();
+
     TextDB textDB;
     editTexts.forEach((text) async {
       textDB = TextDB(
@@ -131,9 +148,6 @@ class DiaryEditViewModel {
   }
 
   Future<void> _saveEmotion(Emotion emotion, DiaryDB diaryBD) async {
-    // if (emotion.getEmotionComponent.getState == 3) return;
-    // print('121>12321312312321');
-    if (emotion == null) return;
     var emotionBox =
         await Hive.openBox<EmotionDB>('emotion' + diaryBD.diaryId.toString());
     emotionBox.clear();
@@ -147,7 +161,9 @@ class DiaryEditViewModel {
         emotion.getEmotionComponent.getSize.height,
         emotion.getEmotionComponent.getOpacity,
         state: emotion.getEmotionComponent.getState);
+    if (emotion.getEmotionComponent.getState == 3) return;
     await emotionBox.add(emotionDB);
+
     // print('133> emotion: ' + emotion.getEmotionImage);
     await emotionBox.close();
   }

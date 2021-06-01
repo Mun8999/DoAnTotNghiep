@@ -50,7 +50,18 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _diaryEditViewModel.setBottomStateController(0, false);
+    _diaryEditViewModel.setBottomStateController(1, false);
+    _diaryEditViewModel.setBottomStateController(2, false);
+    _diaryEditViewModel.setBottomStateController(3, false);
+    _diaryEditViewModel.setBottomStateController(4, false);
     _initData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // if (_emotion != null) _emotion.getEmotionComponent.setState(3);
   }
 
   @override
@@ -1098,6 +1109,10 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     if (_editTexts.length > 0) {
       _diaryEditViewModel.setBottomStateController(1, true);
     }
+    // if (_emotion.getEmotionComponent.getState == 1) {
+    //   _diaryEditViewModel.setBottomStateController(2, true);
+    // }
+    // if()
   }
 }
 
