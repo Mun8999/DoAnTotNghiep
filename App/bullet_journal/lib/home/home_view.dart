@@ -58,20 +58,20 @@ class _HomeViewState extends State<HomeView> {
                 padding: const EdgeInsets.all(10),
                 child: buildGridMenu(),
               ),
-              Positioned(
-                left: 0,
-                top: size.height * 0.565,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Container(
-                    width: size.width - 20,
-                    height: size.height * 0.2,
-                    decoration: BoxDecoration(
-                        color: Colors.red[400],
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                ),
-              )
+              // Positioned(
+              //   left: 0,
+              //   top: size.height * 0.565,
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(10),
+              //     child: Container(
+              //       width: size.width - 20,
+              //       height: size.height * 0.2,
+              //       decoration: BoxDecoration(
+              //           color: Colors.red[400],
+              //           borderRadius: BorderRadius.circular(10)),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ));
@@ -148,7 +148,7 @@ class _HomeViewState extends State<HomeView> {
           );
         },
         staggeredTileBuilder: (index) {
-          return new StaggeredTile.count(2, index.isEven ? 3 : 2);
+          return new StaggeredTile.count(2, index.isEven ? 4 : 3);
         },
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,

@@ -1,6 +1,8 @@
+//@dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class JourneyNewsfeedView extends StatefulWidget {
   @override
@@ -25,10 +27,14 @@ List<String> images = [
   'assets/images/FB_IMG_1619096684228.jpg',
   'assets/images/FB_IMG_1619157271674.jpg'
 ];
+double spacing;
+Size size;
 
 class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
+    spacing = size.width * 0.02;
     return Scaffold(
       body: NestedScrollView(
         physics: NeverScrollableScrollPhysics(),
@@ -40,17 +46,30 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                   top: false,
                   sliver: SliverAppBar(
                     backgroundColor: Colors.white,
-                    leading: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.menu_rounded,
-                        color: Colors.black,
-                      ),
-                    ),
-                    title: Center(
-                      child: Text(
-                        'Nhật ký',
-                        style: TextStyle(color: Colors.black),
+                    leadingWidth: 150,
+                    leading: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Your Style',
+                            style: GoogleFonts.sacramento(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          // Text(
+                          //   'Style',
+                          //   style: GoogleFonts.righteous(
+                          //     fontSize: 25,
+                          //     fontWeight: FontWeight.bold,
+                          //     color: Colors.yellow[900],
+                          //   ),
+                          // ),
+                        ],
                       ),
                     ),
                     actions: [
@@ -65,7 +84,7 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                     pinned: true,
                     snap: false,
                     elevation: 1,
-                    expandedHeight: MediaQuery.of(context).size.height * 0.23,
+                    expandedHeight: MediaQuery.of(context).size.height * 0.27,
                     flexibleSpace: FlexibleSpaceBar(
                       background: SingleChildScrollView(
                         physics: NeverScrollableScrollPhysics(),
@@ -74,18 +93,14 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.1,
                             ),
-                            // Divider(
-                            //   color: Colors.grey[300],
-                            //   thickness: 1,
-                            // ),
                             Container(
-                              margin: EdgeInsets.all(15),
+                              margin: EdgeInsets.all(spacing),
                               height:
                                   MediaQuery.of(context).size.height * 0.125,
                               // padding: EdgeInsets.all(10),
                               padding: EdgeInsets.only(left: 10, right: 10),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey[600]!),
+                                  border: Border.all(color: Colors.grey[600]),
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(20),
                                       bottomLeft: Radius.circular(20))),
@@ -94,6 +109,17 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                                 children: [
                                   TextFormField(
                                     // showCursor: isTapedStatus,
+                                    // onTap: () {
+                                    //   Navigator.push(context, MaterialPageRoute(
+                                    //     builder: (context) {
+                                    //       return DiaryEditView(
+                                    //         DiaryDB(DateTime.now()),
+                                    //         state: 1,
+                                    //       );
+                                    //     },
+                                    //   ));
+                                    // },
+                                    maxLines: 3,
                                     style: TextStyle(fontSize: 16),
                                     cursorColor: Colors.black,
                                     decoration: InputDecoration(
@@ -111,30 +137,30 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                                           padding: const EdgeInsets.only(
                                               top: 10, right: 10, bottom: 10),
                                           child: SvgPicture.asset(
-                                            'assets/icons/emotion_icon.svg',
+                                            'assets/icons/emotion/smile-face.svg',
                                             height: 25,
                                             width: 25,
-                                            color: Colors.red[400],
+                                            color: Colors.yellow[900],
                                           ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               top: 10, right: 10, bottom: 10),
                                           child: SvgPicture.asset(
-                                            'assets/icons/location_icon.svg',
+                                            'assets/icons/insert-picture-icon.svg',
                                             height: 25,
                                             width: 25,
-                                            color: Colors.red[400],
+                                            color: Colors.yellow[900],
                                           ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               top: 10, bottom: 10),
                                           child: SvgPicture.asset(
-                                            'assets/icons/picture_icon.svg',
+                                            'assets/icons/pointer-on-the-map.svg',
                                             height: 25,
                                             width: 25,
-                                            color: Colors.red[400],
+                                            color: Colors.yellow[900],
                                           ),
                                         ),
                                       ],
@@ -143,6 +169,35 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                                 ],
                               ),
                             ),
+                            // Align(
+                            //   alignment: Alignment.centerRight,
+                            //   child: Container(
+                            //     height: size.height * 0.04,
+                            //     width: size.width * 0.35,
+                            //     margin: EdgeInsets.all(spacing),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.yellow[900],
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //     child: Row(
+                            //       mainAxisSize: MainAxisSize.min,
+                            //       mainAxisAlignment: MainAxisAlignment.start,
+                            //       crossAxisAlignment: CrossAxisAlignment.center,
+                            //       children: [
+                            //         IconButton(
+                            //             onPressed: () {},
+                            //             icon: Icon(
+                            //               Icons.send,
+                            //               color: Colors.white,
+                            //               size: 13,
+                            //             )),
+                            //         Text(
+                            //           'Lưu bài viết',
+                            //           style: TextStyle(color: Colors.white),
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ),
                       ),

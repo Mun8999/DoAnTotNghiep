@@ -7,6 +7,7 @@ import 'package:bullet_journal/model/time.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class DailyTaskNewsFeedView extends StatefulWidget {
   @override
@@ -71,278 +72,256 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
               sliver: SliverSafeArea(
                   top: false,
                   sliver: SliverAppBar(
-                    automaticallyImplyLeading: false,
+                    automaticallyImplyLeading: true,
                     backgroundColor: Colors.transparent,
-                    actions: [
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.search_rounded,
-                              color: Colors.black.withOpacity(0.3),
-                            )),
-                      )
-                    ],
+                    // actions: [
+                    //   Padding(
+                    //     padding: const EdgeInsets.all(5),
+                    //     child: IconButton(
+                    //         onPressed: () {},
+                    //         icon: Icon(
+                    //           Icons.search_rounded,
+                    //           color: Colors.black.withOpacity(0.3),
+                    //         )),
+                    //   )
+                    // ],
                     floating: true,
-                    pinned: true,
-                    snap: false,
+                    pinned: false,
+                    snap: true,
                     elevation: 0,
                     expandedHeight: MediaQuery.of(context).size.height * 0.53,
                     flexibleSpace: FlexibleSpaceBar(
                       background: SafeArea(
-                        child: SingleChildScrollView(
-                          physics: NeverScrollableScrollPhysics(),
-                          child: Column(
-                            children: [
-                              // Align(
-                              //   alignment: Alignment.centerLeft,
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.all(10),
-                              //     child: Text(
-                              //       '2021',
-                              //       style: TextStyle(
-                              //           fontSize: 20,
-                              //           fontWeight: FontWeight.bold),
-                              //     ),
-                              //   ),
-                              // ),
-                              Stack(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),
-                                    child: Container(
-                                      width: _size.width,
-                                      height: 45,
-                                      decoration: BoxDecoration(
-                                          color: Colors.yellow[600],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20),
-                                              topRight: Radius.circular(20))),
-                                      // child:
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: FocusedMenuHolder(
-                                        openWithTap: true,
-                                        blurSize: 0,
-                                        menuOffset: 0,
-                                        menuWidth: _size.width / 4,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 20, bottom: 10),
-                                          child: StreamBuilder<String>(
-                                              initialData:
-                                                  dailyTaskNewsFeedViewModel
-                                                      .getStringMonths[0],
-                                              stream: dailyTaskNewsFeedViewModel
-                                                  .getMonthSelectedStream,
-                                              builder: (context, month) {
-                                                return Text(
-                                                  month.data,
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white),
-                                                );
-                                              }),
-                                        ),
-                                        onPressed: () {},
-                                        menuItems: dailyTaskNewsFeedViewModel
-                                            .getStringMonths
-                                            .asMap()
-                                            .entries
-                                            .map((e) => _monthItem(e))
-                                            .toList()),
-                                  ),
-                                ],
-                              ),
-
-                              // Align(
-                              //   alignment: Alignment.centerLeft,
-                              //   child: Padding(
-                              //       padding: const EdgeInsets.only(
-                              //           left: 10, right: 10, bottom: 10),
-                              //       child: Container(
-                              //         child: DropdownButtonHideUnderline(
-                              //             child: DropdownButton(
-                              //           style: TextStyle(
-                              //               color: Colors.black,
-                              //               fontSize: 25,
-                              //               fontWeight: FontWeight.bold),
-                              //           value: _monthSelected,
-                              //           items: dailyTaskNewsFeedViewModel
-                              //               .getStringMonths
-                              //               .map((String value) =>
-                              //                   DropdownMenuItem<String>(
-                              //                     value: value.toString(),
-                              //                     child: new Text(
-                              //                         value.toString()),
-                              //                   ))
-                              //               .toList(),
-                              //           onChanged: (String value) {
-                              //             setState(() {
-                              //               _monthSelected = value;
-                              //             });
-                              //           },
-                              //         )),
-                              //       )),
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10, right: 10, bottom: 10),
-                                child: Center(child: buildGridCalender()),
-                              )
-                            ],
+                          child: TableCalendar(
+                        firstDay: DateTime.utc(2010, 10, 16),
+                        lastDay: DateTime.utc(2030, 3, 14),
+                        focusedDay: DateTime.now(),
+                        startingDayOfWeek: StartingDayOfWeek.monday,
+                      )
+                          // SingleChildScrollView(
+                          //   physics: NeverScrollableScrollPhysics(),
+                          //   child: Column(
+                          //     children: [
+                          //       // Align(
+                          //       //   alignment: Alignment.centerLeft,
+                          //       //   child: Padding(
+                          //       //     padding: const EdgeInsets.all(10),
+                          //       //     child: Text(
+                          //       //       '2021',
+                          //       //       style: TextStyle(
+                          //       //           fontSize: 20,
+                          //       //           fontWeight: FontWeight.bold),
+                          //       //     ),
+                          //       //   ),
+                          //       // ),
+                          //       Stack(
+                          //         children: [
+                          //           Padding(
+                          //             padding: const EdgeInsets.only(
+                          //                 top: 10, left: 10, right: 10),
+                          //             child: Container(
+                          //               width: _size.width,
+                          //               height: 45,
+                          //               decoration: BoxDecoration(
+                          //                   color: Colors.yellow[600],
+                          //                   borderRadius: BorderRadius.only(
+                          //                       topLeft: Radius.circular(20),
+                          //                       topRight: Radius.circular(20))),
+                          //               // child:
+                          //             ),
+                          //           ),
+                          //           Align(
+                          //             alignment: Alignment.center,
+                          //             child: FocusedMenuHolder(
+                          //                 openWithTap: true,
+                          //                 blurSize: 0,
+                          //                 menuOffset: 0,
+                          //                 menuWidth: _size.width / 4,
+                          //                 child: Padding(
+                          //                   padding: const EdgeInsets.only(
+                          //                       top: 20, bottom: 10),
+                          //                   child: StreamBuilder<String>(
+                          //                       initialData:
+                          //                           dailyTaskNewsFeedViewModel
+                          //                               .getStringMonths[0],
+                          //                       stream: dailyTaskNewsFeedViewModel
+                          //                           .getMonthSelectedStream,
+                          //                       builder: (context, month) {
+                          //                         return Text(
+                          //                           month.data,
+                          //                           style: TextStyle(
+                          //                               fontSize: 20,
+                          //                               fontWeight:
+                          //                                   FontWeight.bold,
+                          //                               color: Colors.white),
+                          //                         );
+                          //                       }),
+                          //                 ),
+                          //                 onPressed: () {},
+                          //                 menuItems: dailyTaskNewsFeedViewModel
+                          //                     .getStringMonths
+                          //                     .asMap()
+                          //                     .entries
+                          //                     .map((e) => _monthItem(e))
+                          //                     .toList()),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //       Padding(
+                          //         padding: const EdgeInsets.only(
+                          //             left: 10, right: 10, bottom: 10),
+                          //         child: Center(child: buildGridCalender()),
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
                           ),
-                        ),
-                      ),
                     ),
                   )),
             )
           ];
         },
-        body: Container(
-            height: _size.height,
-            color: Colors.white,
-            child: ListView.separated(
-              /// de o day de khong scroll theo cai nay
-              physics: NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Container(
-                      height: 250,
-                      child: Stack(children: [
-                        Container(
-                          height: 250,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              // color: 100 * (index % 9) == 0
-                              //     ? Colors.pink[50]
-                              //     : Colors.pink[100 * (index % 9)],
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: Offset(0, 3))
-                              ]),
-                          // child:
-                        ),
-                        Positioned(
-                          left: index % 2 == 0 ? 0 : null,
-                          right: index % 2 != 0 ? 0 : null,
-                          child: Container(
-                            width: 150,
+        body: SafeArea(
+          child: Container(
+              height: _size.height,
+              color: Colors.white,
+              child: ListView.separated(
+                /// de o day de khong scroll theo cai nay
+                physics: NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Container(
+                        height: 250,
+                        child: Stack(children: [
+                          Container(
                             height: 250,
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: index % 2 == 0
-                                    ? BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10))
-                                    : BorderRadius.only(
-                                        topRight: Radius.circular(10),
-                                        bottomRight: Radius.circular(10))),
+                                color: Colors.black,
+                                // color: 100 * (index % 9) == 0
+                                //     ? Colors.pink[50]
+                                //     : Colors.pink[100 * (index % 9)],
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3))
+                                ]),
+                            // child:
                           ),
-                        ),
-                        Positioned(
+                          Positioned(
                             left: index % 2 == 0 ? 0 : null,
                             right: index % 2 != 0 ? 0 : null,
                             child: Container(
                               width: 150,
-                              height: 200,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 70,
-                                  ),
-                                  Text(
-                                    '09',
-                                    style: TextStyle(fontSize: 50),
-                                  ),
-                                  Text(
-                                    '09/2021',
-                                    style: TextStyle(fontSize: 20),
-                                  )
-                                ],
-                              ),
-                            )),
-                        Positioned(
-                            right: index % 2 == 0 ? 0 : null,
-                            left: index % 2 != 0 ? 0 : null,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width - 170,
                               height: 250,
-                              child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: 4,
-                                itemBuilder: (context, index) {
-                                  return Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(20),
-                                        child: Stack(
-                                          children: [
-                                            Container(
-                                              height: 20,
-                                              width: 20,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.yellow[800]
-                                                      .withOpacity(0.5),
-                                                  shape: BoxShape.circle),
-                                            ),
-                                            Positioned(
-                                              top: 5,
-                                              left: 5,
-                                              child: Container(
-                                                height: 10,
-                                                width: 10,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: index % 2 == 0
+                                      ? BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10))
+                                      : BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          bottomRight: Radius.circular(10))),
+                            ),
+                          ),
+                          Positioned(
+                              left: index % 2 == 0 ? 0 : null,
+                              right: index % 2 != 0 ? 0 : null,
+                              child: Container(
+                                width: 150,
+                                height: 200,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 70,
+                                    ),
+                                    Text(
+                                      '09',
+                                      style: TextStyle(fontSize: 50),
+                                    ),
+                                    Text(
+                                      '09/2021',
+                                      style: TextStyle(fontSize: 20),
+                                    )
+                                  ],
+                                ),
+                              )),
+                          Positioned(
+                              right: index % 2 == 0 ? 0 : null,
+                              left: index % 2 != 0 ? 0 : null,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 170,
+                                height: 250,
+                                child: ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: 4,
+                                  itemBuilder: (context, index) {
+                                    return Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(20),
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                height: 20,
+                                                width: 20,
                                                 decoration: BoxDecoration(
-                                                    color: Colors.yellow[800],
+                                                    color: Colors.yellow[800]
+                                                        .withOpacity(0.5),
                                                     shape: BoxShape.circle),
                                               ),
-                                            ),
-                                          ],
+                                              Positioned(
+                                                top: 5,
+                                                left: 5,
+                                                child: Container(
+                                                  height: 10,
+                                                  width: 10,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.yellow[800],
+                                                      shape: BoxShape.circle),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        '5:00 ',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        'Chạy bộ',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 16),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            )),
-                      ]),
+                                        Text(
+                                          '5:00 ',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          'Chạy bộ',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              )),
+                        ]),
+                      ),
                     ),
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                  height: 30,
-                );
-              },
-            )),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: 30,
+                  );
+                },
+              )),
+        ),
       ),
     );
   }
@@ -423,11 +402,12 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
     );
   }
 
-  FocusedMenuItem _monthItem(MapEntry<int, String> e) {
-    return FocusedMenuItem(
-        onPressed: () {
-          dailyTaskNewsFeedViewModel.setMonthSelected(e.value);
-        },
-        title: Text(e.value));
-  }
+  // FocusedMenuItem _monthItem(MapEntry<int, String> e) {
+  //   return FocusedMenuItem(
+  //       onPressed: () {
+  //         dailyTaskNewsFeedViewModel.setMonthSelected(e.value);
+  //         dailyTaskNewsFeedViewModel.getDayData(2021, month)
+  //       },
+  //       title: Text(e.value));
+  // }
 }

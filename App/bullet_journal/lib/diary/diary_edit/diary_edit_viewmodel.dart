@@ -60,20 +60,25 @@ class DiaryEditViewModel {
   Stream get getEmotionStatusStream => this._emotionStatus.stream;
   Sink get getEmotionStatusSink => this._emotionStatus.sink;
   Future<void> saveDiary(DiaryDB diaryBD, List<MyImage> images,
-      List<MyText> editTexts, Emotion emotion) async {
+      List<MyText> editTexts, Emotion emotion, int state) async {
+    ///kiem tra trang thai tao moi hoac luu lai
+    diaryBD.diaryTime = DateTime.now();
+    var diaryBox = Hive.box<DiaryDB>('diaries');
+    if (state == 1) {
+      await diaryBox.add(diaryBD);
+      diaryBD.diaryId = diaryBox.length - 1;
+    }
     var textBox =
         await Hive.openBox<TextDB>('texts' + diaryBD.diaryId.toString());
     await textBox.clear();
     var imageBox =
         await Hive.openBox<ImageDB>('images' + diaryBD.diaryId.toString());
     await imageBox.clear();
-    // emotion.getEmotionComponent.setState(3);
-    _saveImage(images, diaryBD, imageBox);
-    _saveText(editTexts, diaryBD, textBox);
-    _saveEmotion(emotion, diaryBD);
-    diaryBD.diaryTime = DateTime.now();
-    var diaryBox = Hive.box<DiaryDB>('diaries');
-    await diaryBox.putAt(diaryBD.diaryId, diaryBD);
+
+    await _saveImage(images, diaryBD, imageBox);
+    await _saveText(editTexts, diaryBD, textBox);
+    await _saveEmotion(emotion, diaryBD);
+    await diaryBox.put(diaryBD.diaryId, diaryBD);
   }
 
   Future<void> _saveImage(
@@ -148,6 +153,7 @@ class DiaryEditViewModel {
   }
 
   Future<void> _saveEmotion(Emotion emotion, DiaryDB diaryBD) async {
+    if (emotion == null || emotion.getEmotionComponent.getState == 3) return;
     var emotionBox =
         await Hive.openBox<EmotionDB>('emotion' + diaryBD.diaryId.toString());
     emotionBox.clear();

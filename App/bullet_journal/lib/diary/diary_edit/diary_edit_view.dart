@@ -22,7 +22,10 @@ import 'package:image_cropper/image_cropper.dart';
 // ignore: must_be_immutable
 class DiaryEditView extends StatefulWidget {
   DiaryDB _diaryDB;
-  DiaryEditView(this._diaryDB);
+  int _state;
+  DiaryEditView(this._diaryDB, {int state = 2}) {
+    this._state = state;
+  }
   @override
   _DiaryEditViewState createState() => _DiaryEditViewState();
 }
@@ -61,7 +64,6 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   @override
   void dispose() {
     super.dispose();
-    // if (_emotion != null) _emotion.getEmotionComponent.setState(3);
   }
 
   @override
@@ -114,8 +116,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           actions: [
             IconButton(
               onPressed: () async {
-                await _diaryEditViewModel.saveDiary(
-                    widget._diaryDB, _images, _editTexts, _emotion);
+                await _diaryEditViewModel.saveDiary(widget._diaryDB, _images,
+                    _editTexts, _emotion, widget._state);
               },
               icon: Icon(
                 Icons.save_sharp,
@@ -153,15 +155,6 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                       stream: _diaryEditViewModel
                                           .getEmotionStatusStream,
                                       builder: (context, emotion) {
-                                        // if (_emotion == null) {
-                                        //   Component component = Component(
-                                        //       Offset(10, 150), Size.zero);
-                                        //   _emotion
-                                        //       .setEmotionComponent(component);
-                                        //   _diaryEditViewModel
-                                        //       .setEmotionStatus(_emotion);
-                                        // }
-
                                         if (emotion.hasData &&
                                             emotion.data.getEmotionComponent
                                                     .getState !=
@@ -185,11 +178,6 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                           //         .getEmotionComponent.getOffset
                                           //         .toString());
                                         }
-                                        // if (_emotionOffset == null) {
-                                        //   Offset _innitOffset = Offset(10, 150);
-                                        //   _emotionOffset = _innitOffset;
-                                        // }
-
                                         return emotion.hasData &&
                                                 emotion.data.getEmotionComponent
                                                         .getState !=
@@ -422,6 +410,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                                   ))
                                               : Container();
                                         }),
+                                    // fgfdfdfdfdfdfdf
                                     ..._editTexts.asMap().entries.map(
                                         (e) => _addEditTextWidget(e, _space))
                                   ]
@@ -914,54 +903,106 @@ class _DiaryEditViewState extends State<DiaryEditView> {
         child: Container(
           width: size.width * 0.75,
           // color: Colors.transparent,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.yellow.withOpacity(0.5),
-          ),
+
           child: Draggable(
-            child: TextFormField(
-                initialValue: e.value.getTextContent,
-                onChanged: (value) {
-                  e.value.setTextContent(value);
-                },
-                cursorColor: Colors.yellow[900],
-                minLines: 1,
-                maxLines: 50,
-                style: GoogleFonts.dancingScript(
-                  fontSize: 20,
-                  color: Colors.yellow[900],
+            child: Stack(
+              children: [
+                Container(
+                  width: size.width * 0.67,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.yellow.withOpacity(0.5),
+                  ),
+                  child: TextFormField(
+                      onTap: () {
+                        setState(() {
+                          e.value.setEditState(!e.value.getEditState);
+                          print('904>Edit state: ' +
+                              e.value.getEditState.toString());
+                        });
+                      },
+                      initialValue: e.value.getTextContent,
+                      onChanged: (value) {
+                        e.value.setTextContent(value);
+                      },
+                      cursorColor: Colors.yellow[900],
+                      minLines: 1,
+                      maxLines: 50,
+                      style: GoogleFonts.dancingScript(
+                        fontSize: 20,
+                        color: Colors.yellow[900],
+                      ),
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(10))),
                 ),
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(10))
-                // InputDecoration(
-                //   fillColor: Colors.yellow.withOpacity(0.5),
-                //   filled: true,
-                //   border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.all(Radius.circular(10)),
-                //       borderSide: BorderSide(
-                //           color: Colors.transparent,
-                //           width: 0,
-                //           style: BorderStyle.none)),
-                //   enabled: true,
-                //   enabledBorder: OutlineInputBorder(
-                //       borderRadius: BorderRadius.all(Radius.circular(10)),
-                //       borderSide: BorderSide(
-                //           color: Colors.transparent,
-                //           width: 0,
-                //           style: BorderStyle.none)),
-                //   contentPadding: const EdgeInsets.all(10),
-                //   hintText: 'Bạn đang nghĩ gì?',
-                //   hintStyle: GoogleFonts.dancingScript(
-                //     fontSize: 20,
-                //     color: Colors.black.withOpacity(0.2),
-                //   ),
-                // )
-                ),
+                e.value.getEditState
+                    ? Positioned(
+                        top: 7,
+                        right: 0,
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.black),
+                          child: IconButton(
+                              alignment: Alignment.center,
+                              iconSize: 15,
+                              onPressed: () async {
+                                setState(() {
+                                  e.value.setState(3);
+                                  if (e.value.getState == 3) {
+                                    _editTexts.removeAt(e.key);
+                                    if (_editTexts.length == 0)
+                                      _diaryEditViewModel
+                                          .setBottomStateController(1, false);
+                                  }
+                                });
+                              },
+                              icon: Icon(
+                                Icons.close_rounded,
+                                color: Colors.white,
+                              )),
+                        ))
+                    : Container(),
+                // e.value.getEditState
+                //     ? Positioned(
+                //         bottom: 0,
+                //         right: 0,
+                //         child: InkWell(
+                //           // onTapCancel: () {
+                //           //   print('ontapcancle');
+                //           //   _images[index].setResizeState(true);
+                //           //   setState(() {});
+                //           // },
+                //           // onHover: (value) {
+                //           //   print('onhover');
+                //           // },
+                //           child: Container(
+                //             height: 30,
+                //             width: 30,
+                //             decoration: BoxDecoration(
+                //                 shape: BoxShape.circle, color: Colors.black),
+                //             child: IconButton(
+                //                 alignment: Alignment.center,
+                //                 iconSize: 15,
+                //                 onPressed: () {},
+                //                 icon: RotatedBox(
+                //                   quarterTurns: 1,
+                //                   child: Icon(
+                //                     Icons.open_in_full_rounded,
+                //                     color: Colors.white,
+                //                   ),
+                //                 )),
+                //           ),
+                //         ))
+                //     : Container(),
+              ],
+            ),
             feedback: Opacity(
               opacity: 0.5,
               child: Container(
-                width: size.width * 0.75,
+                width: size.width * 0.67,
                 // color: Colors.transparent,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),

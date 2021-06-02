@@ -76,30 +76,24 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'YoL',
+                          'Your Style',
                           style: GoogleFonts.sacramento(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
-                        Text(
-                          'YoS',
-                          style: GoogleFonts.righteous(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.yellow[900],
-                          ),
-                        ),
+                        // Text(
+                        //   'Style',
+                        //   style: GoogleFonts.righteous(
+                        //     fontSize: 25,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.yellow[900],
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
-                  // title: Center(
-                  //   child: Text(
-                  //     'Nhật ký',
-                  //     style: TextStyle(color: Colors.black),
-                  //   ),
-                  // ),
                   actions: [
                     IconButton(
                         onPressed: () {},
@@ -136,6 +130,16 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                               children: [
                                 TextFormField(
                                   // showCursor: isTapedStatus,
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return DiaryEditView(
+                                          DiaryDB(DateTime.now()),
+                                          state: 1,
+                                        );
+                                      },
+                                    ));
+                                  },
                                   maxLines: 3,
                                   style: TextStyle(fontSize: 16),
                                   cursorColor: Colors.black,
@@ -231,6 +235,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
             builder: (context, Box<DiaryDB> diaryBox, child) {
               return ListView.separated(
                 itemBuilder: (BuildContext context, int index) {
+                  // diaryBox.values.elementAt(index).diaryId = index;
                   return _itemDiaryList(
                       diaryBox.values.elementAt(index), index);
                 },
@@ -253,16 +258,26 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
   }
 
   Widget _itemDiaryList(DiaryDB item, int index) {
-    print('237> diary box: ' + diaryBox.name);
-    print('\ncontent: ' +
-        diaryBox.getAt(index).diaryContent +
-        '\nImage: ' +
-        diaryBox.getAt(index).diaryImage);
+    // print('237> diary box: ' + diaryBox.name);
+    // print('\ncontent: ' +
+    //     diaryBox.getAt(index).diaryContent +
+    //     '\nImage: ' +
+    //     diaryBox.getAt(index).diaryImage);
+
+    String h, m;
+    if (item.diaryTime.hour < 10)
+      h = '0' + item.diaryTime.hour.toString();
+    else
+      h = item.diaryTime.hour.toString();
+    if (item.diaryTime.minute < 10)
+      m = '0' + item.diaryTime.minute.toString();
+    else
+      m = item.diaryTime.minute.toString();
 ///////////////123
     return InkWell(
-      onLongPress: () {
-        diaryBox.deleteAt(index);
-      },
+      // onLongPress: () {
+      //   _delete(index);
+      // },
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
@@ -272,7 +287,10 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
             //     '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
             //     DateTime.now());
 
-            return DiaryEditView(item);
+            return DiaryEditView(
+              item,
+              state: 2,
+            );
           },
         ));
       },
@@ -403,10 +421,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
               right: index % 2 != 0 ? size.width * 0.02 : null,
               child: Container(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                    item.diaryTime.hour.toString() +
-                        ':' +
-                        item.diaryTime.minute.toString(),
+                child: Text(h + ':' + m,
                     style: GoogleFonts.oswald(
                         fontSize: 16, color: Colors.white.withOpacity(0.7))
                     // TextStyle(
@@ -420,6 +435,16 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
         ),
       ),
     );
+  }
+
+  Future<void> _delete(int index) async {
+    diaryBox.deleteAt(index);
+    // var imageBox = await Hive.openBox('images' + index.toString());
+    // imageBox.deleteFromDisk();
+    // var textBox = await Hive.openBox('texts' + index.toString());
+    // textBox.deleteFromDisk();
+    // var emotionBox = await Hive.openBox('emotion' + index.toString());
+    // emotionBox.deleteFromDisk();
   }
 }
 // ListView.separated(
