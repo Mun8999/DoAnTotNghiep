@@ -1,4 +1,5 @@
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
+import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_view.dart';
 import 'package:bullet_journal/home/home_view.dart';
 import 'package:bullet_journal/sticker_widget/sticker_widget_view.dart';
 import 'package:bullet_journal/test/test.dart';

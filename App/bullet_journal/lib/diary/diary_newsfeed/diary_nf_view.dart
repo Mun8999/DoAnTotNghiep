@@ -4,7 +4,6 @@ import 'dart:ui';
 
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
 import 'package:bullet_journal/database/db_diary.dart';
-import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -57,8 +56,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     spacing = size.width * 0.02;
-    return Scaffold(
-        body: NestedScrollView(
+    return NestedScrollView(
       physics: NeverScrollableScrollPhysics(),
       headerSliverBuilder: (context, value) {
         return [
@@ -161,7 +159,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                                           'assets/icons/emotion/smile-face.svg',
                                           height: 25,
                                           width: 25,
-                                          color: Colors.yellow[900],
+                                          color: Colors.red[400],
                                         ),
                                       ),
                                       Padding(
@@ -171,7 +169,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                                           'assets/icons/insert-picture-icon.svg',
                                           height: 25,
                                           width: 25,
-                                          color: Colors.yellow[900],
+                                          color: Colors.red[400],
                                         ),
                                       ),
                                       Padding(
@@ -181,7 +179,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                                           'assets/icons/pointer-on-the-map.svg',
                                           height: 25,
                                           width: 25,
-                                          color: Colors.yellow[900],
+                                          color: Colors.red[400],
                                         ),
                                       ),
                                     ],
@@ -190,35 +188,6 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                               ],
                             ),
                           ),
-                          // Align(
-                          //   alignment: Alignment.centerRight,
-                          //   child: Container(
-                          //     height: size.height * 0.04,
-                          //     width: size.width * 0.35,
-                          //     margin: EdgeInsets.all(spacing),
-                          //     decoration: BoxDecoration(
-                          //         color: Colors.yellow[900],
-                          //         borderRadius: BorderRadius.circular(10)),
-                          //     child: Row(
-                          //       mainAxisSize: MainAxisSize.min,
-                          //       mainAxisAlignment: MainAxisAlignment.start,
-                          //       crossAxisAlignment: CrossAxisAlignment.center,
-                          //       children: [
-                          //         IconButton(
-                          //             onPressed: () {},
-                          //             icon: Icon(
-                          //               Icons.send,
-                          //               color: Colors.white,
-                          //               size: 13,
-                          //             )),
-                          //         Text(
-                          //           'Lưu bài viết',
-                          //           style: TextStyle(color: Colors.white),
-                          //         )
-                          //       ],
-                          //     ),
-                          //   ),
-                          // )
                         ],
                       ),
                     ),
@@ -254,7 +223,87 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
               );
             },
           )),
-    ));
+    );
+    // Scaffold(
+    //   body:
+    //   // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    //   // floatingActionButton: FloatingActionButton(
+    //   //   backgroundColor: Colors.yellow[900],
+    //   //   onPressed: () {},
+    //   //   child: SvgPicture.asset(
+    //   //     'assets/icons/menu/home-with-hearth.svg',
+    //   //     height: 30,
+    //   //     width: 30,
+    //   //     color: Colors.white,
+    //   //   ),
+    //   //   elevation: 2.0,
+    //   // ),
+    //   // bottomNavigationBar: FABBottomAppBar(
+    //   //   centerItemText: 'Trang chủ',
+    //   //   color: Colors.black38,
+    //   //   backgroundColor: Colors.white,
+    //   //   selectedColor: Colors.black,
+    //   //   notchedShape: CircularNotchedRectangle(),
+    //   //   onTabSelected: (value) {
+    //   //     switch (value) {
+    //   //       case 0:
+    //   //         {
+    //   //           Navigator.push(
+    //   //               context,
+    //   //               MaterialPageRoute(
+    //   //                 builder: (context) => DailyTaskNewsFeedView(),
+    //   //               ));
+    //   //           break;
+    //   //         }
+    //   //       case 1:
+    //   //         {
+    //   //           Navigator.push(
+    //   //               context,
+    //   //               MaterialPageRoute(
+    //   //                 builder: (context) => JourneyNewsfeedView(),
+    //   //               ));
+    //   //           break;
+    //   //         }
+    //   //       case 2:
+    //   //         {
+    //   //           Navigator.push(context, MaterialPageRoute(
+    //   //             builder: (context) {
+    //   //               DiaryDB diary = DiaryDB(DateTime.now());
+    //   //               return DiaryEditView(diary);
+    //   //             },
+    //   //           ));
+    //   //           break;
+    //   //         }
+    //   //       case 3:
+    //   //         {
+    //   //           Navigator.push(
+    //   //               context,
+    //   //               MaterialPageRoute(
+    //   //                 builder: (context) => LoginView(),
+    //   //               ));
+    //   //           break;
+    //   //         }
+    //   //       default:
+    //   //         break;
+    //   //     }
+    //   //   },
+    //   //   items: [
+    //   //     FABBottomAppBarItem(
+    //   //         iconData:
+    //   //             'assets/icons/menu/black-paper-calendar-with-spring.svg',
+    //   //         text: 'Hoạt động'),
+    //   //     FABBottomAppBarItem(
+    //   //         iconData: 'assets/icons/menu/airplane-facing-left.svg',
+    //   //         text: 'Chuyến đi'),
+    //   //     FABBottomAppBarItem(
+    //   //         iconData: 'assets/icons/menu/blank-page-folded-corner.svg',
+    //   //         text: 'Ghi chú'),
+    //   //     FABBottomAppBarItem(
+    //   //         iconData: 'assets/icons/menu/black-user-shape.svg',
+    //   //         text: 'Tài khoản'),
+    //   //   ],
+    //   // ),
+    // );
   }
 
   Widget _itemDiaryList(DiaryDB item, int index) {
@@ -334,19 +383,6 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    // Flexible(
-                    //   flex: 2,
-                    //   fit: FlexFit.loose,
-                    //   child: Padding(
-                    //     padding: EdgeInsets.all(spacing),
-                    //     child: Text('Đom Đóm - Jack',
-                    //         style: TextStyle(
-                    //             fontFamily: 'DancingScript',
-                    //             fontSize: 15,
-                    //             color: Colors.brown[800],
-                    //             fontWeight: FontWeight.bold)),
-                    //   ),
-                    // ),
                     Flexible(
                       flex: 8,
                       fit: FlexFit.loose,
@@ -358,7 +394,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                           style: TextStyle(
                             fontFamily: 'DancingScript',
                             fontSize: 15,
-                            color: Colors.brown[700],
+                            color: Colors.brown[900],
                           ),
                           textAlign: TextAlign.left,
                         ),

@@ -77,6 +77,7 @@ flutter:
     - assets/icons/menu/
     - assets/fonts/google_fonts/
     - assets/gifs/
+    - assets/icons/menu/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
