@@ -24,13 +24,14 @@ class DiaryDBAdapter extends TypeAdapter<DiaryDB> {
       diaryContent: fields[2] as String,
       diaryImage: fields[3] as String,
       securityMode: fields[5] as int,
+      diaryBox: fields[6] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, DiaryDB obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.diaryId)
       ..writeByte(1)
@@ -42,7 +43,9 @@ class DiaryDBAdapter extends TypeAdapter<DiaryDB> {
       ..writeByte(4)
       ..write(obj.diaryTime)
       ..writeByte(5)
-      ..write(obj.securityMode);
+      ..write(obj.securityMode)
+      ..writeByte(6)
+      ..write(obj.diaryBox);
   }
 
   @override

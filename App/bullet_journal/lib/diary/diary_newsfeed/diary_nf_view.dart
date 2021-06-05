@@ -205,8 +205,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
               return ListView.separated(
                 itemBuilder: (BuildContext context, int index) {
                   // diaryBox.values.elementAt(index).diaryId = index;
-                  return _itemDiaryList(
-                      diaryBox.values.elementAt(index), index);
+                  return _itemDiaryList(diaryBox.getAt(index), index);
                 },
                 itemCount: diaryBox.values.length,
                 separatorBuilder: (BuildContext context, int index) {
@@ -324,9 +323,9 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
       m = item.diaryTime.minute.toString();
 ///////////////123
     return InkWell(
-      // onLongPress: () {
-      //   _delete(index);
-      // },
+      onLongPress: () {
+        _delete(index);
+      },
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
@@ -335,7 +334,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
             //     'Đom Đóm - Jack',
             //     '" Người giờ còn đây không?\nThuyền này liệu còn sang sông?\nBuổi chiều dài mênh mông\nLòng người giờ hòa hay đông?\nHồng mắt em cả bầu trời đỏ hoen\nTa như đứa trẻ ngây thơ\nQuên đi tháng ngày ngu ngơ... "',
             //     DateTime.now());
-
+            print('338>item diary box image: ' + item.diaryImage);
             return DiaryEditView(
               item,
               state: 2,
@@ -474,13 +473,15 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
   }
 
   Future<void> _delete(int index) async {
+    int boxIndex = diaryBox.getAt(index).diaryBox;
     diaryBox.deleteAt(index);
-    // var imageBox = await Hive.openBox('images' + index.toString());
-    // imageBox.deleteFromDisk();
-    // var textBox = await Hive.openBox('texts' + index.toString());
-    // textBox.deleteFromDisk();
-    // var emotionBox = await Hive.openBox('emotion' + index.toString());
-    // emotionBox.deleteFromDisk();
+
+    var imageBox = await Hive.openBox('images' + boxIndex.toString());
+    imageBox.deleteFromDisk();
+    var textBox = await Hive.openBox('texts' + boxIndex.toString());
+    textBox.deleteFromDisk();
+    var emotionBox = await Hive.openBox('emotion' + boxIndex.toString());
+    emotionBox.deleteFromDisk();
   }
 }
 // ListView.separated(

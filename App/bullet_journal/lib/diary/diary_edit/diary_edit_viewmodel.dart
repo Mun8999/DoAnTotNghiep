@@ -64,21 +64,30 @@ class DiaryEditViewModel {
     ///kiem tra trang thai tao moi hoac luu lai
     diaryBD.diaryTime = DateTime.now();
     var diaryBox = Hive.box<DiaryDB>('diaries');
+    int index = diaryBox.length;
+
     if (state == 1) {
+      if (index == 0) {
+        diaryBD.diaryId = 0;
+        diaryBD.diaryBox = 0;
+      } else {
+        diaryBD.diaryId = index;
+        int diaryBoxId = diaryBox.getAt(index - 1).diaryId + 1;
+        diaryBD.diaryBox = diaryBoxId;
+      }
       await diaryBox.add(diaryBD);
-      diaryBD.diaryId = diaryBox.length - 1;
     }
     var textBox =
-        await Hive.openBox<TextDB>('texts' + diaryBD.diaryId.toString());
+        await Hive.openBox<TextDB>('texts' + diaryBD.diaryBox.toString());
     await textBox.clear();
     var imageBox =
-        await Hive.openBox<ImageDB>('images' + diaryBD.diaryId.toString());
+        await Hive.openBox<ImageDB>('images' + diaryBD.diaryBox.toString());
     await imageBox.clear();
 
     await _saveImage(images, diaryBD, imageBox);
     await _saveText(editTexts, diaryBD, textBox);
     await _saveEmotion(emotion, diaryBD);
-    await diaryBox.put(diaryBD.diaryId, diaryBD);
+    await diaryBox.putAt(diaryBD.diaryId, diaryBD);
   }
 
   Future<void> _saveImage(
@@ -87,10 +96,6 @@ class DiaryEditViewModel {
       diaryBD.diaryImage = '';
       return;
     }
-    // var imageBox =
-    //     await Hive.openBox<ImageDB>('images' + diaryBD.diaryId.toString());
-    // await imageBox.clear();
-
     ImageDB imageDB;
     images.forEach((image) async {
       imageDB = ImageDB(
@@ -155,7 +160,7 @@ class DiaryEditViewModel {
   Future<void> _saveEmotion(Emotion emotion, DiaryDB diaryBD) async {
     if (emotion == null || emotion.getEmotionComponent.getState == 3) return;
     var emotionBox =
-        await Hive.openBox<EmotionDB>('emotion' + diaryBD.diaryId.toString());
+        await Hive.openBox<EmotionDB>('emotion' + diaryBD.diaryBox.toString());
     emotionBox.clear();
     EmotionDB emotionDB = EmotionDB(
         emotion.getEmotionId,

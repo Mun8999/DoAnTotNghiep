@@ -118,6 +118,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
               onPressed: () async {
                 await _diaryEditViewModel.saveDiary(widget._diaryDB, _images,
                     _editTexts, _emotion, widget._state);
+                widget._state = 2;
               },
               icon: Icon(
                 Icons.save_sharp,
@@ -1101,7 +1102,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   Future _initImage() async {
     var imageBox = await Hive.openBox<ImageDB>(
-        'images' + widget._diaryDB.diaryId.toString());
+        'images' + widget._diaryDB.diaryBox.toString());
+    // print('1105> boxId: ' + widget._diaryDB.diaryBox.toString());
     if (imageBox.length == 0) return;
     MyImage myImage;
     imageBox.toMap().values.toList().forEach((image) {
@@ -1116,7 +1118,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   Future _initText() async {
     var textBox = await Hive.openBox<TextDB>(
-        'texts' + widget._diaryDB.diaryId.toString());
+        'texts' + widget._diaryDB.diaryBox.toString());
     if (textBox.length == 0) return;
     textBox.values.toList().forEach((element) {
       print('>content ' + element.textContent + '\n>offset ');
@@ -1129,7 +1131,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   Future _initEmotion() async {
     // _emotion=Emotion(emotionId, emotionName, emotionImage)
     var emotionBox = await Hive.openBox<EmotionDB>(
-        'emotion' + widget._diaryDB.diaryId.toString());
+        'emotion' + widget._diaryDB.diaryBox.toString());
     if (emotionBox.length == 0) return;
     EmotionDB emotionDB = emotionBox.getAt(0);
     if (emotionDB.state == 3) return;

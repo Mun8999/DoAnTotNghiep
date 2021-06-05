@@ -19,18 +19,21 @@ class DiaryDB {
   /// 2. public
   @HiveField(5)
   int securityMode;
-
+  @HiveField(6)
+  int diaryBox;
   DiaryDB(DateTime diaryTime,
       {int diaryId = -1,
       String diaryTitle = '',
       String diaryContent = '',
       String diaryImage = '',
-      int securityMode = 1}) {
+      int securityMode = 1,
+      int diaryBox = -1}) {
     this.diaryId = diaryId;
     this.diaryTitle = diaryTitle;
     this.diaryContent = diaryContent;
     this.diaryTime = diaryTime;
     this.diaryImage = diaryImage;
     this.securityMode = securityMode;
+    this.diaryBox = diaryBox; //bai hoc xuong mau nho gan bien day du nha ba nọi
   }
 }
