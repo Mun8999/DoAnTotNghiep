@@ -72,7 +72,7 @@ class DiaryEditViewModel {
         diaryBD.diaryBox = 0;
       } else {
         diaryBD.diaryId = index;
-        int diaryBoxId = diaryBox.getAt(index - 1).diaryId + 1;
+        int diaryBoxId = diaryBox.getAt(index - 1).diaryBox + 1;
         diaryBD.diaryBox = diaryBoxId;
       }
       await diaryBox.add(diaryBD);
