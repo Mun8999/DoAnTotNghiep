@@ -31,6 +31,19 @@ class MyTime {
   int get getHour => this._h;
   int get getMinute => this._m;
   int get getSecond => this._s;
+  @override
+  String toString() {
+    String h, m;
+    if (this._h > 9)
+      h = this._h.toString();
+    else
+      h = '0' + this._h.toString();
+    if (this._m > 9)
+      m = this._m.toString();
+    else
+      m = '0' + this._m.toString();
+    return h + ':' + m;
+  }
 }
 
 class MyDate {
@@ -46,6 +59,19 @@ class MyDate {
   int get getMonth => this._month;
   int get getYear => this._year;
   int get getWeekday => this._weekday;
+  @override
+  String toString() {
+    String day, month;
+    if (this._day > 9)
+      day = this._day.toString();
+    else
+      day = '0' + this._day.toString();
+    if (this._month > 9)
+      month = this._month.toString();
+    else
+      month = '0' + this._month.toString();
+    return day + ' - ' + month + ' - ' + this._year.toString();
+  }
 }
 
 class MyStringDate {

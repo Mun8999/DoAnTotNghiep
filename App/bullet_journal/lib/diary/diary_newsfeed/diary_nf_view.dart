@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
+import 'package:bullet_journal/model/time.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
@@ -312,16 +313,6 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
     //     diaryBox.getAt(index).diaryContent +
     //     '\nImage: ' +
     //     diaryBox.getAt(index).diaryImage);
-
-    String h, m;
-    if (item.diaryTime.hour < 10)
-      h = '0' + item.diaryTime.hour.toString();
-    else
-      h = item.diaryTime.hour.toString();
-    if (item.diaryTime.minute < 10)
-      m = '0' + item.diaryTime.minute.toString();
-    else
-      m = item.diaryTime.minute.toString();
 ///////////////123
     // print('325>item diary box image: ' + item.diaryBox.toString());
     return InkWell(
@@ -460,7 +451,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
               right: index % 2 != 0 ? size.width * 0.02 : null,
               child: Container(
                 alignment: Alignment.centerLeft,
-                child: Text(h + ':' + m,
+                child: Text(MyDateTime(item.diaryTime).getTime.toString(),
                     style: GoogleFonts.oswald(
                         fontSize: 16, color: Colors.white.withOpacity(0.7))
                     // TextStyle(

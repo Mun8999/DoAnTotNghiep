@@ -37,6 +37,7 @@ dependencies:
   date_util: ^0.1.4
   focused_menu: ^1.0.5
   table_calendar: ^3.0.0
+  flutter_circular_chart: ^0.1.0
   #location
   geolocator: ^7.0.3
   geocoder: ^0.2.1
