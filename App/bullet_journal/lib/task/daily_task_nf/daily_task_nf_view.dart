@@ -5,7 +5,7 @@ import 'package:bullet_journal/model/time.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 // import 'package:table_calendar/table_calendar.dart';
 // import 'package:bullet_journal/widget/calendar/calendar_widget.dart';
 
@@ -50,19 +50,7 @@ List<Color> _boderColor = [
   Colors.teal[300]
 ];
 List<String> _tasks = ['Tập thể dục', 'Đọc sách', 'Nghe nhạc', 'Làm việc'];
-List<CircularStackEntry> data = <CircularStackEntry>[
-  new CircularStackEntry(
-    <CircularSegmentEntry>[
-      new CircularSegmentEntry(500.0, Colors.red[200], rankKey: 'Q1'),
-      new CircularSegmentEntry(1000.0, Colors.green[200], rankKey: 'Q2'),
-      new CircularSegmentEntry(2000.0, Colors.blue[200], rankKey: 'Q3'),
-      new CircularSegmentEntry(1000.0, Colors.yellow[200], rankKey: 'Q4'),
-    ],
-    rankKey: 'Quarterly Profits',
-  ),
-];
-final GlobalKey<AnimatedCircularChartState> _chartKey =
-    new GlobalKey<AnimatedCircularChartState>();
+
 int _daysInMonth = 0;
 int _weekDayOfMonth = 0;
 int _dayIndex = 1;
@@ -195,112 +183,286 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
       },
       body: SafeArea(
         child: Container(
-            height: _size.height * 0.5,
+            height: _size.height,
+            width: _size.width,
             color: Colors.white,
             padding: EdgeInsets.only(top: 10),
-            child: Column(
-              children: [
-                ListView.separated(
-                  /// de o day de khong scroll theo cai nay
-                  physics: NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: _colors.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Container(
-                          height: _size.width * 0.2,
-                          width: _size.width,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                color: _boderColor[index],
-                              ),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Stack(
-                            children: [
-                              Container(
-                                width: _size.width * 0.25 * (index + 1),
-                                decoration: BoxDecoration(
-                                    color: _colors[index],
-                                    borderRadius: BorderRadius.circular(10)),
-                              ),
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                    (25 * (index + 1)).toString() + '%',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: _size.height * 0.45,
+                    child: ListView.separated(
+                      /// de o day de khong scroll theo cai nay
+                      physics: NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount: _colors.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Container(
+                              height: _size.width * 0.2,
+                              width: _size.width,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: _boderColor[index],
                                   ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                    _tasks[index],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    width: _size.width * 0.25 * (index + 1),
+                                    decoration: BoxDecoration(
+                                        color: _colors[index],
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                   ),
-                                ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Text(
+                                        (25 * (index + 1)).toString() + '%',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Text(
+                                        _tasks[index],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Container(
+                                        height: _size.width * 0.05,
+                                        width: _size.width * 0.3,
+                                        margin: EdgeInsets.all(5),
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: 5,
+                                          itemBuilder: (context, index) =>
+                                              Icon(Icons.check),
+                                        )),
+                                  )
+                                ],
                               ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Container(
-                                    height: _size.width * 0.05,
-                                    width: _size.width * 0.3,
-                                    margin: EdgeInsets.all(5),
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: 5,
-                                      itemBuilder: (context, index) =>
-                                          Icon(Icons.check),
-                                    )),
-                              )
-                            ],
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: 10,
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
+                    height: _size.width * 0.7,
+                    width: _size.width * 0.7,
+                    child: Stack(
+                      children: [
+                        // CircularPercentIndicator(
+                        //   radius: _size.width * 0.7,
+                        //   lineWidth: 0.5,
+                        //   percent: 1.0,
+                        //   // center: new Text("100%"),
+                        //   progressColor: Colors.black,
+                        // ),
+                        CircularPercentIndicator(
+                          animation: true,
+                          animationDuration: 3000,
+                          circularStrokeCap: CircularStrokeCap.round,
+                          radius: _size.width * 0.7,
+                          lineWidth: 10,
+                          animateFromLastPercent: true,
+                          percent: 0.7,
+                          // center: new Text("70%"),
+                          progressColor: Colors.red[900],
+                          backgroundWidth: 3,
+                        ),
+                        Center(
+                          child: CircularPercentIndicator(
+                            animation: true,
+                            animationDuration: 1000,
+                            circularStrokeCap: CircularStrokeCap.round,
+                            radius: _size.width * 0.6,
+                            lineWidth: 4,
+                            animateFromLastPercent: true,
+                            percent: 0.25,
+                            center: new Text("70%"),
+                            progressColor: _boderColor[0],
+                            backgroundWidth: 0.5,
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: 10,
-                    );
-                  },
-                ),
-                // Container(
-                //   child: AnimatedCircularChart(
-                //     key: _chartKey,
-                //     size: Size(_size.width, _size.width),
-                //     initialChartData: <CircularStackEntry>[
-                //       new CircularStackEntry(
-                //         <CircularSegmentEntry>[
-                //           new CircularSegmentEntry(
-                //             33.33,
-                //             Colors.blue[400],
-                //             rankKey: 'completed',
-                //           ),
-                //           new CircularSegmentEntry(
-                //             66.67,
-                //             Colors.blueGrey[600],
-                //             rankKey: 'remaining',
-                //           ),
-                //         ],
-                //         rankKey: 'progress',
-                //       ),
-                //     ],
-                //     chartType: CircularChartType.Radial,
-                //     edgeStyle: SegmentEdgeStyle.round,
-                //     percentageValues: true,
-                //   ),
-                // )
-              ],
+                        Center(
+                          child: CircularPercentIndicator(
+                            animation: true,
+                            animationDuration: 1000,
+                            circularStrokeCap: CircularStrokeCap.round,
+                            radius: _size.width * 0.55,
+                            lineWidth: 4,
+                            animateFromLastPercent: true,
+                            percent: 0.5,
+                            center: new Text("70%"),
+                            progressColor: _boderColor[1],
+                            backgroundWidth: 1,
+                          ),
+                        ),
+                        Center(
+                          child: CircularPercentIndicator(
+                            animation: true,
+                            animationDuration: 1000,
+                            circularStrokeCap: CircularStrokeCap.round,
+                            radius: _size.width * 0.5,
+                            lineWidth: 4,
+                            animateFromLastPercent: true,
+                            percent: 0.75,
+                            center: new Text("70%"),
+                            progressColor: _boderColor[2],
+                            backgroundWidth: 0.5,
+                          ),
+                        ),
+                        Center(
+                          child: CircularPercentIndicator(
+                            animation: true,
+                            animationDuration: 1000,
+                            circularStrokeCap: CircularStrokeCap.round,
+                            radius: _size.width * 0.45,
+                            lineWidth: 4,
+                            animateFromLastPercent: true,
+                            percent: 1,
+                            center: new Text("70%"),
+                            progressColor: _boderColor[3],
+                            backgroundWidth: 1,
+                          ),
+                        ),
+                        // Center(
+                        //   child: CircularPercentIndicator(
+                        //     animation: true,
+                        //     animationDuration: 1000,
+                        //     circularStrokeCap: CircularStrokeCap.round,
+                        //     radius: _size.width * 0.4,
+                        //     lineWidth: 4,
+                        //     animateFromLastPercent: true,
+                        //     percent: 1,
+                        //     center: new Text("70%"),
+                        //     progressColor: _boderColor[3],
+                        //     backgroundWidth: 1,
+                        //   ),
+                        // ),
+                        // Center(
+                        //   child: CircularPercentIndicator(
+                        //     animation: true,
+                        //     animationDuration: 1000,
+                        //     circularStrokeCap: CircularStrokeCap.round,
+                        //     radius: _size.width * 0.35,
+                        //     lineWidth: 4,
+                        //     animateFromLastPercent: true,
+                        //     percent: 1,
+                        //     center: new Text("70%"),
+                        //     progressColor: Colors.teal[50],
+                        //     backgroundWidth: 1,
+                        //   ),
+                        // ),
+                        // Center(
+                        //   child: CircularPercentIndicator(
+                        //     animation: true,
+                        //     animationDuration: 1000,
+                        //     circularStrokeCap: CircularStrokeCap.round,
+                        //     radius: _size.width * 0.3,
+                        //     lineWidth: 4,
+                        //     animateFromLastPercent: true,
+                        //     percent: 1,
+                        //     center: new Text("70%"),
+                        //     progressColor: Colors.teal[900],
+                        //     backgroundWidth: 1,
+                        //   ),
+                        // ),
+                        // Center(
+                        //   child: CircularPercentIndicator(
+                        //     animation: true,
+                        //     animationDuration: 1000,
+                        //     circularStrokeCap: CircularStrokeCap.round,
+                        //     radius: _size.width * 0.25,
+                        //     lineWidth: 4,
+                        //     animateFromLastPercent: true,
+                        //     percent: 1,
+                        //     center: new Text("70%"),
+                        //     progressColor: Colors.teal[800],
+                        //     backgroundWidth: 1,
+                        //   ),
+                        // ),
+                        // Center(
+                        //   child: CircularPercentIndicator(
+                        //     animation: true,
+                        //     animationDuration: 1000,
+                        //     circularStrokeCap: CircularStrokeCap.round,
+                        //     radius: _size.width * 0.2,
+                        //     lineWidth: 4,
+                        //     animateFromLastPercent: true,
+                        //     percent: 1,
+                        //     center: new Text("70%"),
+                        //     progressColor: Colors.teal[700],
+                        //     backgroundWidth: 1,
+                        //   ),
+                        // ),
+                        // Center(
+                        //   child: CircularPercentIndicator(
+                        //     animation: true,
+                        //     animationDuration: 1000,
+                        //     circularStrokeCap: CircularStrokeCap.round,
+                        //     radius: _size.width * 0.15,
+                        //     lineWidth: 4,
+                        //     animateFromLastPercent: true,
+                        //     percent: 1,
+                        //     center: new Text("70%"),
+                        //     progressColor: Colors.teal[600],
+                        //     backgroundWidth: 1,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  )
+                  // Container(
+                  //   child: AnimatedCircularChart(
+                  //     key: _chartKey,
+                  //     size: Size(_size.width, _size.width),
+                  //     initialChartData: <CircularStackEntry>[
+                  //       new CircularStackEntry(
+                  //         <CircularSegmentEntry>[
+                  //           new CircularSegmentEntry(
+                  //             33.33,
+                  //             Colors.blue[400],
+                  //             rankKey: 'completed',
+                  //           ),
+                  //           new CircularSegmentEntry(
+                  //             66.67,
+                  //             Colors.blueGrey[600],
+                  //             rankKey: 'remaining',
+                  //           ),
+                  //         ],
+                  //         rankKey: 'progress',
+                  //       ),
+                  //     ],
+                  //     chartType: CircularChartType.Radial,
+                  //     edgeStyle: SegmentEdgeStyle.round,
+                  //     percentageValues: true,
+                  //   ),
+                  // )
+                ],
+              ),
             )),
       ),
     );
