@@ -1,7 +1,8 @@
 // @dart=2.9
 import 'dart:ui';
+import 'package:bullet_journal/model/calendar/calender.dart';
 import 'package:bullet_journal/task/daily_task_nf/daily_task_nf_viewmodel.dart';
-import 'package:bullet_journal/model/time.dart';
+import 'package:bullet_journal/model/calendar/time.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -63,15 +64,19 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
   void initState() {
     super.initState();
     dailyTaskNewsFeedViewModel = DailyTaskNewsFeedViewModel();
+    // dailyTaskNewsFeedViewModel.setDay(2);
     // _monthSelected = dailyTaskNewsFeedViewModel.getStringMonths[0];
-    _daysInMonth = dailyTaskNewsFeedViewModel.getDayData(2021, 1);
-    DateTime dateTime = DateTime(2021, 1, 1);
-    _weekDayOfMonth = MyDateTime(dateTime).getDate.getWeekday * 2;
+
+    ///
+    // _daysInMonth = dailyTaskNewsFeedViewModel.getDayData(2021, 1);
+    // DateTime dateTime = DateTime(2021, 1, 1);
+    // _weekDayOfMonth = MyDateTime(dateTime).getDate.getWeekday * 2;
+
     // _selectedDay = DateTime.now();
     // _focusedDay = DateTime.now();
     // _calendarFormat = CalendarFormat.month;
-    print('\ndaysInMonth ' + _daysInMonth.toString());
-    print('\nweekDayOfMonth ' + _weekDayOfMonth.toString());
+    // print('\ndaysInMonth ' + _daysInMonth.toString());
+    // print('\nweekDayOfMonth ' + _weekDayOfMonth.toString());
   }
 
   @override
@@ -103,18 +108,6 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                         physics: NeverScrollableScrollPhysics(),
                         child: Column(
                           children: [
-                            // Align(
-                            //   alignment: Alignment.centerLeft,
-                            //   child: Padding(
-                            //     padding: const EdgeInsets.all(10),
-                            //     child: Text(
-                            //       '2021',
-                            //       style: TextStyle(
-                            //           fontSize: 20,
-                            //           fontWeight: FontWeight.bold),
-                            //     ),
-                            //   ),
-                            // ),
                             Stack(
                               children: [
                                 Padding(
@@ -131,40 +124,38 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                     // child:
                                   ),
                                 ),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: FocusedMenuHolder(
-                                      openWithTap: true,
-                                      blurSize: 0,
-                                      menuOffset: 0,
-                                      menuWidth: _size.width / 4,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 20, bottom: 10),
-                                        child: StreamBuilder<String>(
-                                            initialData:
-                                                dailyTaskNewsFeedViewModel
-                                                    .getStringMonths[0],
-                                            stream: dailyTaskNewsFeedViewModel
-                                                .getMonthSelectedStream,
-                                            builder: (context, month) {
-                                              return Text(
-                                                month.data,
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white),
-                                              );
-                                            }),
-                                      ),
-                                      onPressed: () {},
-                                      menuItems: dailyTaskNewsFeedViewModel
-                                          .getStringMonths
-                                          .asMap()
-                                          .entries
-                                          .map((e) => _monthItem(e))
-                                          .toList()),
-                                ),
+                                // Align(
+                                //   alignment: Alignment.center,
+                                //   child: FocusedMenuHolder(
+                                //       openWithTap: true,
+                                //       blurSize: 0,
+                                //       menuOffset: 0,
+                                //       menuWidth: _size.width / 4,
+                                //       child: Padding(
+                                //         padding: const EdgeInsets.only(
+                                //             top: 20, bottom: 10),
+                                //         child: StreamBuilder<Month>(
+                                //             initialData: Month(2020, 1),
+                                //             stream: dailyTaskNewsFeedViewModel
+                                //                 .getMonthStream,
+                                //             builder: (context, month) {
+                                //               return Text(
+                                //                 month.data.getMonth.toString(),
+                                //                 style: TextStyle(
+                                //                     fontSize: 20,
+                                //                     fontWeight: FontWeight.bold,
+                                //                     color: Colors.white),
+                                //               );
+                                //             }),
+                                //       ),
+                                //       onPressed: () {},
+                                //       menuItems: dailyTaskNewsFeedViewModel
+                                //           .getMonthList
+                                //           .asMap()
+                                //           .entries
+                                //           .map((e) => _monthItem(e))
+                                //           .toList()),
+                                // ),
                               ],
                             ),
                             Padding(
@@ -481,69 +472,119 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
       padding: EdgeInsets.all(5),
       child: Align(
         alignment: Alignment.center,
-        child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: 42,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7, crossAxisSpacing: 5, mainAxisSpacing: 5),
-            itemBuilder: (context, index) {
-              if (_dayIndex > 31) {
-                _dayIndex = 1;
-              }
-              return Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          // borderRadius: BorderRadius.circular(10),
-                          shape: BoxShape.circle,
-                          // color: index <= _weekDayOfMonth
-                          //     ? Colors.transparent
-                          //     : Colors.white.withOpacity(0.2),
-                          color: index == 20
-                              ? Colors.red[400]
-                              : Colors.transparent),
-                      alignment: Alignment.center,
-                      // && index + 1 % 7 <= _daysInMonth
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      index < 7
-                          ? _weekdays[index]
-                          : ((index <= _weekDayOfMonth)
-                              ? '0'
-                              : (_dayIndex++).toString()),
-                      style: TextStyle(
-                          color: index == 20
-                              ? Colors.white
-                              : index < 7
-                                  ? Colors.red[500]
-                                  : index <= _weekDayOfMonth
-                                      ? Colors.black.withOpacity(0.2)
-                                      : Colors.black.withOpacity(0.7),
-                          fontWeight:
-                              index < 7 ? FontWeight.bold : FontWeight.normal),
-                    ),
-                  ),
-                ],
-              );
+        child: StreamBuilder<Month>(
+            initialData: Month(2020, 1),
+            stream: dailyTaskNewsFeedViewModel.getMonthStream,
+            builder: (context, month) {
+              return GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 42,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 7,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5),
+                  itemBuilder: (context, index) {
+                    return Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                // borderRadius: BorderRadius.circular(10),
+                                shape: BoxShape.circle,
+                                // color: index <= _weekDayOfMonth
+                                //     ? Colors.transparent
+                                //     : Colors.white.withOpacity(0.2),
+                                color: index == 20
+                                    ? Colors.red[400]
+                                    : Colors.transparent),
+                            alignment: Alignment.center,
+                            // && index + 1 % 7 <= _daysInMonth
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            index < 7
+                                ? _weekdays[index]
+                                : ((index <= _weekDayOfMonth)
+                                    ? '0'
+                                    : (_dayIndex++).toString()),
+                            style: TextStyle(
+                                color: index == 20
+                                    ? Colors.white
+                                    : index < 7
+                                        ? Colors.red[500]
+                                        : index <= _weekDayOfMonth
+                                            ? Colors.black.withOpacity(0.2)
+                                            : Colors.black.withOpacity(0.7),
+                                fontWeight: index < 7
+                                    ? FontWeight.bold
+                                    : FontWeight.normal),
+                          ),
+                        ),
+                      ],
+                    );
+                    // if (_dayIndex > 31) {
+                    //   _dayIndex = 1;
+                    // }
+                    // return Stack(
+                    //   children: [
+                    //     Align(
+                    //       alignment: Alignment.center,
+                    //       child: Container(
+                    //         height: 30,
+                    //         width: 30,
+                    //         decoration: BoxDecoration(
+                    //             // borderRadius: BorderRadius.circular(10),
+                    //             shape: BoxShape.circle,
+                    //             // color: index <= _weekDayOfMonth
+                    //             //     ? Colors.transparent
+                    //             //     : Colors.white.withOpacity(0.2),
+                    //             color: index == 20
+                    //                 ? Colors.red[400]
+                    //                 : Colors.transparent),
+                    //         alignment: Alignment.center,
+                    //         // && index + 1 % 7 <= _daysInMonth
+                    //       ),
+                    //     ),
+                    //     Align(
+                    //       alignment: Alignment.center,
+                    //       child: Text(
+                    //         index < 7
+                    //             ? _weekdays[index]
+                    //             : ((index <= _weekDayOfMonth)
+                    //                 ? '0'
+                    //                 : (_dayIndex++).toString()),
+                    //         style: TextStyle(
+                    //             color: index == 20
+                    //                 ? Colors.white
+                    //                 : index < 7
+                    //                     ? Colors.red[500]
+                    //                     : index <= _weekDayOfMonth
+                    //                         ? Colors.black.withOpacity(0.2)
+                    //                         : Colors.black.withOpacity(0.7),
+                    //             fontWeight:
+                    //                 index < 7 ? FontWeight.bold : FontWeight.normal),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // );
+                  });
             }),
       ),
     );
   }
 
-  FocusedMenuItem _monthItem(MapEntry<int, String> e) {
+  FocusedMenuItem _monthItem(MapEntry<int, Month> e) {
     return FocusedMenuItem(
         onPressed: () {
           dailyTaskNewsFeedViewModel.setMonthSelected(e.value);
-          dailyTaskNewsFeedViewModel.getDayData(2021, 1);
+          // dailyTaskNewsFeedViewModel.
         },
-        title: Text(e.value));
+        title: Text(e.value.getMonth.toString()));
   }
 }
 // Container(

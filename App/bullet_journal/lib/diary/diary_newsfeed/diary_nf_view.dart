@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
-import 'package:bullet_journal/model/time.dart';
+import 'package:bullet_journal/model/calendar/time.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
