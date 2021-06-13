@@ -52,9 +52,10 @@ List<Color> _boderColor = [
 ];
 List<String> _tasks = ['Tập thể dục', 'Đọc sách', 'Nghe nhạc', 'Làm việc'];
 
-int _daysInMonth = 0;
-int _weekDayOfMonth = 0;
-int _dayIndex = 1;
+int _monthSelected = DateTime.now().month - 1;
+DateTime _dateSelected = DateTime.now();
+// int _weekDayOfMonth = 0;
+// int _dayIndex = 1;
 // DateTime _selectedDay, _focusedDay;
 // CalendarFormat _calendarFormat;
 
@@ -100,7 +101,7 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                   pinned: false,
                   snap: true,
                   elevation: 0,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.45,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.51,
                   flexibleSpace: FlexibleSpaceBar(
                     background: SafeArea(
                       // child: TableComplexExample(),
@@ -124,38 +125,46 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                     // child:
                                   ),
                                 ),
-                                // Align(
-                                //   alignment: Alignment.center,
-                                //   child: FocusedMenuHolder(
-                                //       openWithTap: true,
-                                //       blurSize: 0,
-                                //       menuOffset: 0,
-                                //       menuWidth: _size.width / 4,
-                                //       child: Padding(
-                                //         padding: const EdgeInsets.only(
-                                //             top: 20, bottom: 10),
-                                //         child: StreamBuilder<Month>(
-                                //             initialData: Month(2020, 1),
-                                //             stream: dailyTaskNewsFeedViewModel
-                                //                 .getMonthStream,
-                                //             builder: (context, month) {
-                                //               return Text(
-                                //                 month.data.getMonth.toString(),
-                                //                 style: TextStyle(
-                                //                     fontSize: 20,
-                                //                     fontWeight: FontWeight.bold,
-                                //                     color: Colors.white),
-                                //               );
-                                //             }),
-                                //       ),
-                                //       onPressed: () {},
-                                //       menuItems: dailyTaskNewsFeedViewModel
-                                //           .getMonthList
-                                //           .asMap()
-                                //           .entries
-                                //           .map((e) => _monthItem(e))
-                                //           .toList()),
-                                // ),
+                                Align(
+                                    alignment: Alignment.center,
+                                    child: StreamBuilder<Year>(
+                                        initialData: Year(),
+                                        stream: dailyTaskNewsFeedViewModel
+                                            .getCalendarController,
+                                        builder: (context, snapshot) {
+                                          return FocusedMenuHolder(
+                                              openWithTap: true,
+                                              blurSize: 0,
+                                              menuOffset: 0,
+                                              menuWidth: _size.width / 4,
+                                              child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 20, bottom: 10),
+                                                  child: Text(
+                                                    snapshot
+                                                        .data
+                                                        .getMonth[
+                                                            _monthSelected]
+                                                        .getStringMonth
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white),
+                                                  )),
+                                              onPressed: () {},
+                                              menuItems:
+                                                  dailyTaskNewsFeedViewModel
+                                                      .getMonthList
+                                                      .asMap()
+                                                      .entries
+                                                      .map((e) => _monthItem(e))
+                                                      .toList());
+                                          // Text(snapshot
+                                          //     .data.getMonth[0].getStringMonth);
+                                        })),
                               ],
                             ),
                             Padding(
@@ -461,7 +470,7 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
 
   Widget buildGridCalender() {
     return Container(
-      height: _size.width * 0.82,
+      height: _size.width * 0.95,
       width: _size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -472,18 +481,26 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
       padding: EdgeInsets.all(5),
       child: Align(
         alignment: Alignment.center,
-        child: StreamBuilder<Month>(
-            initialData: Month(2020, 1),
-            stream: dailyTaskNewsFeedViewModel.getMonthStream,
-            builder: (context, month) {
+        child: StreamBuilder<List<DayCalendar>>(
+            initialData: [],
+            stream: dailyTaskNewsFeedViewModel.getDayController,
+            builder: (context, days) {
               return GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: 42,
+                  itemCount: days.data.length + 7,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 7,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5),
                   itemBuilder: (context, index) {
+                    DateTime dt;
+                    // if (index > 7) {
+                    //   print('498> now ' + _dateSelected.toString());
+                    //   dt = DateTime(
+                    //       _dateSelected.year,
+                    //       days.data[index - 7].getMonth,
+                    //       days.data[index - 7].getDay);
+                    // }
                     return Stack(
                       children: [
                         Align(
@@ -497,6 +514,7 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                 // color: index <= _weekDayOfMonth
                                 //     ? Colors.transparent
                                 //     : Colors.white.withOpacity(0.2),
+                                // color: (index > 7 && _dateSelected == dt)
                                 color: index == 20
                                     ? Colors.red[400]
                                     : Colors.transparent),
@@ -509,17 +527,16 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                           child: Text(
                             index < 7
                                 ? _weekdays[index]
-                                : ((index <= _weekDayOfMonth)
-                                    ? '0'
-                                    : (_dayIndex++).toString()),
+                                : days.data[index - 7].getDay.toString(),
                             style: TextStyle(
                                 color: index == 20
                                     ? Colors.white
                                     : index < 7
                                         ? Colors.red[500]
-                                        : index <= _weekDayOfMonth
-                                            ? Colors.black.withOpacity(0.2)
-                                            : Colors.black.withOpacity(0.7),
+                                        : _monthSelected ==
+                                                days.data[index - 7].getMonth
+                                            ? Colors.black.withOpacity(0.7)
+                                            : Colors.black.withOpacity(0.2),
                                 fontWeight: index < 7
                                     ? FontWeight.bold
                                     : FontWeight.normal),
@@ -581,10 +598,14 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
   FocusedMenuItem _monthItem(MapEntry<int, Month> e) {
     return FocusedMenuItem(
         onPressed: () {
-          dailyTaskNewsFeedViewModel.setMonthSelected(e.value);
+          dailyTaskNewsFeedViewModel.setDayInMonth(e.value.getMonth);
+          setState(() {
+            _monthSelected = e.key;
+          });
+          //
           // dailyTaskNewsFeedViewModel.
         },
-        title: Text(e.value.getMonth.toString()));
+        title: Text(e.value.getStringMonth));
   }
 }
 // Container(

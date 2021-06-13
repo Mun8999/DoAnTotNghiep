@@ -49,11 +49,14 @@ class Calender {
 class Year {
   int _year;
   List<Month> _months = [];
-  Year(int year) {
+  Year([int year]) {
     _init(year);
   }
-  _init(int year) async {
-    this._year = year;
+  _init([int year]) async {
+    if (year == null)
+      this._year = DateTime.now().year;
+    else
+      this._year = year;
     await _addMonth();
   }
 
@@ -75,13 +78,17 @@ class Year {
 class Month {
   int _month;
   List<int> _days = [];
-  int _firstDayOfMonth = -1;
-  int _lastDayOfMonth = -1;
+  int _firstDayOfMonth;
+  int _lastDayOfMonth;
+  String _abbrMonth;
+  String _stringMonth;
   Month(int year, int month) {
     _init(year, month);
   }
   _init(int year, int month) async {
     this._month = month;
+    this._abbrMonth = DateFormat.MMM().format(DateTime(2021, month, 1));
+    this._stringMonth = DateFormat.MMMM().format(DateTime(2021, month, 1));
     DateTime _dt = DateTime(year, month, 1);
     this._firstDayOfMonth = _dt.weekday;
     int dayOfMonth = DateUtil().daysInMonth(month, year);
@@ -103,19 +110,9 @@ class Month {
   // String toString() =>
   //     this._month.toString() + ' ' + this._firstDayOfMonth.toString();
   int get getMonth => this._month;
+  String get getAbbrMonth => this._abbrMonth;
+  String get getStringMonth => this._stringMonth;
   List<int> get getDaysOfMonth => this._days;
   int get getFirstDayOfMonth => this._firstDayOfMonth;
-  // int getDayOfMonth() => this._firstDayOfMonth;
   int get getLastDayOfMonth => this._lastDayOfMonth;
 }
-// class DayInMonth {}
-// class Month{
-
-// }
-// class Year {
-//   int _year;
-//   Year(int year) {
-//     this._year = year;
-//   }
-//   int get getYear => _year;
-// }
