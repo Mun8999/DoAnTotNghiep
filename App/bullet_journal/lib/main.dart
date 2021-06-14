@@ -6,6 +6,7 @@ import 'package:bullet_journal/database/db_emotion.dart';
 import 'package:bullet_journal/database/db_image.dart';
 import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/main/my_app.dart';
+import 'package:bullet_journal/model/db_dailytask.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,6 +17,7 @@ void main() async {
   Hive.init(document.path);
   await Hive
     ..registerAdapter(DiaryDBAdapter())
+    ..registerAdapter(DailyTaskDBAdapter())
     ..registerAdapter(ImageDBAdapter())
     ..registerAdapter(TextDBAdapter())
     ..registerAdapter(EmotionDBAdapter())
@@ -24,6 +26,7 @@ void main() async {
         ComponentDBAdapter()); // bai hoc xuong mau> class extend phai de o cuoi cung nha -_-
 
   await Hive.openBox<DiaryDB>('diaries');
+  await Hive.openBox<DailyTaskDB>('dailytasks');
   runApp(MyApp());
   // SystemChrome.setEnabledSystemUIOverlays(
   //   SystemUiOverlayStyle.light(

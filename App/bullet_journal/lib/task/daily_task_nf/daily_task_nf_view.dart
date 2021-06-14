@@ -1,8 +1,10 @@
 // @dart=2.9
 import 'dart:ui';
 import 'package:bullet_journal/model/calendar/calender.dart';
+import 'package:bullet_journal/task/daily_task_nf/daily_task.dart';
 import 'package:bullet_journal/task/daily_task_nf/daily_task_nf_viewmodel.dart';
 import 'package:bullet_journal/model/calendar/time.dart';
+import 'package:bullet_journal/task/daily_task_nf/monthly_task.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -38,26 +40,12 @@ List<String> images = [
   'assets/images/FB_IMG_1619157271674.jpg'
 ];
 List<String> _weekdays = ['Mon', 'Tue', 'Wes', 'Thu', 'Fri', 'Sat', 'Sun'];
-List<Color> _colors = [
-  Colors.yellow[100],
-  Colors.red[100],
-  Colors.pink[100],
-  Colors.teal[100]
-];
-List<Color> _boderColor = [
-  Colors.yellow[300],
-  Colors.red[300],
-  Colors.pink[300],
-  Colors.teal[300]
-];
-List<String> _tasks = ['Tập thể dục', 'Đọc sách', 'Nghe nhạc', 'Làm việc'];
 
 int _monthSelected = DateTime.now().month - 1;
-DateTime _dateSelected = DateTime.now();
-// int _weekDayOfMonth = 0;
-// int _dayIndex = 1;
-// DateTime _selectedDay, _focusedDay;
-// CalendarFormat _calendarFormat;
+DateTime _dayNow = DateTime.now();
+DateTime _dateSelected;
+Color _dateBackgroundColor = Colors.transparent;
+Color _dateTextColor = Colors.black;
 
 class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
   // List<String> list = [];
@@ -65,19 +53,6 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
   void initState() {
     super.initState();
     dailyTaskNewsFeedViewModel = DailyTaskNewsFeedViewModel();
-    // dailyTaskNewsFeedViewModel.setDay(2);
-    // _monthSelected = dailyTaskNewsFeedViewModel.getStringMonths[0];
-
-    ///
-    // _daysInMonth = dailyTaskNewsFeedViewModel.getDayData(2021, 1);
-    // DateTime dateTime = DateTime(2021, 1, 1);
-    // _weekDayOfMonth = MyDateTime(dateTime).getDate.getWeekday * 2;
-
-    // _selectedDay = DateTime.now();
-    // _focusedDay = DateTime.now();
-    // _calendarFormat = CalendarFormat.month;
-    // print('\ndaysInMonth ' + _daysInMonth.toString());
-    // print('\nweekDayOfMonth ' + _weekDayOfMonth.toString());
   }
 
   @override
@@ -125,13 +100,30 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                     // child:
                                   ),
                                 ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 30, top: 20),
+                                  child: StreamBuilder<Year>(
+                                      stream: dailyTaskNewsFeedViewModel
+                                          .getCalendarController,
+                                      initialData: Year(),
+                                      builder: (context, year) {
+                                        return Text(
+                                          year.data.getYear.toString(),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        );
+                                      }),
+                                ),
                                 Align(
                                     alignment: Alignment.center,
                                     child: StreamBuilder<Year>(
                                         initialData: Year(),
                                         stream: dailyTaskNewsFeedViewModel
                                             .getCalendarController,
-                                        builder: (context, snapshot) {
+                                        builder: (context, year) {
                                           return FocusedMenuHolder(
                                               openWithTap: true,
                                               blurSize: 0,
@@ -142,7 +134,7 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                                       const EdgeInsets.only(
                                                           top: 20, bottom: 10),
                                                   child: Text(
-                                                    snapshot
+                                                    year
                                                         .data
                                                         .getMonth[
                                                             _monthSelected]
@@ -181,290 +173,7 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
           )
         ];
       },
-      body: SafeArea(
-        child: Container(
-            height: _size.height,
-            width: _size.width,
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 10),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    height: _size.height * 0.45,
-                    child: ListView.separated(
-                      /// de o day de khong scroll theo cai nay
-                      physics: NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: _colors.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Container(
-                              height: _size.width * 0.2,
-                              width: _size.width,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: _boderColor[index],
-                                  ),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: _size.width * 0.25 * (index + 1),
-                                    decoration: BoxDecoration(
-                                        color: _colors[index],
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Text(
-                                        (25 * (index + 1)).toString() + '%',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Text(
-                                        _tasks[index],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: Container(
-                                        height: _size.width * 0.05,
-                                        width: _size.width * 0.3,
-                                        margin: EdgeInsets.all(5),
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: 5,
-                                          itemBuilder: (context, index) =>
-                                              Icon(Icons.check),
-                                        )),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          height: 10,
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    height: _size.width * 0.7,
-                    width: _size.width * 0.7,
-                    child: Stack(
-                      children: [
-                        // CircularPercentIndicator(
-                        //   radius: _size.width * 0.7,
-                        //   lineWidth: 0.5,
-                        //   percent: 1.0,
-                        //   // center: new Text("100%"),
-                        //   progressColor: Colors.black,
-                        // ),
-                        CircularPercentIndicator(
-                          animation: true,
-                          animationDuration: 3000,
-                          circularStrokeCap: CircularStrokeCap.round,
-                          radius: _size.width * 0.7,
-                          lineWidth: 10,
-                          animateFromLastPercent: true,
-                          percent: 0.7,
-                          // center: new Text("70%"),
-                          progressColor: Colors.red[900],
-                          backgroundWidth: 3,
-                        ),
-                        Center(
-                          child: CircularPercentIndicator(
-                            animation: true,
-                            animationDuration: 1000,
-                            circularStrokeCap: CircularStrokeCap.round,
-                            radius: _size.width * 0.6,
-                            lineWidth: 4,
-                            animateFromLastPercent: true,
-                            percent: 0.25,
-                            center: new Text("70%"),
-                            progressColor: _boderColor[0],
-                            backgroundWidth: 0.5,
-                          ),
-                        ),
-                        Center(
-                          child: CircularPercentIndicator(
-                            animation: true,
-                            animationDuration: 1000,
-                            circularStrokeCap: CircularStrokeCap.round,
-                            radius: _size.width * 0.55,
-                            lineWidth: 4,
-                            animateFromLastPercent: true,
-                            percent: 0.5,
-                            center: new Text("70%"),
-                            progressColor: _boderColor[1],
-                            backgroundWidth: 1,
-                          ),
-                        ),
-                        Center(
-                          child: CircularPercentIndicator(
-                            animation: true,
-                            animationDuration: 1000,
-                            circularStrokeCap: CircularStrokeCap.round,
-                            radius: _size.width * 0.5,
-                            lineWidth: 4,
-                            animateFromLastPercent: true,
-                            percent: 0.75,
-                            center: new Text("70%"),
-                            progressColor: _boderColor[2],
-                            backgroundWidth: 0.5,
-                          ),
-                        ),
-                        Center(
-                          child: CircularPercentIndicator(
-                            animation: true,
-                            animationDuration: 1000,
-                            circularStrokeCap: CircularStrokeCap.round,
-                            radius: _size.width * 0.45,
-                            lineWidth: 4,
-                            animateFromLastPercent: true,
-                            percent: 1,
-                            center: new Text("70%"),
-                            progressColor: _boderColor[3],
-                            backgroundWidth: 1,
-                          ),
-                        ),
-                        // Center(
-                        //   child: CircularPercentIndicator(
-                        //     animation: true,
-                        //     animationDuration: 1000,
-                        //     circularStrokeCap: CircularStrokeCap.round,
-                        //     radius: _size.width * 0.4,
-                        //     lineWidth: 4,
-                        //     animateFromLastPercent: true,
-                        //     percent: 1,
-                        //     center: new Text("70%"),
-                        //     progressColor: _boderColor[3],
-                        //     backgroundWidth: 1,
-                        //   ),
-                        // ),
-                        // Center(
-                        //   child: CircularPercentIndicator(
-                        //     animation: true,
-                        //     animationDuration: 1000,
-                        //     circularStrokeCap: CircularStrokeCap.round,
-                        //     radius: _size.width * 0.35,
-                        //     lineWidth: 4,
-                        //     animateFromLastPercent: true,
-                        //     percent: 1,
-                        //     center: new Text("70%"),
-                        //     progressColor: Colors.teal[50],
-                        //     backgroundWidth: 1,
-                        //   ),
-                        // ),
-                        // Center(
-                        //   child: CircularPercentIndicator(
-                        //     animation: true,
-                        //     animationDuration: 1000,
-                        //     circularStrokeCap: CircularStrokeCap.round,
-                        //     radius: _size.width * 0.3,
-                        //     lineWidth: 4,
-                        //     animateFromLastPercent: true,
-                        //     percent: 1,
-                        //     center: new Text("70%"),
-                        //     progressColor: Colors.teal[900],
-                        //     backgroundWidth: 1,
-                        //   ),
-                        // ),
-                        // Center(
-                        //   child: CircularPercentIndicator(
-                        //     animation: true,
-                        //     animationDuration: 1000,
-                        //     circularStrokeCap: CircularStrokeCap.round,
-                        //     radius: _size.width * 0.25,
-                        //     lineWidth: 4,
-                        //     animateFromLastPercent: true,
-                        //     percent: 1,
-                        //     center: new Text("70%"),
-                        //     progressColor: Colors.teal[800],
-                        //     backgroundWidth: 1,
-                        //   ),
-                        // ),
-                        // Center(
-                        //   child: CircularPercentIndicator(
-                        //     animation: true,
-                        //     animationDuration: 1000,
-                        //     circularStrokeCap: CircularStrokeCap.round,
-                        //     radius: _size.width * 0.2,
-                        //     lineWidth: 4,
-                        //     animateFromLastPercent: true,
-                        //     percent: 1,
-                        //     center: new Text("70%"),
-                        //     progressColor: Colors.teal[700],
-                        //     backgroundWidth: 1,
-                        //   ),
-                        // ),
-                        // Center(
-                        //   child: CircularPercentIndicator(
-                        //     animation: true,
-                        //     animationDuration: 1000,
-                        //     circularStrokeCap: CircularStrokeCap.round,
-                        //     radius: _size.width * 0.15,
-                        //     lineWidth: 4,
-                        //     animateFromLastPercent: true,
-                        //     percent: 1,
-                        //     center: new Text("70%"),
-                        //     progressColor: Colors.teal[600],
-                        //     backgroundWidth: 1,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  )
-                  // Container(
-                  //   child: AnimatedCircularChart(
-                  //     key: _chartKey,
-                  //     size: Size(_size.width, _size.width),
-                  //     initialChartData: <CircularStackEntry>[
-                  //       new CircularStackEntry(
-                  //         <CircularSegmentEntry>[
-                  //           new CircularSegmentEntry(
-                  //             33.33,
-                  //             Colors.blue[400],
-                  //             rankKey: 'completed',
-                  //           ),
-                  //           new CircularSegmentEntry(
-                  //             66.67,
-                  //             Colors.blueGrey[600],
-                  //             rankKey: 'remaining',
-                  //           ),
-                  //         ],
-                  //         rankKey: 'progress',
-                  //       ),
-                  //     ],
-                  //     chartType: CircularChartType.Radial,
-                  //     edgeStyle: SegmentEdgeStyle.round,
-                  //     percentageValues: true,
-                  //   ),
-                  // )
-                ],
-              ),
-            )),
-      ),
+      body: SafeArea(child: DailyTask()),
     );
   }
 
@@ -493,11 +202,11 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5),
                   itemBuilder: (context, index) {
-                    DateTime dt;
+                    // DateTime dt;
                     // if (index > 7) {
                     //   print('498> now ' + _dateSelected.toString());
-                    //   dt = DateTime(
-                    //       _dateSelected.year,
+                    //   _dateSelected = DateTime(
+                    //       _dayNow.year,
                     //       days.data[index - 7].getMonth,
                     //       days.data[index - 7].getDay);
                     // }
@@ -515,9 +224,11 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                 //     ? Colors.transparent
                                 //     : Colors.white.withOpacity(0.2),
                                 // color: (index > 7 && _dateSelected == dt)
-                                color: index == 20
-                                    ? Colors.red[400]
-                                    : Colors.transparent),
+                                color: _dateBackgroundColor
+                                // color: _dayNow == _dateSelected
+                                //     ? Colors.red
+                                //     : Colors.transparent
+                                ),
                             alignment: Alignment.center,
                             // && index + 1 % 7 <= _daysInMonth
                           ),
@@ -529,14 +240,15 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                                 ? _weekdays[index]
                                 : days.data[index - 7].getDay.toString(),
                             style: TextStyle(
-                                color: index == 20
-                                    ? Colors.white
-                                    : index < 7
-                                        ? Colors.red[500]
-                                        : _monthSelected ==
-                                                days.data[index - 7].getMonth
-                                            ? Colors.black.withOpacity(0.7)
-                                            : Colors.black.withOpacity(0.2),
+                                // color: index == 20
+                                //     ? Colors.white
+                                //     : index < 7
+                                //         ? Colors.red[500]
+                                //         : _monthSelected ==
+                                //                 days.data[index - 7].getMonth
+                                //             ? Colors.black.withOpacity(0.7)
+                                //             : Colors.black.withOpacity(0.2),
+                                color: _dateTextColor,
                                 fontWeight: index < 7
                                     ? FontWeight.bold
                                     : FontWeight.normal),
@@ -544,51 +256,6 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
                         ),
                       ],
                     );
-                    // if (_dayIndex > 31) {
-                    //   _dayIndex = 1;
-                    // }
-                    // return Stack(
-                    //   children: [
-                    //     Align(
-                    //       alignment: Alignment.center,
-                    //       child: Container(
-                    //         height: 30,
-                    //         width: 30,
-                    //         decoration: BoxDecoration(
-                    //             // borderRadius: BorderRadius.circular(10),
-                    //             shape: BoxShape.circle,
-                    //             // color: index <= _weekDayOfMonth
-                    //             //     ? Colors.transparent
-                    //             //     : Colors.white.withOpacity(0.2),
-                    //             color: index == 20
-                    //                 ? Colors.red[400]
-                    //                 : Colors.transparent),
-                    //         alignment: Alignment.center,
-                    //         // && index + 1 % 7 <= _daysInMonth
-                    //       ),
-                    //     ),
-                    //     Align(
-                    //       alignment: Alignment.center,
-                    //       child: Text(
-                    //         index < 7
-                    //             ? _weekdays[index]
-                    //             : ((index <= _weekDayOfMonth)
-                    //                 ? '0'
-                    //                 : (_dayIndex++).toString()),
-                    //         style: TextStyle(
-                    //             color: index == 20
-                    //                 ? Colors.white
-                    //                 : index < 7
-                    //                     ? Colors.red[500]
-                    //                     : index <= _weekDayOfMonth
-                    //                         ? Colors.black.withOpacity(0.2)
-                    //                         : Colors.black.withOpacity(0.7),
-                    //             fontWeight:
-                    //                 index < 7 ? FontWeight.bold : FontWeight.normal),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // );
                   });
             }),
       ),
