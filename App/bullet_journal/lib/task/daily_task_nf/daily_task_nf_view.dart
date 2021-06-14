@@ -1,14 +1,11 @@
 // @dart=2.9
 import 'dart:ui';
 import 'package:bullet_journal/model/calendar/calender.dart';
-import 'package:bullet_journal/task/daily_task_nf/daily_task.dart';
 import 'package:bullet_journal/task/daily_task_nf/daily_task_nf_viewmodel.dart';
-import 'package:bullet_journal/model/calendar/time.dart';
-import 'package:bullet_journal/task/daily_task_nf/monthly_task.dart';
+import 'package:bullet_journal/task/daily_task_nf/daily_task_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 // import 'package:table_calendar/table_calendar.dart';
 // import 'package:bullet_journal/widget/calendar/calendar_widget.dart';
 
