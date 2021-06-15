@@ -58,218 +58,42 @@ class _DailyTaskNewsFeedViewState extends State<DailyTaskNewsFeedView> {
     //   print(element);
     // });
     _size = MediaQuery.of(context).size;
-    return NestedScrollView(
-      physics: NeverScrollableScrollPhysics(),
-      headerSliverBuilder: (context, value) {
-        return [
-          SliverOverlapAbsorber(
-            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-            sliver: SliverSafeArea(
-                top: false,
-                sliver: SliverAppBar(
-                  automaticallyImplyLeading: true,
-                  backgroundColor: Colors.transparent,
-                  floating: true,
-                  pinned: false,
-                  snap: true,
-                  elevation: 0,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.51,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: SafeArea(
-                      // child: TableComplexExample(),
-                      child: SingleChildScrollView(
-                        physics: NeverScrollableScrollPhysics(),
-                        child: Column(
-                          children: [
-                            Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, left: 10, right: 10),
-                                  child: Container(
-                                    width: _size.width,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                        color: Colors.red[400],
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20))),
-                                    // child:
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 30, top: 20),
-                                  child: StreamBuilder<Year>(
-                                      stream: dailyTaskNewsFeedViewModel
-                                          .getCalendarController,
-                                      initialData: Year(),
-                                      builder: (context, year) {
-                                        return Text(
-                                          year.data.getYear.toString(),
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        );
-                                      }),
-                                ),
-                                Align(
-                                    alignment: Alignment.center,
-                                    child: StreamBuilder<Year>(
-                                        initialData: Year(),
-                                        stream: dailyTaskNewsFeedViewModel
-                                            .getCalendarController,
-                                        builder: (context, year) {
-                                          return FocusedMenuHolder(
-                                              openWithTap: true,
-                                              blurSize: 0,
-                                              menuOffset: 0,
-                                              menuWidth: _size.width / 4,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 20, bottom: 10),
-                                                  child: Text(
-                                                    year
-                                                        .data
-                                                        .getMonth[
-                                                            _monthSelected]
-                                                        .getStringMonth
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.white),
-                                                  )),
-                                              onPressed: () {},
-                                              menuItems:
-                                                  dailyTaskNewsFeedViewModel
-                                                      .getMonthList
-                                                      .asMap()
-                                                      .entries
-                                                      .map((e) => _monthItem(e))
-                                                      .toList());
-                                          // Text(snapshot
-                                          //     .data.getMonth[0].getStringMonth);
-                                        })),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, right: 10, bottom: 10),
-                              child: Center(child: buildGridCalender()),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )),
-          )
-        ];
-      },
-      body: SafeArea(child: DailyTask()),
-    );
-  }
+    return SafeArea(child: DailyTask());
+    // NestedScrollView(
+    //   physics: NeverScrollableScrollPhysics(),
+    //   // headerSliverBuilder: (context, value) {
+    //   //   return [
+    //   //     SliverOverlapAbsorber(
+    //   //       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+    //   //       sliver: SliverSafeArea(
+    //   //           top: false,
+    //   //           sliver: SliverAppBar(
+    //   //             automaticallyImplyLeading: true,
+    //   //             backgroundColor: Colors.transparent,
+    //   //             floating: true,
+    //   //             pinned: false,
+    //   //             snap: true,
+    //   //             elevation: 0,
+    //   //             // expandedHeight: MediaQuery.of(context).size.height * 0.51,
+    //   //             // flexibleSpace: FlexibleSpaceBar(
+    //   //             //   background: SafeArea(
+    //   //             //     // child: TableComplexExample(),
+    //   //             //     child: SingleChildScrollView(
+    //   //             //       physics: NeverScrollableScrollPhysics(),
+    //   //             //       child: Column(
+    //   //             //         children: [
 
-  Widget buildGridCalender() {
-    return Container(
-      height: _size.width * 0.95,
-      width: _size.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-        // color: Colors.black,
-        border: Border.all(color: Colors.red[400], width: 2),
-      ),
-      padding: EdgeInsets.all(5),
-      child: Align(
-        alignment: Alignment.center,
-        child: StreamBuilder<List<DayCalendar>>(
-            initialData: [],
-            stream: dailyTaskNewsFeedViewModel.getDayController,
-            builder: (context, days) {
-              return GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: days.data.length + 7,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 7,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5),
-                  itemBuilder: (context, index) {
-                    // DateTime dt;
-                    // if (index > 7) {
-                    //   print('498> now ' + _dateSelected.toString());
-                    //   _dateSelected = DateTime(
-                    //       _dayNow.year,
-                    //       days.data[index - 7].getMonth,
-                    //       days.data[index - 7].getDay);
-                    // }
-                    return Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                                // borderRadius: BorderRadius.circular(10),
-                                shape: BoxShape.circle,
-                                // color: index <= _weekDayOfMonth
-                                //     ? Colors.transparent
-                                //     : Colors.white.withOpacity(0.2),
-                                // color: (index > 7 && _dateSelected == dt)
-                                color: _dateBackgroundColor
-                                // color: _dayNow == _dateSelected
-                                //     ? Colors.red
-                                //     : Colors.transparent
-                                ),
-                            alignment: Alignment.center,
-                            // && index + 1 % 7 <= _daysInMonth
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            index < 7
-                                ? _weekdays[index]
-                                : days.data[index - 7].getDay.toString(),
-                            style: TextStyle(
-                                // color: index == 20
-                                //     ? Colors.white
-                                //     : index < 7
-                                //         ? Colors.red[500]
-                                //         : _monthSelected ==
-                                //                 days.data[index - 7].getMonth
-                                //             ? Colors.black.withOpacity(0.7)
-                                //             : Colors.black.withOpacity(0.2),
-                                color: _dateTextColor,
-                                fontWeight: index < 7
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
-                          ),
-                        ),
-                      ],
-                    );
-                  });
-            }),
-      ),
-    );
-  }
-
-  FocusedMenuItem _monthItem(MapEntry<int, Month> e) {
-    return FocusedMenuItem(
-        onPressed: () {
-          dailyTaskNewsFeedViewModel.setDayInMonth(e.value.getMonth);
-          setState(() {
-            _monthSelected = e.key;
-          });
-          //
-          // dailyTaskNewsFeedViewModel.
-        },
-        title: Text(e.value.getStringMonth));
+    //   //             //         ],
+    //   //             //       ),
+    //   //             //     ),
+    //   //             //   ),
+    //   //             // ),
+    //   //           )),
+    //   //     )
+    //   //   ];
+    //   // },
+    //   body: ,
+    // );
   }
 }
 // Container(

@@ -7,21 +7,25 @@ class DailyTaskDB {
   @HiveField(0)
   int dailyTaskId;
   @HiveField(1)
-  DateTime dailyTaskTime;
+  DateTime dailyTaskTimeStart;
   @HiveField(2)
-  String dailyTaskContent;
+  DateTime dailyTaskTimeEnd;
   @HiveField(3)
-  String dailyTaskDep;
+  String dailyTaskContent;
   @HiveField(4)
-  bool dailyTaskState;
+  String dailyTaskDep;
   @HiveField(5)
+  bool dailyTaskState;
+  @HiveField(6)
   bool reminder;
-  DailyTaskDB(DateTime dailyTaskTime, String dailyTaskContent,
+  DailyTaskDB(DateTime dailyTaskTimeStart, DateTime dailyTaskTimeEnd,
+      String dailyTaskContent,
       {int dailyTaskId = -1,
       bool dailyTaskState = false,
       bool reminder = false,
       String dailyTaskDepcription}) {
-    this.dailyTaskTime = dailyTaskTime;
+    this.dailyTaskTimeStart = dailyTaskTimeStart;
+    this.dailyTaskTimeEnd = dailyTaskTimeEnd;
     this.dailyTaskContent = dailyTaskContent;
     this.dailyTaskId = dailyTaskId;
     this.dailyTaskState = dailyTaskState;

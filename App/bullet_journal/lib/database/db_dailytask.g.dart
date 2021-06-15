@@ -19,28 +19,31 @@ class DailyTaskDBAdapter extends TypeAdapter<DailyTaskDB> {
     };
     return DailyTaskDB(
       fields[1] as DateTime,
-      fields[2] as String,
+      fields[2] as DateTime,
+      fields[3] as String,
       dailyTaskId: fields[0] as int,
-      dailyTaskState: fields[4] as bool,
-      reminder: fields[5] as bool,
-    )..dailyTaskDep = fields[3] as String;
+      dailyTaskState: fields[5] as bool,
+      reminder: fields[6] as bool,
+    )..dailyTaskDep = fields[4] as String;
   }
 
   @override
   void write(BinaryWriter writer, DailyTaskDB obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.dailyTaskId)
       ..writeByte(1)
-      ..write(obj.dailyTaskTime)
+      ..write(obj.dailyTaskTimeStart)
       ..writeByte(2)
-      ..write(obj.dailyTaskContent)
+      ..write(obj.dailyTaskTimeEnd)
       ..writeByte(3)
-      ..write(obj.dailyTaskDep)
+      ..write(obj.dailyTaskContent)
       ..writeByte(4)
-      ..write(obj.dailyTaskState)
+      ..write(obj.dailyTaskDep)
       ..writeByte(5)
+      ..write(obj.dailyTaskState)
+      ..writeByte(6)
       ..write(obj.reminder);
   }
 
