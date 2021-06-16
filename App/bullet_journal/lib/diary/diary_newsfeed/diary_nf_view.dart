@@ -343,7 +343,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
           height: size.height * 0.27,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.black,
+            color: Colors.brown[900],
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),

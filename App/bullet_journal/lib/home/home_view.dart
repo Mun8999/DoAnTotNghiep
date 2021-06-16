@@ -1,6 +1,7 @@
 // @dart=2.9
 import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/login/login_view.dart';
+import 'package:bullet_journal/note/note_nf_view.dart';
 import 'package:bullet_journal/snap_photo/snap_photo_view.dart';
 import 'package:bullet_journal/widget/bottom_navigator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -73,7 +74,9 @@ class _HomeViewState extends State<HomeView> {
               }
             case 2:
               {
-                // _centerSreen= DailyTaskNewsFeedView();
+                setState(() {
+                  _centerSreen = NoteNewsFeedView();
+                });
                 break;
               }
             case 3:

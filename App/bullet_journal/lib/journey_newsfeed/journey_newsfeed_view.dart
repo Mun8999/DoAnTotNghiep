@@ -78,7 +78,6 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                           Container(
                             margin: EdgeInsets.all(spacing),
                             height: MediaQuery.of(context).size.height * 0.125,
-                            // padding: EdgeInsets.all(10),
                             padding: EdgeInsets.only(left: 10, right: 10),
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey[600]),
@@ -150,35 +149,6 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                               ],
                             ),
                           ),
-                          // Align(
-                          //   alignment: Alignment.centerRight,
-                          //   child: Container(
-                          //     height: size.height * 0.04,
-                          //     width: size.width * 0.35,
-                          //     margin: EdgeInsets.all(spacing),
-                          //     decoration: BoxDecoration(
-                          //         color: Colors.yellow[900],
-                          //         borderRadius: BorderRadius.circular(10)),
-                          //     child: Row(
-                          //       mainAxisSize: MainAxisSize.min,
-                          //       mainAxisAlignment: MainAxisAlignment.start,
-                          //       crossAxisAlignment: CrossAxisAlignment.center,
-                          //       children: [
-                          //         IconButton(
-                          //             onPressed: () {},
-                          //             icon: Icon(
-                          //               Icons.send,
-                          //               color: Colors.white,
-                          //               size: 13,
-                          //             )),
-                          //         Text(
-                          //           'Lưu bài viết',
-                          //           style: TextStyle(color: Colors.white),
-                          //         )
-                          //       ],
-                          //     ),
-                          //   ),
-                          // )
                         ],
                       ),
                     ),
