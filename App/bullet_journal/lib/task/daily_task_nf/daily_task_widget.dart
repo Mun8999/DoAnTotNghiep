@@ -13,7 +13,6 @@ import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 
 /// nhớ add thư viện này dô dùm cái mẹ
 

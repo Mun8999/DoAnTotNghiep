@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:bullet_journal/note/note_edit_view.dart';
 import 'package:bullet_journal/note/note_nf_viewmodel.dart';
 import 'package:bullet_journal/task/daily_task_nf/daily_task_nf_view.dart';
 import 'package:flutter/material.dart';
@@ -91,48 +92,57 @@ class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
             crossAxisCount: 4,
             itemCount: images.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Stack(children: [
-                  Container(
-                    padding:
-                        EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 50),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        // color: 100 * (index % 9) == 0
-                        //     ? Colors.pink[50]
-                        //     : Colors.pink[100 * (index % 9)],
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              blurRadius: 1,
-                              offset: Offset(2, 2))
-                        ]),
-                    child: SizedBox(
-                      child: Container(
-                        decoration: BoxDecoration(
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NoteEditView(),
+                      ));
+                },
+                child: Container(
+                  child: Stack(children: [
+                    Container(
+                      padding: EdgeInsets.only(
+                          top: 5, left: 5, right: 5, bottom: 50),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          // color: 100 * (index % 9) == 0
+                          //     ? Colors.pink[50]
+                          //     : Colors.pink[100 * (index % 9)],
                           borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                              image: AssetImage(images[index]),
-                              fit: BoxFit.cover),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                blurRadius: 1,
+                                offset: Offset(2, 2))
+                          ]),
+                      child: SizedBox(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                                image: AssetImage(images[index]),
+                                fit: BoxFit.cover),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 8,
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          'Hellllo',
-                          style: TextStyle(color: Colors.black, fontSize: 16),
+                    Positioned(
+                      bottom: 8,
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            'Hellllo',
+                            style: TextStyle(color: Colors.black, fontSize: 16),
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                ]),
+                    )
+                  ]),
+                ),
               );
             },
             // ignore: missing_return
