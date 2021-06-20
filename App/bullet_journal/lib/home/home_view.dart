@@ -2,12 +2,11 @@
 import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/login/login_view.dart';
 import 'package:bullet_journal/note/note_nf_view.dart';
-import 'package:bullet_journal/snap_photo/snap_photo_view.dart';
 import 'package:bullet_journal/widget/bottom_navigator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:bullet_journal/task/daily_task_nf/daily_task_nf_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_view.dart';
-import 'package:bullet_journal/journey_newsfeed/journey_newsfeed_view.dart';
+import 'package:bullet_journal/journey/journey_newsfeed/journey_newsfeed_view.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {

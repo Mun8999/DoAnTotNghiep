@@ -5,6 +5,7 @@ import 'package:bullet_journal/database/db_component.dart';
 import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/database/db_emotion.dart';
 import 'package:bullet_journal/database/db_image.dart';
+import 'package:bullet_journal/database/db_journey.dart';
 import 'package:bullet_journal/database/db_note.dart';
 import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/main/my_app.dart';
@@ -44,6 +45,7 @@ void main() async {
   await Hive
     ..registerAdapter(DiaryDBAdapter())
     ..registerAdapter(NoteDBAdapter())
+    ..registerAdapter(JourneyDBAdapter())
     ..registerAdapter(AssetDBAdapter())
     ..registerAdapter(ImageDBAdapter())
     ..registerAdapter(TextDBAdapter())
@@ -56,7 +58,7 @@ void main() async {
   await Hive.openBox<DiaryDB>('diaries');
   await Hive.openBox<NoteDB>('notes');
   await Hive.openBox<DailyTaskDB>('dailytasks');
-
+  await Hive.openBox<JourneyDB>('journeys');
   runApp(MyApp());
   // SystemChrome.setEnabledSystemUIOverlays(
   //   SystemUiOverlayStyle.light(

@@ -16,10 +16,10 @@ class NoteEditViewModel {
     records.clear();
     assets.clear();
     if (state == 1) return;
-    await _saveContent(noteDB, state, records, assets);
+    await _initContent(noteDB, state, records, assets);
   }
 
-  _saveContent(NoteDB noteDB, int state, List<String> records,
+  _initContent(NoteDB noteDB, int state, List<String> records,
       List<Asset> assets) async {
     var recordBox =
         await Hive.openBox<String>('records' + noteDB.boxId.toString());
@@ -31,7 +31,7 @@ class NoteEditViewModel {
     if (recordBox.length > 0) {
       recordBox.values.forEach((recordDB) async {
         record = recordDB;
-        await records.add(record);
+        records.add(record);
       });
     }
     Asset asset;
@@ -39,7 +39,7 @@ class NoteEditViewModel {
       assetBox.values.forEach((assetDB) async {
         asset = Asset(assetDB.identifier, assetDB.name, assetDB.originalWidth,
             assetDB.originalHeight);
-        await assets.add(asset);
+        assets.add(asset);
       });
     }
     await recordBox.close();
@@ -49,6 +49,7 @@ class NoteEditViewModel {
   saveNote(Box<NoteDB> noteBox, int state, NoteDB noteDB, List<String> records,
       List<Asset> assets) async {
     int index = noteBox.length;
+    noteDB.noteTime = DateTime.now();
     print('38> index: ' + index.toString());
     if (state == 1) {
       noteDB.noteId = index;
@@ -72,7 +73,7 @@ class NoteEditViewModel {
     assetBox.clear();
     if (records.length > 0) {
       records.forEach((record) async {
-        await recordBox.add(record);
+        recordBox.add(record);
       });
     }
     // await recordBox.close();
@@ -81,9 +82,20 @@ class NoteEditViewModel {
       assets.forEach((asset) async {
         assetDB = AssetDB(asset.identifier, asset.name, asset.originalWidth,
             asset.originalHeight);
-        await assetBox.add(assetDB);
+        assetBox.add(assetDB);
       });
     }
+    await recordBox.close();
+    await assetBox.close();
     // await assetBox.close();
+  }
+
+  deleteNote(Box<NoteDB> noteBox, NoteDB noteDB) async {
+    await noteBox.deleteAt(noteDB.boxId);
+    int boxIndex = noteDB.boxId;
+    var recordBox = await Hive.openBox<String>('records' + boxIndex.toString());
+    var assetBox = await Hive.openBox<AssetDB>('assets' + boxIndex.toString());
+    if (recordBox.length > 0) recordBox.deleteFromDisk();
+    if (assetBox.length > 0) assetBox.deleteFromDisk();
   }
 }

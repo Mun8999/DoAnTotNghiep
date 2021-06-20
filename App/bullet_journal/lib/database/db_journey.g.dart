@@ -1,45 +1,45 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // @dart=2.9
 
-part of 'db_note.dart';
+part of 'db_journey.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class NoteDBAdapter extends TypeAdapter<NoteDB> {
+class JourneyDBAdapter extends TypeAdapter<JourneyDB> {
   @override
-  final int typeId = 7;
+  final int typeId = 9;
 
   @override
-  NoteDB read(BinaryReader reader) {
+  JourneyDB read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return NoteDB(
+    return JourneyDB(
       fields[1] as String,
-      fields[2] as String,
-      noteId: fields[0] as int,
-      boxId: fields[3] as int,
-      noteTime: fields[4] as DateTime,
+      journeyId: fields[0] as int,
+      boxId: fields[2] as int,
+      journeyTime: fields[3] as DateTime,
+      jouneyImage: fields[4] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, NoteDB obj) {
+  void write(BinaryWriter writer, JourneyDB obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.noteId)
+      ..write(obj.journeyId)
       ..writeByte(1)
-      ..write(obj.noteTitle)
+      ..write(obj.journeyTitle)
       ..writeByte(2)
-      ..write(obj.noteContent)
-      ..writeByte(3)
       ..write(obj.boxId)
+      ..writeByte(3)
+      ..write(obj.journeyTime)
       ..writeByte(4)
-      ..write(obj.noteTime);
+      ..write(obj.jouneyImage);
   }
 
   @override
@@ -48,7 +48,7 @@ class NoteDBAdapter extends TypeAdapter<NoteDB> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NoteDBAdapter &&
+      other is JourneyDBAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

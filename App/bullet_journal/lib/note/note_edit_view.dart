@@ -1,6 +1,4 @@
 // @dart=2.9
-// import 'dart:io';
-import 'package:bullet_journal/database/db_asset.dart';
 import 'package:bullet_journal/database/db_note.dart';
 import 'package:bullet_journal/note/m_record.dart';
 import 'package:bullet_journal/note/note_edit_viewmodel.dart';
@@ -9,13 +7,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:permission_handler/permission_handler.dart';
-// import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-// import 'package:numberpicker/numberpicker.dart';
 
-// ignore: must_be_immutable
 class NoteEditView extends StatefulWidget {
   int _state;
   NoteDB _noteDB;
@@ -315,8 +308,9 @@ class _NoteEditViewState extends State<NoteEditView> {
           actions: [
             IconButton(
               onPressed: () {
-                _images.removeAt(index);
-                setState(() {});
+                // _images.removeAt(index);
+                // setState(() {});
+                _noteEditViewModel.deleteNote(_noteBox, _noteBox.getAt(index));
               },
               icon: Icon(
                 Icons.delete,

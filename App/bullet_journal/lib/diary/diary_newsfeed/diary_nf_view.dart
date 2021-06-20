@@ -75,9 +75,9 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Your Style',
+                          'My Style',
                           style: GoogleFonts.sacramento(
-                            fontSize: 25,
+                            fontSize: 30,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),

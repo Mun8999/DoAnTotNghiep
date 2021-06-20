@@ -12,10 +12,14 @@ class NoteDB extends HiveObject {
   String noteContent;
   @HiveField(3)
   int boxId;
-  NoteDB(String noteTitle, String noteContent, {int noteId, int boxId}) {
+  @HiveField(4)
+  DateTime noteTime;
+  NoteDB(String noteTitle, String noteContent,
+      {int noteId, int boxId, DateTime noteTime}) {
     this.noteId = noteId;
     this.noteTitle = noteTitle;
     this.noteContent = noteContent;
     this.boxId = boxId;
+    this.noteTime = noteTime;
   }
 }

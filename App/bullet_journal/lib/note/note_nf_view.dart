@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'package:bullet_journal/database/db_note.dart';
+import 'package:bullet_journal/model/calendar/time.dart';
 import 'package:bullet_journal/note/note_edit_view.dart';
 import 'package:bullet_journal/note/note_nf_viewmodel.dart';
 import 'package:bullet_journal/task/daily_task_nf/daily_task_nf_view.dart';
@@ -42,7 +43,7 @@ class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
                 top: false,
                 sliver: SliverAppBar(
                   backgroundColor: Colors.white,
-                  leadingWidth: 150,
+                  leadingWidth: 80,
                   leading: Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -50,9 +51,9 @@ class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Your Style',
+                          'Note',
                           style: GoogleFonts.sacramento(
-                            fontSize: 25,
+                            fontSize: 30,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -146,15 +147,70 @@ class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.circular(_size.width * 0.02),
+                                  BorderRadius.circular(_size.width * 0.04),
                               color: Colors.amber[200],
                             ),
                             child: Padding(
                               padding: EdgeInsets.all(_size.width * 0.02),
-                              child: Text(
-                                notes.getAt(index).noteTitle,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16),
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          notes.getAt(index).noteTitle,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          notes.getAt(index).noteContent,
+                                          style: TextStyle(
+                                            color: Colors.black38,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Text(
+                                      _noteBox
+                                              .getAt(index)
+                                              .noteTime
+                                              .day
+                                              .toString() +
+                                          ' tháng ' +
+                                          _noteBox
+                                              .getAt(index)
+                                              .noteTime
+                                              .month
+                                              .toString(),
+                                      style: TextStyle(
+                                        color: Colors.black38,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                      MyDateTime(_noteBox.getAt(index).noteTime)
+                                          .getTime
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.black38,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ),
