@@ -1,11 +1,13 @@
 // @dart=2.9
+import 'package:bullet_journal/database/db_note.dart';
 import 'package:bullet_journal/note/note_edit_view.dart';
 import 'package:bullet_journal/note/note_nf_viewmodel.dart';
 import 'package:bullet_journal/task/daily_task_nf/daily_task_nf_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:math';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class NoteNewsFeedView extends StatefulWidget {
   const NoteNewsFeedView({Key key}) : super(key: key);
@@ -14,21 +16,22 @@ class NoteNewsFeedView extends StatefulWidget {
   _NoteNewsFeedViewState createState() => _NoteNewsFeedViewState();
 }
 
-double _spacing;
+// double _spacing;
 Size _size;
 NoteViewNewsFeedViewModel _noteViewNewsFeedViewModel;
+Box<NoteDB> _noteBox;
 
 class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
   @override
   void initState() {
     _noteViewNewsFeedViewModel = NoteViewNewsFeedViewModel();
+    _noteBox = Hive.box<NoteDB>('notes');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     _size = MediaQuery.of(context).size;
-    _spacing = _size.width * 0.02;
     return NestedScrollView(
       physics: NeverScrollableScrollPhysics(),
       headerSliverBuilder: (context, value) {
@@ -82,80 +85,108 @@ class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
         ];
       },
       body: Container(
-          color: Colors.white,
-          child: StaggeredGridView.countBuilder(
-            // controller: _staggredGridController,
-            physics:
-                NeverScrollableScrollPhysics(), // không scroll theo widget này
-            // shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            crossAxisCount: 4,
-            itemCount: images.length,
-            itemBuilder: (BuildContext context, int index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NoteEditView(),
-                      ));
-                },
-                child: Container(
-                  child: Stack(children: [
-                    Container(
-                      padding: EdgeInsets.only(
-                          top: 5, left: 5, right: 5, bottom: 50),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          // color: 100 * (index % 9) == 0
-                          //     ? Colors.pink[50]
-                          //     : Colors.pink[100 * (index % 9)],
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                blurRadius: 1,
-                                offset: Offset(2, 2))
-                          ]),
-                      child: SizedBox(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            image: DecorationImage(
-                                image: AssetImage(images[index]),
-                                fit: BoxFit.cover),
+        width: _size.width,
+        height: _size.height,
+        child: Stack(
+          children: [
+            Container(
+                margin: EdgeInsets.all(_size.width * 0.02),
+                color: Colors.white,
+                child: ValueListenableBuilder(
+                  builder:
+                      (BuildContext context, Box<NoteDB> notes, Widget child) {
+                    return GridView.builder(
+                      physics:
+                          NeverScrollableScrollPhysics(), // không scroll theo widget này
+                      // shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: notes.values.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NoteEditView()),
+                            );
+                          },
+                          onLongPress: () {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Cảnh báo',
+                                    style: TextStyle(color: Colors.red)),
+                                content: const Text(
+                                    'Bạn có chắc chắn muốn xóa\nhoạt động này không?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      _noteBox.deleteAt(index);
+                                      Navigator.pop(context, 'Có');
+                                    },
+                                    child: const Text('Có'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Không'),
+                                    child: const Text('Không'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(_size.width * 0.02),
+                              color: Colors.amber[200],
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(_size.width * 0.02),
+                              child: Text(
+                                notes.getAt(index).noteTitle,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 8,
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            'Hellllo',
-                            style: TextStyle(color: Colors.black, fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    )
-                  ]),
+                        );
+                      },
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: _size.width * 0.02,
+                          crossAxisSpacing: _size.width * 0.02),
+                      // ignore: missing_return
+
+                      // staggeredTileBuilder: (int index) =>
+                      //     new StaggeredTile.count(2, index.isEven ? 2 : 1),
+                    );
+                  },
+                  valueListenable: _noteBox.listenable(),
+                )),
+            Positioned(
+              right: _size.width * 0.04,
+              bottom: _size.width * 0.04,
+              child: ButtonTheme(
+                minWidth: _size.height * 0.07,
+                height: _size.height * 0.07,
+                child: RaisedButton(
+                  focusElevation: 2,
+                  shape: CircleBorder(),
+                  color: Colors.amber[500],
+                  child: Icon(Icons.add),
+                  elevation: 1,
+                  onPressed: () {
+                    NoteDB noteDB =
+                        NoteDB(0, 'nganha se lam duoc', 'dkfnsdnfsdfnsd', 0);
+                    _noteBox.add(noteDB);
+                  },
                 ),
-              );
-            },
-            // ignore: missing_return
-            staggeredTileBuilder: (index) {
-              return new StaggeredTile.count(2, 2);
-              // return new StaggeredTile.count(
-              //     2, snapshot.hasData ? snapshot.data[index] : 2);
-            },
-            // staggeredTileBuilder: (int index) =>
-            //     new StaggeredTile.count(2, index.isEven ? 2 : 1),
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
-          )),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

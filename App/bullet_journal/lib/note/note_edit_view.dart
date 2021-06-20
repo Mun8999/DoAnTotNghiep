@@ -1,11 +1,17 @@
 // @dart=2.9
-import 'dart:io';
+// import 'dart:io';
+import 'package:bullet_journal/note/m_record.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:permission_handler/permission_handler.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:numberpicker/numberpicker.dart';
+// import 'package:numberpicker/numberpicker.dart';
 
 class NoteEditView extends StatefulWidget {
   const NoteEditView({Key key}) : super(key: key);
@@ -18,8 +24,27 @@ Size _size;
 // List<File> _images = [];
 List<Asset> _images = <Asset>[];
 String _error = 'No Error Dectected';
+// FlutterSoundPlayer myPlayer;
+FlutterSoundRecorder _soundRecorder;
+bool _recordState = false;
+MyRecord _myRecord;
+List<String> _records = [];
+String _record;
+DateTime _dt;
 
 class _NoteEditViewState extends State<NoteEditView> {
+  @override
+  void initState() {
+    _myRecord = MyRecord();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _myRecord.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     _size = MediaQuery.of(context).size;
@@ -28,10 +53,6 @@ class _NoteEditViewState extends State<NoteEditView> {
           backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {
-              // setState(() {
-              //   _isEditButtonTaped = false;
-              //   print('back' + _isEditButtonTaped.toString());
-              // });
               Navigator.pop(context);
             },
             icon: Icon(
@@ -89,7 +110,31 @@ class _NoteEditViewState extends State<NoteEditView> {
                                   fontSize: 18)),
                           style: GoogleFonts.nunitoSans(fontSize: 18),
                         ),
-                        Expanded(flex: 2, child: buildGridView()),
+                        ..._records
+                            .asMap()
+                            .entries
+                            .map((record) => _recorderWidget(record)),
+                        // Align(
+                        //   alignment: Alignment.centerLeft,
+                        //   child: Container(
+                        //     width: _size.width * 0.3,
+                        //     height: _size.height * 0.3,
+                        //     child: ListView.separated(
+                        //       scrollDirection: Axis.vertical,
+                        //       itemCount: _records.length,
+                        //       itemBuilder: (context, index) {
+                        //         return _recorderWidget(_records[index], index);
+                        //       },
+                        //       separatorBuilder:
+                        //           (BuildContext context, int index) {
+                        //         return SizedBox(
+                        //           height: _size.width * 0.03,
+                        //         );
+                        //       },
+                        //     ),
+                        //   ),
+                        // ),
+                        Expanded(flex: 2, child: buildListViewImage()),
                       ]),
                     )),
               ),
@@ -112,14 +157,6 @@ class _NoteEditViewState extends State<NoteEditView> {
                   children: [
                     IconButton(
                       onPressed: () async {
-                        // _diaryEditViewModel.setBottomStateController(
-                        //     0, true);
-                        // final file = await Utils.pickMedia(
-                        //     isGallery: true, cropImage: cropImage);
-                        // if (file == null) {
-                        //   // _diaryEditViewModel.setBottomStateController(0);
-                        //   return;
-                        // }
                         await loadAssets();
                       },
                       icon: Container(
@@ -130,49 +167,81 @@ class _NoteEditViewState extends State<NoteEditView> {
                             color: Colors.white),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Container(
-                          height: 30,
-                          width: 30,
-                          child: Icon(
-                            Icons.keyboard_voice_rounded,
-                            color: Colors.white,
-                            size: 30,
-                          )),
-                    ),
-                    IconButton(
-                      icon: Container(
-                        height: 30,
-                        width: 30,
-                        child: SvgPicture.asset(
-                          'assets/icons/emotion/smile-face.svg',
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Container(
-                        height: 30,
-                        width: 30,
-                        child: SvgPicture.asset(
-                            'assets/icons/pointer-on-the-map.svg',
-                            color: Colors.white),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Container(
-                        height: 30,
-                        width: 30,
-                        child: SvgPicture.asset(
-                          'assets/icons/black-shop-tag.svg',
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
+                    StreamBuilder<FlutterSoundRecorder>(
+                        stream: _myRecord.mRecorderController,
+                        builder: (context, recorder) {
+                          return InkWell(
+                            onTap: () async {
+                              setState(() {
+                                _recordState = !_recordState;
+                              });
+                              if (_recordState) {
+                                _dt = DateTime.now();
+                                _record = _dt.day.toString() +
+                                    _dt.month.toString() +
+                                    _dt.year.toString() +
+                                    _dt.hour.toString() +
+                                    _dt.minute.toString() +
+                                    _dt.second.toString() +
+                                    _dt.millisecond.toString() +
+                                    '.aac';
+                                // print(_record);
+                                _myRecord.record(_record);
+                                _records.add(_record);
+                              } else {
+                                _myRecord.stopRecorder();
+                              }
+                            },
+                            child: Container(
+                                height: 30,
+                                width: 30,
+                                child: _recordState
+                                    ? SvgPicture.asset(
+                                        'assets/icons/note_edit/stop.svg',
+                                        color: Colors.white,
+                                      )
+                                    : SvgPicture.asset(
+                                        'assets/icons/note_edit/mic.svg',
+                                        color: Colors.white)),
+                          );
+                        }),
+                    // IconButton(
+                    //   icon: Container(
+                    //     height: 30,
+                    //     width: 30,
+                    //     child: SvgPicture.asset(
+                    //       'assets/icons/emotion/smile-face.svg',
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    //   onPressed: () {
+                    //     _myRecord.play(_record);
+                    //     // _myRecord.stopRecorder();
+                    //   },
+                    // ),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     // _myRecord.play();
+                    //   },
+                    //   icon: Container(
+                    //     height: 30,
+                    //     width: 30,
+                    //     child: SvgPicture.asset(
+                    //         'assets/icons/pointer-on-the-map.svg',
+                    //         color: Colors.white),
+                    //   ),
+                    // ),
+                    // IconButton(
+                    //   onPressed: () {},
+                    //   icon: Container(
+                    //     height: 30,
+                    //     width: 30,
+                    //     child: SvgPicture.asset(
+                    //       'assets/icons/black-shop-tag.svg',
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ))));
   }
@@ -184,7 +253,7 @@ class _NoteEditViewState extends State<NoteEditView> {
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 300,
-        enableCamera: true,
+        enableCamera: false,
         selectedAssets: _images,
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
         materialOptions: MaterialOptions(
@@ -214,32 +283,116 @@ class _NoteEditViewState extends State<NoteEditView> {
     });
   }
 
-  Widget buildGridView() {
-    return GridView.count(
-      crossAxisCount: 2,
-      crossAxisSpacing: _size.width * 0.02,
-      mainAxisSpacing: _size.width * 0.02,
+  Widget buildListViewImage() {
+    return ListView(
+      physics: NeverScrollableScrollPhysics(),
+      // crossAxisCount: 2,
+      // crossAxisSpacing: _size.width * 0.02,
+      // mainAxisSpacing: _size.width * 0.02,
       children: List.generate(_images.length, (index) {
         Asset asset = _images[index];
-        return
-            // Container(
-            //   height: _size.width * 0.5,
-            //   width: _size.width * 0.5,
-            //   decoration: BoxDecoration(
-            //       image: DecorationImage(
-            //           image: AssetImage(
-            //               'multi_image_picker/image/' + asset.identifier))),
-            // );
-            Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(_size.width * 0.02)),
-          child: AssetThumb(
-            asset: asset,
-            width: 500,
-            height: 500,
+        return Slidable(
+          actionPane: SlidableScrollActionPane(),
+          actionExtentRatio: 1 / 2,
+          closeOnScroll: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                _images.removeAt(index);
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+            ),
+          ],
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(_size.width * 0.02)),
+            padding: EdgeInsets.all(_size.width * 0.02),
+            child: AssetThumb(
+              asset: asset,
+              width: 500,
+              height: 500,
+            ),
           ),
         );
       }),
     );
   }
+
+  Widget _recorderWidget(MapEntry<int, String> record) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: InkWell(
+        onTap: () {
+          _myRecord.play(record.value);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(_size.width * 0.02),
+              color: Colors.yellow.withOpacity(0.2)),
+          margin: EdgeInsets.all(_size.width * 0.02),
+          padding: EdgeInsets.only(left: _size.width * 0.02),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                  height: 50,
+                  width: 50,
+                  child: SvgPicture.asset('assets/icons/note_edit/record.svg')),
+              IconButton(
+                  onPressed: () {
+                    _myRecord.deleteRecord(record.value);
+                    _records.removeAt(record.key);
+                    setState(() {});
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Widget _recorderWidget(String record, int index) {
+  //   return InkWell(
+  //     onTap: () {
+  //       _myRecord.play(record);
+  //     },
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(_size.width * 0.02),
+  //           color: Colors.yellow.withOpacity(0.2)),
+  //       padding: EdgeInsets.only(left: _size.width * 0.02),
+  //       child: Row(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         mainAxisSize: MainAxisSize.min,
+  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //         children: [
+  //           Container(
+  //               height: 50,
+  //               width: 50,
+  //               child: SvgPicture.asset('assets/icons/note_edit/record.svg')),
+  //           IconButton(
+  //               onPressed: () {
+  //                 _myRecord.deleteRecord(record);
+  //                 _records.removeAt(index);
+  //                 setState(() {});
+  //               },
+  //               icon: Icon(
+  //                 Icons.delete,
+  //                 color: Colors.red,
+  //               ))
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }
