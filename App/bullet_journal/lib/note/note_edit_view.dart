@@ -1,41 +1,55 @@
 // @dart=2.9
 // import 'dart:io';
+import 'package:bullet_journal/database/db_asset.dart';
+import 'package:bullet_journal/database/db_note.dart';
 import 'package:bullet_journal/note/m_record.dart';
+import 'package:bullet_journal/note/note_edit_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 // import 'package:numberpicker/numberpicker.dart';
 
+// ignore: must_be_immutable
 class NoteEditView extends StatefulWidget {
-  const NoteEditView({Key key}) : super(key: key);
+  int _state;
+  NoteDB _noteDB;
+  NoteEditView(int state, NoteDB noteDB, {Key key}) : super(key: key) {
+    this._state = state;
+    this._noteDB = noteDB;
+  }
 
   @override
   _NoteEditViewState createState() => _NoteEditViewState();
 }
 
 Size _size;
-// List<File> _images = [];
 List<Asset> _images = <Asset>[];
 String _error = 'No Error Dectected';
-// FlutterSoundPlayer myPlayer;
-FlutterSoundRecorder _soundRecorder;
 bool _recordState = false;
 MyRecord _myRecord;
 List<String> _records = [];
 String _record;
 DateTime _dt;
+NoteEditViewModel _noteEditViewModel;
+Box<NoteDB> _noteBox;
 
 class _NoteEditViewState extends State<NoteEditView> {
   @override
   void initState() {
     _myRecord = MyRecord();
+    _noteBox = Hive.box<NoteDB>('notes');
+    _noteEditViewModel = NoteEditViewModel();
+    _noteEditViewModel
+        .initNoteData(widget._noteDB, widget._state, _records, _images)
+        .then((value) => setState(() {}));
+
+    print('state>49' + widget._state.toString());
     super.initState();
   }
 
@@ -63,9 +77,9 @@ class _NoteEditViewState extends State<NoteEditView> {
           actions: [
             IconButton(
               onPressed: () async {
-                // await _diaryEditViewModel.saveDiary(widget._diaryDB, _images,
-                //     _editTexts, _emotion, widget._state);
-                // widget._state = 2;
+                _noteEditViewModel.saveNote(
+                    _noteBox, widget._state, widget._noteDB, _records, _images);
+                widget._state = 2;
               },
               icon: Icon(
                 Icons.save_sharp,
@@ -89,6 +103,7 @@ class _NoteEditViewState extends State<NoteEditView> {
                         TextFormField(
                           minLines: 1,
                           maxLines: 2,
+                          initialValue: widget._noteDB.noteTitle,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Chủ đề',
@@ -98,10 +113,14 @@ class _NoteEditViewState extends State<NoteEditView> {
                                   fontWeight: FontWeight.bold)),
                           style: GoogleFonts.nunitoSans(
                               fontSize: 20, fontWeight: FontWeight.bold),
+                          onChanged: (value) {
+                            widget._noteDB.noteTitle = value;
+                          },
                         ),
                         TextFormField(
                           minLines: 1,
                           maxLines: 20,
+                          initialValue: widget._noteDB.noteContent,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Nội dung',
@@ -109,6 +128,9 @@ class _NoteEditViewState extends State<NoteEditView> {
                                   color: Colors.grey.withOpacity(0.3),
                                   fontSize: 18)),
                           style: GoogleFonts.nunitoSans(fontSize: 18),
+                          onChanged: (value) {
+                            widget._noteDB.noteContent = value;
+                          },
                         ),
                         ..._records
                             .asMap()
@@ -167,44 +189,40 @@ class _NoteEditViewState extends State<NoteEditView> {
                             color: Colors.white),
                       ),
                     ),
-                    StreamBuilder<FlutterSoundRecorder>(
-                        stream: _myRecord.mRecorderController,
-                        builder: (context, recorder) {
-                          return InkWell(
-                            onTap: () async {
-                              setState(() {
-                                _recordState = !_recordState;
-                              });
-                              if (_recordState) {
-                                _dt = DateTime.now();
-                                _record = _dt.day.toString() +
-                                    _dt.month.toString() +
-                                    _dt.year.toString() +
-                                    _dt.hour.toString() +
-                                    _dt.minute.toString() +
-                                    _dt.second.toString() +
-                                    _dt.millisecond.toString() +
-                                    '.aac';
-                                // print(_record);
-                                _myRecord.record(_record);
-                                _records.add(_record);
-                              } else {
-                                _myRecord.stopRecorder();
-                              }
-                            },
-                            child: Container(
-                                height: 30,
-                                width: 30,
-                                child: _recordState
-                                    ? SvgPicture.asset(
-                                        'assets/icons/note_edit/stop.svg',
-                                        color: Colors.white,
-                                      )
-                                    : SvgPicture.asset(
-                                        'assets/icons/note_edit/mic.svg',
-                                        color: Colors.white)),
-                          );
-                        }),
+                    InkWell(
+                      onTap: () async {
+                        setState(() {
+                          _recordState = !_recordState;
+                        });
+                        if (_recordState) {
+                          _dt = DateTime.now();
+                          _record = _dt.day.toString() +
+                              _dt.month.toString() +
+                              _dt.year.toString() +
+                              _dt.hour.toString() +
+                              _dt.minute.toString() +
+                              _dt.second.toString() +
+                              _dt.millisecond.toString() +
+                              '.aac';
+                          // print(_record);
+                          _myRecord.record(_record);
+                          _records.add(_record);
+                        } else {
+                          _myRecord.stopRecorder();
+                        }
+                      },
+                      child: Container(
+                          height: 30,
+                          width: 30,
+                          child: _recordState
+                              ? SvgPicture.asset(
+                                  'assets/icons/note_edit/stop.svg',
+                                  color: Colors.white,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/icons/note_edit/mic.svg',
+                                  color: Colors.white)),
+                    )
                     // IconButton(
                     //   icon: Container(
                     //     height: 30,
@@ -249,7 +267,6 @@ class _NoteEditViewState extends State<NoteEditView> {
   Future<void> loadAssets() async {
     List<Asset> resultList = <Asset>[];
     String error = 'No Error Detected';
-
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 300,

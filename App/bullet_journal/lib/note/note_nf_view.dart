@@ -95,19 +95,27 @@ class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
                 child: ValueListenableBuilder(
                   builder:
                       (BuildContext context, Box<NoteDB> notes, Widget child) {
+                    print('lengt' + notes.values.length.toString());
+                    notes.values.forEach((element) {
+                      print('note' + element.noteTitle);
+                    });
                     return GridView.builder(
                       physics:
                           NeverScrollableScrollPhysics(), // không scroll theo widget này
                       // shrinkWrap: true,
                       scrollDirection: Axis.vertical,
-                      itemCount: notes.values.length,
+                      itemCount: notes.length,
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            // await Hive.openBox<NoteDB>('notes');
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => NoteEditView()),
+                                  builder: (context) => NoteEditView(
+                                        2,
+                                        _noteBox.getAt(index),
+                                      )),
                             );
                           },
                           onLongPress: () {
@@ -176,10 +184,17 @@ class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
                   color: Colors.amber[500],
                   child: Icon(Icons.add),
                   elevation: 1,
-                  onPressed: () {
-                    NoteDB noteDB =
-                        NoteDB(0, 'nganha se lam duoc', 'dkfnsdnfsdfnsd', 0);
-                    _noteBox.add(noteDB);
+                  onPressed: () async {
+                    // NoteDB noteDB =
+                    //     NoteDB(0, 'nganha se lam duoc', 'dkfnsdnfsdfnsd', 0);
+                    // _noteBox.add(noteDB);
+                    await Hive.openBox<NoteDB>('texts');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              NoteEditView(1, NoteDB('', ''))),
+                    );
                   },
                 ),
               ),

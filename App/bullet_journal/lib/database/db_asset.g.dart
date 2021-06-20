@@ -1,42 +1,42 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // @dart=2.9
 
-part of 'db_note.dart';
+part of 'db_asset.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class NoteDBAdapter extends TypeAdapter<NoteDB> {
+class AssetDBAdapter extends TypeAdapter<AssetDB> {
   @override
-  final int typeId = 7;
+  final int typeId = 8;
 
   @override
-  NoteDB read(BinaryReader reader) {
+  AssetDB read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return NoteDB(
+    return AssetDB(
+      fields[0] as String,
       fields[1] as String,
-      fields[2] as String,
-      noteId: fields[0] as int,
-      boxId: fields[3] as int,
+      fields[2] as int,
+      fields[3] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, NoteDB obj) {
+  void write(BinaryWriter writer, AssetDB obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.noteId)
+      ..write(obj.identifier)
       ..writeByte(1)
-      ..write(obj.noteTitle)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.noteContent)
+      ..write(obj.originalWidth)
       ..writeByte(3)
-      ..write(obj.boxId);
+      ..write(obj.originalHeight);
   }
 
   @override
@@ -45,7 +45,7 @@ class NoteDBAdapter extends TypeAdapter<NoteDB> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is NoteDBAdapter &&
+      other is AssetDBAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

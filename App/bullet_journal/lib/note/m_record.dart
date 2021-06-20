@@ -93,10 +93,10 @@ class MyRecord {
   }
 
   void play(String fileName) {
-    assert(_mPlayerIsInited &&
-        _mplaybackReady &&
-        _mRecorder!.isStopped &&
-        _mPlayer!.isStopped);
+    // assert(_mPlayerIsInited &&
+    //     _mplaybackReady &&
+    //     _mRecorder!.isStopped &&
+    //     _mPlayer!.isStopped);
     _mPlayer!.startPlayer(
       fromURI: fileName,
       //codec: kIsWeb ? Codec.opusWebM : Codec.aacADTS,

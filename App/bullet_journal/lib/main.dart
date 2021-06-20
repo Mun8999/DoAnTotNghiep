@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'package:bullet_journal/database/db_address.dart';
+import 'package:bullet_journal/database/db_asset.dart';
 import 'package:bullet_journal/database/db_component.dart';
 import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/database/db_emotion.dart';
@@ -43,6 +44,7 @@ void main() async {
   await Hive
     ..registerAdapter(DiaryDBAdapter())
     ..registerAdapter(NoteDBAdapter())
+    ..registerAdapter(AssetDBAdapter())
     ..registerAdapter(ImageDBAdapter())
     ..registerAdapter(TextDBAdapter())
     ..registerAdapter(EmotionDBAdapter())
