@@ -44,14 +44,14 @@ void main() async {
   Hive.init(document.path);
   await Hive
     ..registerAdapter(DiaryDBAdapter())
+    ..registerAdapter(ImageDBAdapter())
+    ..registerAdapter(TextDBAdapter())
+    ..registerAdapter(ComponentDBAdapter())
     ..registerAdapter(NoteDBAdapter())
     ..registerAdapter(JourneyDBAdapter())
     ..registerAdapter(AssetDBAdapter())
-    ..registerAdapter(ImageDBAdapter())
-    ..registerAdapter(TextDBAdapter())
     ..registerAdapter(EmotionDBAdapter())
     ..registerAdapter(AddressDBAdapter())
-    ..registerAdapter(ComponentDBAdapter())
     ..registerAdapter(
         DailyTaskDBAdapter()); // bai hoc xuong mau> class extend phai de o cuoi cung nha -_-
 

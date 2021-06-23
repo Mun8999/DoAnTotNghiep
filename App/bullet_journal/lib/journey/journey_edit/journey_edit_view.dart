@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:bullet_journal/database/db_journey.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:bullet_journal/journey/journey_edit/journey_edit_viewmodel.dart';
-import 'package:bullet_journal/note/m_record.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,11 +24,6 @@ class JourneyEditView extends StatefulWidget {
 
 Size _size;
 List<String> _images = [];
-String _error = 'No Error Dectected';
-bool _recordState = false;
-List<String> _records = [];
-String _record;
-DateTime _dt;
 JourneyEditViewModel _journeyEditViewModel;
 Box<JourneyDB> _journeyBox;
 
@@ -40,8 +34,9 @@ class _JourneyEditViewState extends State<JourneyEditView> {
     _journeyEditViewModel = JourneyEditViewModel();
     _journeyEditViewModel
         .initNoteData(widget._journeyDB, widget._state, _images)
-        .then((value) => setState(() {}));
-
+        .then((value) => setState(() {
+              print('44> image lenght: ' + _images.length.toString());
+            }));
     print('state>49' + widget._state.toString());
     super.initState();
   }
@@ -169,20 +164,6 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                             color: Colors.white),
                       ),
                     ),
-                    InkWell(
-                      onTap: () async {},
-                      child: Container(
-                          height: 30,
-                          width: 30,
-                          child: _recordState
-                              ? SvgPicture.asset(
-                                  'assets/icons/note_edit/stop.svg',
-                                  color: Colors.white,
-                                )
-                              : SvgPicture.asset(
-                                  'assets/icons/note_edit/mic.svg',
-                                  color: Colors.white)),
-                    )
                   ],
                 ))));
   }

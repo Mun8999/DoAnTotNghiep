@@ -764,7 +764,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   // }
 
   Widget _WidgetChildDrag(File imageFile, int index) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         setState(() {
           _images[index].setEditState(!_images[index].getEditState);
@@ -1106,7 +1106,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     // print('1105> boxId: ' + widget._diaryDB.diaryBox.toString());
     if (imageBox.length == 0) return;
     MyImage myImage;
-    imageBox.toMap().values.toList().forEach((image) {
+    imageBox.toMap().values.forEach((image) {
       myImage = MyImage(
           File(image.imagePath),
           Offset(image.offset_dx, image.offset_dy),

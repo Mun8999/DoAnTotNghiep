@@ -17,9 +17,9 @@ class JourneyEditViewModel {
   }
 
   _initContent(JourneyDB journeyDB, int state, List<String> images) async {
-    var imageBox =
-        await Hive.openBox<String>('images' + journeyDB.boxId.toString());
-    if (images.length > 0) {
+    var imageBox = await Hive.openBox<String>(
+        'journeyimages' + journeyDB.boxId.toString());
+    if (imageBox.length > 0) {
       imageBox.values.forEach((image) async {
         await images.add(image);
       });
@@ -47,8 +47,8 @@ class JourneyEditViewModel {
         journeyDB.journeyId.toString() +
         ', box id: ' +
         journeyDB.boxId.toString());
-    var imageBox =
-        await Hive.openBox<String>('images' + journeyDB.boxId.toString());
+    var imageBox = await Hive.openBox<String>(
+        'journeyimages' + journeyDB.boxId.toString());
     imageBox.clear();
     if (images.length > 0) {
       images.forEach((image) async {
@@ -56,6 +56,5 @@ class JourneyEditViewModel {
       });
     }
     await imageBox.close();
-    // await assetBox.close();
   }
 }
