@@ -158,11 +158,13 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                             child: Container(
                               alignment: Alignment.centerLeft,
                               child: Padding(
-                                padding: const EdgeInsets.all(8),
+                                padding: EdgeInsets.all(_size.width * 0.02),
                                 child: Text(
                                   journeys.getAt(index).journeyTitle,
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 16),
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),

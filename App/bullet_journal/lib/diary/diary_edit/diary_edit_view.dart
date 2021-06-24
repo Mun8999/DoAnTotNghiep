@@ -593,22 +593,22 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                             ),
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            _diaryEditViewModel.setBottomStateController(
-                                4, true);
-                          },
-                          icon: Container(
-                            height: 30,
-                            width: 30,
-                            child: SvgPicture.asset(
-                              'assets/icons/black-shop-tag.svg',
-                              color: bottomButton.data[4]
-                                  ? Colors.yellow[600]
-                                  : Colors.white,
-                            ),
-                          ),
-                        )
+                        // IconButton(
+                        //   onPressed: () {
+                        //     _diaryEditViewModel.setBottomStateController(
+                        //         4, true);
+                        //   },
+                        //   icon: Container(
+                        //     height: 30,
+                        //     width: 30,
+                        //     child: SvgPicture.asset(
+                        //       'assets/icons/black-shop-tag.svg',
+                        //       color: bottomButton.data[4]
+                        //           ? Colors.yellow[600]
+                        //           : Colors.white,
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     ));
               }),
