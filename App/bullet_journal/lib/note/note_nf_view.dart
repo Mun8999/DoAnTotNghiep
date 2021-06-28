@@ -126,11 +126,12 @@ class _NoteNewsFeedViewState extends State<NoteNewsFeedView> {
                                 title: const Text('Cảnh báo',
                                     style: TextStyle(color: Colors.red)),
                                 content: const Text(
-                                    'Bạn có chắc chắn muốn xóa\nhoạt động này không?'),
+                                    'Bạn có chắc chắn muốn xóa\nghi chú này không?'),
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
-                                      _noteBox.deleteAt(index);
+                                      _noteViewNewsFeedViewModel.deleteNote(
+                                          notes, notes.getAt(index));
                                       Navigator.pop(context, 'Có');
                                     },
                                     child: const Text('Có'),

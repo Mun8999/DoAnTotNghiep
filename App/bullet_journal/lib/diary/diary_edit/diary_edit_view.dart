@@ -8,7 +8,6 @@ import 'package:bullet_journal/database/db_text.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_viewmodel.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:bullet_journal/model/component.dart';
-import 'package:bullet_journal/model/diary.dart';
 import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/text.dart';
@@ -30,7 +29,7 @@ class DiaryEditView extends StatefulWidget {
   _DiaryEditViewState createState() => _DiaryEditViewState();
 }
 
-Size size;
+Size _size;
 bool _isEditButtonTaped = false;
 FocusNode _focusTyping = FocusNode();
 ScrollController _scrollController;
@@ -68,9 +67,9 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
-    _imageWidth = size.width * 0.6;
-    _imageHeight = size.width * 0.6;
+    _size = MediaQuery.of(context).size;
+    _imageWidth = _size.width * 0.6;
+    _imageHeight = _size.width * 0.6;
     _imageSize = Size(_imageWidth, _imageHeight);
     _space = MediaQuery.of(context).padding.top + kToolbarHeight;
     GlobalKey _key = GlobalKey();
@@ -136,8 +135,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
                 // physics: NeverScrollableScrollPhysics(),
                 child: Container(
-                    height: size.height * 2,
-                    width: size.width,
+                    height: _size.height * 2,
+                    width: _size.width,
                     color: Colors.white,
                     child: StreamBuilder<List<bool>>(
                         initialData: [false, false, false, false, false],
@@ -341,7 +340,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                                     _emotion
                                                         .setEmotionComponent(
                                                             Component(
-                                                                offset, size));
+                                                                offset, _size));
                                                     _diaryEditViewModel
                                                         .setEmotionStatus(
                                                             _emotion);
@@ -365,8 +364,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                                   bottomButton.data[3]
                                               ? Positioned(
                                                   right: 0,
-                                                  bottom: size.height +
-                                                      size.height * 0.22,
+                                                  bottom: _size.height +
+                                                      _size.height * 0.22,
                                                   child: Container(
                                                     margin: EdgeInsets.only(
                                                         left: 10, right: 10),
@@ -482,7 +481,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                 // print('438: ' + bottomButton.data[3].toString());
                 return Container(
                     margin: EdgeInsets.all(20),
-                    height: size.height * 0.07,
+                    height: _size.height * 0.07,
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(20),
@@ -503,7 +502,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                             }
                             setState(() {
                               Offset _initOffsetImage =
-                                  Offset(size.width / 4, size.height / 4);
+                                  Offset(_size.width / 4, _size.height / 4);
                               if (_scrollController.offset > 0)
                                 _initOffsetImage = _initOffsetImage +
                                     Offset(0, _scrollController.offset);
@@ -769,6 +768,20 @@ class _DiaryEditViewState extends State<DiaryEditView> {
         setState(() {
           _images[index].setEditState(!_images[index].getEditState);
         });
+        showModalBottomSheet(
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(_size.width * 0.07))),
+          context: context,
+          builder: (context) {
+            return Container(
+                height: _size.height * 0.4,
+                width: _size.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(_size.width * 0.02)));
+          },
+        );
       },
       child: Container(
         height: _images[index].getSize.height,
@@ -778,8 +791,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
             Positioned(
               top: 15,
               child: Container(
-                height: size.width * 0.5,
-                width: size.width * 0.5,
+                height: _size.width * 0.5,
+                width: _size.width * 0.5,
                 child: ClipRRect(
                   child: Image.file(imageFile),
                 ),
@@ -856,15 +869,15 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     return Opacity(
       opacity: 0.5,
       child: Container(
-        height: size.width * 0.6,
-        width: size.width * 0.6,
+        height: _size.width * 0.6,
+        width: _size.width * 0.6,
         child: Stack(
           children: [
             Positioned(
               top: 15,
               child: Container(
-                height: size.width * 0.5,
-                width: size.width * 0.5,
+                height: _size.width * 0.5,
+                width: _size.width * 0.5,
                 child: ClipRRect(
                   child: Image.file(imageFile),
                 ),
@@ -878,8 +891,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   bool _checkEmotionOfffset(Offset offset) {
     if (offset.dx < 0 ||
-        offset.dx > size.width - 50 ||
-        offset.dy > size.height - size.height * 0.07 - 85 ||
+        offset.dx > _size.width - 50 ||
+        offset.dy > _size.height - _size.height * 0.07 - 85 ||
         offset.dy < _space)
       return false;
     else
@@ -888,8 +901,9 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
   bool _checkImageOffset(Offset offset, Size sizeImage) {
     if (offset.dx < -sizeImage.width * 0.5 ||
-        offset.dx > size.width - sizeImage.width * 0.5 ||
-        offset.dy > size.height - size.height * 0.07 - sizeImage.height * 0.5 ||
+        offset.dx > _size.width - sizeImage.width * 0.5 ||
+        offset.dy >
+            _size.height - _size.height * 0.07 - sizeImage.height * 0.5 ||
         offset.dy < _space - 15)
       return false;
     else
@@ -902,14 +916,14 @@ class _DiaryEditViewState extends State<DiaryEditView> {
         left: e.value.getOffset.dx,
         top: e.value.getOffset.dy - space,
         child: Container(
-          width: size.width * 0.75,
+          width: _size.width * 0.75,
           // color: Colors.transparent,
 
           child: Draggable(
             child: Stack(
               children: [
                 Container(
-                  width: size.width * 0.67,
+                  width: _size.width * 0.67,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.yellow.withOpacity(0.5),
@@ -920,6 +934,20 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                           e.value.setEditState(!e.value.getEditState);
                           print('904>Edit state: ' +
                               e.value.getEditState.toString());
+                          if (e.value.getEditState) {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return Container(
+                                    height: _size.height * 0.4,
+                                    width: _size.width,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            _size.width * 0.02)));
+                              },
+                            );
+                          }
                         });
                       },
                       initialValue: e.value.getTextContent,
@@ -1003,7 +1031,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
             feedback: Opacity(
               opacity: 0.5,
               child: Container(
-                width: size.width * 0.67,
+                width: _size.width * 0.67,
                 // color: Colors.transparent,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -1078,6 +1106,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     menu.show(widgetKey: key);
   }
 
+  // ignore: non_constant_identifier_names
   MenuItem MenuEmtionItem(MapEntry<int, Emotion> e) {
     return MenuItem(
         textStyle: TextStyle(
@@ -1123,7 +1152,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     textBox.values.toList().forEach((element) {
       print('>content ' + element.textContent + '\n>offset ');
       _editTexts.add(MyText('', TextStyle(), element.textContent,
-          Offset(element.offset_dx, element.offset_dy), size));
+          Offset(element.offset_dx, element.offset_dy), _size));
     });
     await textBox.close();
   }

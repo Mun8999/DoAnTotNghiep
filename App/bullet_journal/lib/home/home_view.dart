@@ -60,51 +60,69 @@ class _HomeViewState extends State<HomeView> {
             case 0:
               {
                 setState(() {
-                  _centerSreen = DailyTaskNewsFeedView();
+                  _centerSreen = JourneyNewsfeedView();
                 });
                 break;
               }
             case 1:
               {
                 setState(() {
-                  _centerSreen = JourneyNewsfeedView();
-                });
-                break;
-              }
-            case 2:
-              {
-                setState(() {
                   _centerSreen = NoteNewsFeedView();
                 });
-                break;
-              }
-            case 3:
-              {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginView(),
-                    ));
                 break;
               }
             default:
               break;
           }
+          // switch (value) {
+          //   case 0:
+          //     {
+          //       setState(() {
+          //         _centerSreen = DailyTaskNewsFeedView();
+          //       });
+          //       break;
+          //     }
+          //   case 1:
+          //     {
+          //       setState(() {
+          //         _centerSreen = JourneyNewsfeedView();
+          //       });
+          //       break;
+          //     }
+          //   case 2:
+          //     {
+          //       setState(() {
+          //         _centerSreen = NoteNewsFeedView();
+          //       });
+          //       break;
+          //     }
+          //   case 3:
+          //     {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => LoginView(),
+          //           ));
+          //       break;
+          //     }
+          //   default:
+          //     break;
+          // }
         },
         items: [
-          FABBottomAppBarItem(
-              iconData:
-                  'assets/icons/menu/black-paper-calendar-with-spring.svg',
-              text: 'Hoạt động'),
+          // FABBottomAppBarItem(
+          //     iconData:
+          //         'assets/icons/menu/black-paper-calendar-with-spring.svg',
+          //     text: 'Hoạt động'),
           FABBottomAppBarItem(
               iconData: 'assets/icons/menu/airplane-facing-left.svg',
               text: 'Chuyến đi'),
           FABBottomAppBarItem(
               iconData: 'assets/icons/menu/blank-page-folded-corner.svg',
               text: 'Ghi chú'),
-          FABBottomAppBarItem(
-              iconData: 'assets/icons/menu/black-user-shape.svg',
-              text: 'Tài khoản'),
+          // FABBottomAppBarItem(
+          //     iconData: 'assets/icons/menu/black-user-shape.svg',
+          //     text: 'Tài khoản'),
         ],
       ),
     );

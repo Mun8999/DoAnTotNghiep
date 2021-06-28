@@ -23,13 +23,14 @@ class JourneyDBAdapter extends TypeAdapter<JourneyDB> {
       boxId: fields[2] as int,
       journeyTime: fields[3] as DateTime,
       jouneyImage: fields[4] as String,
+      journeyContent: fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, JourneyDB obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.journeyId)
       ..writeByte(1)
@@ -39,7 +40,9 @@ class JourneyDBAdapter extends TypeAdapter<JourneyDB> {
       ..writeByte(3)
       ..write(obj.journeyTime)
       ..writeByte(4)
-      ..write(obj.jouneyImage);
+      ..write(obj.jouneyImage)
+      ..writeByte(5)
+      ..write(obj.journeyContent);
   }
 
   @override

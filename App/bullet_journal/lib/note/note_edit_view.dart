@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'dart:io';
+
 import 'package:bullet_journal/database/db_note.dart';
 import 'package:bullet_journal/note/m_record.dart';
 import 'package:bullet_journal/note/note_edit_viewmodel.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:dio/dio.dart';
 
 class NoteEditView extends StatefulWidget {
   int _state;
@@ -87,7 +90,7 @@ class _NoteEditViewState extends State<NoteEditView> {
             return SafeArea(
               child: SingleChildScrollView(
                 child: Container(
-                    height: _size.height * 2,
+                    height: _size.height * 1.5,
                     width: _size.width,
                     color: Colors.white,
                     child: Padding(
@@ -301,23 +304,50 @@ class _NoteEditViewState extends State<NoteEditView> {
       // mainAxisSpacing: _size.width * 0.02,
       children: List.generate(_images.length, (index) {
         Asset asset = _images[index];
-        return Slidable(
-          actionPane: SlidableScrollActionPane(),
-          actionExtentRatio: 1 / 2,
-          closeOnScroll: true,
-          actions: [
-            IconButton(
-              onPressed: () {
-                // _images.removeAt(index);
-                // setState(() {});
-                _noteEditViewModel.deleteNote(_noteBox, _noteBox.getAt(index));
-              },
-              icon: Icon(
-                Icons.delete,
-                color: Colors.red,
+        return InkWell(
+          onLongPress: () {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title:
+                    const Text('Cảnh báo', style: TextStyle(color: Colors.red)),
+                content:
+                    const Text('Bạn có chắc chắn muốn xóa hình này không?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _images.removeAt(index);
+                      });
+                      // _noteEditViewModel.deleteNote(_noteBox, _noteBox.getAt(index));
+                      Navigator.pop(context, 'Có');
+                    },
+                    child: const Text('Có'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Không'),
+                    child: const Text('Không'),
+                  ),
+                ],
               ),
-            ),
-          ],
+            );
+          },
+          // actionPane: SlidableScrollActionPane(),
+          // actionExtentRatio: 1 / 2,
+          // closeOnScroll: true,
+          // actions: [
+          //   IconButton(
+          //     onPressed: () {
+          //       // _images.removeAt(index);
+          //       // setState(() {});
+          //       _noteEditViewModel.deleteNote(_noteBox, _noteBox.getAt(index));
+          //     },
+          //     icon: Icon(
+          //       Icons.delete,
+          //       color: Colors.red,
+          //     ),
+          //   ),
+          // ],
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(_size.width * 0.02)),

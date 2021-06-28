@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:bullet_journal/database/db_journey.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:bullet_journal/journey/journey_edit/journey_edit_viewmodel.dart';
+import 'package:bullet_journal/journey/journey_edit/journey_item_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:intl/intl.dart';
 
 class JourneyEditView extends StatefulWidget {
   int _state;
@@ -26,12 +29,14 @@ Size _size;
 List<String> _images = [];
 JourneyEditViewModel _journeyEditViewModel;
 Box<JourneyDB> _journeyBox;
+List<String> _items = [];
 
 class _JourneyEditViewState extends State<JourneyEditView> {
   @override
   void initState() {
     _journeyBox = Hive.box<JourneyDB>('journeys');
     _journeyEditViewModel = JourneyEditViewModel();
+    // _journalItem.add(item);
     _journeyEditViewModel
         .initNoteData(widget._journeyDB, widget._state, _images)
         .then((value) => setState(() {
@@ -80,7 +85,7 @@ class _JourneyEditViewState extends State<JourneyEditView> {
           builder: (context) {
             return SafeArea(
               child: Container(
-                  height: _size.height * 2,
+                  height: _size.height * 1.5,
                   width: _size.width,
                   color: Colors.white,
                   child: Padding(
@@ -105,11 +110,42 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                             widget._journeyDB.journeyTitle = value;
                           },
                         ),
+                        TextFormField(
+                          minLines: 1,
+                          maxLines: 10,
+                          initialValue: widget._journeyDB.journeyContent,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Nội dung',
+                              hintStyle: GoogleFonts.nunitoSans(
+                                  fontSize: 16, color: Colors.grey)),
+                          style: GoogleFonts.nunitoSans(fontSize: 16),
+                          onChanged: (value) {
+                            widget._journeyDB.journeyContent = value;
+                          },
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: InkWell(
+                              onTap: () {
+                                _items.add('abc');
+                                setState(() {});
+                              },
+                              child: Container(
+                                // decoration: BoxDecoration(color: Colors.red[300]),
+                                child: Text(
+                                  '>> Thêm hành trình',
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              )),
+                        ),
+
                         ..._images
                             .asMap()
                             .entries
                             .map((image) => _addImageWidget(image))
-                            .toList()
+                            .toList(),
+                        ..._items.asMap().entries.map((e) => _JouneyItem()),
                         // TextFormField(
                         //   minLines: 1,
                         //   maxLines: 20,
@@ -168,6 +204,139 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                 ))));
   }
 
+  DateTime _selectedDate;
+  Widget _JouneyItem() {
+    _selectedDate = DateTime.now();
+    return Container(
+      width: _size.width,
+      height: _size.height * 0.12,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              width: _size.width,
+              height: _size.height * 0.1,
+              child: Stack(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      final DateTime datePicked = await showDatePicker(
+                        context: context,
+                        initialDate: _selectedDate,
+                        firstDate: DateTime(2010),
+                        lastDate: DateTime(2050),
+                      );
+                      if (datePicked != null && datePicked != _selectedDate) {
+                        setState(() {
+                          _selectedDate = datePicked;
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: _size.width * 0.2,
+                      height: _size.width * 0.2,
+                      margin: EdgeInsets.all(_size.width * 0.01),
+                      decoration: BoxDecoration(
+                          color: Colors.amber[600], shape: BoxShape.circle),
+                      child: Center(
+                          child: Text(
+                        DateFormat('dd/MM').format(_selectedDate),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      )),
+                    ),
+                  ),
+                  Positioned(
+                    top: -_size.width * 0.02,
+                    left: _size.width * 0.22,
+                    child: Container(
+                      width: _size.width * 0.8,
+                      height: _size.height * 0.2,
+                      child: ListView.builder(
+                        itemCount: 2,
+                        itemBuilder: (context, index) {
+                          return Row(
+                            children: [
+                              Checkbox(
+                                value: false,
+                                onChanged: (value) {},
+                              ),
+                              Text('Xuất phát')
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Container(
+            //   width: _size.width,
+            //   height: _size.height * 0.2,
+            //   color: Colors.red,
+            // )
+            Divider(
+              color: Colors.grey,
+              thickness: 3,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<File> cropImage(File file) async {
+    return await ImageCropper.cropImage(
+        sourcePath: file.path,
+        // aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 3),
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.yellow[800],
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(minimumAspectRatio: 1.0),
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9,
+        ]);
+  }
+
+  Widget _addImageWidget(MapEntry<int, String> image) {
+    return Slidable(
+      actionPane: SlidableScrollActionPane(),
+      actionExtentRatio: 1 / 2,
+      closeOnScroll: true,
+      actions: [
+        IconButton(
+          onPressed: () {
+            setState(() {
+              _images.removeAt(image.key);
+            });
+          },
+          icon: Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
+        ),
+      ],
+      child: Container(
+        height: _size.width,
+        width: _size.width,
+        margin: EdgeInsets.all(_size.width * 0.02),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(_size.width * 0.04),
+            image: DecorationImage(
+                image: FileImage(File(image.value)), fit: BoxFit.cover)),
+      ),
+    );
+  }
   // Future<void> loadAssets() async {
   //   List<Asset> resultList = <Asset>[];
   //   String error = 'No Error Detected';
@@ -241,33 +410,4 @@ class _JourneyEditViewState extends State<JourneyEditView> {
   //     }),
   //   );
   // }
-  Future<File> cropImage(File file) async {
-    return await ImageCropper.cropImage(
-        sourcePath: file.path,
-        // aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 3),
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: Colors.yellow[800],
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(minimumAspectRatio: 1.0),
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9,
-        ]);
-  }
-
-  Widget _addImageWidget(MapEntry<int, String> image) {
-    return Container(
-      height: _size.width,
-      width: _size.width,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: FileImage(File(image.value)), fit: BoxFit.contain)),
-    );
-  }
 }

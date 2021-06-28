@@ -89,13 +89,4 @@ class NoteEditViewModel {
     await assetBox.close();
     // await assetBox.close();
   }
-
-  deleteNote(Box<NoteDB> noteBox, NoteDB noteDB) async {
-    await noteBox.deleteAt(noteDB.boxId);
-    int boxIndex = noteDB.boxId;
-    var recordBox = await Hive.openBox<String>('records' + boxIndex.toString());
-    var assetBox = await Hive.openBox<AssetDB>('assets' + boxIndex.toString());
-    if (recordBox.length > 0) recordBox.deleteFromDisk();
-    if (assetBox.length > 0) assetBox.deleteFromDisk();
-  }
 }

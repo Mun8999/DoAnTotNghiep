@@ -30,6 +30,13 @@ class DiaryEditViewModel {
     _setAddressController();
   }
 
+  dispose() {
+    _addressController.close();
+    _emotionController.close();
+    _bottomStateController.close();
+    _emotionStatus.close();
+  }
+
   _setEmotionController() {
     _emotions = ListEmotion();
     _emotionController.sink.add(_emotions.getEmotions);

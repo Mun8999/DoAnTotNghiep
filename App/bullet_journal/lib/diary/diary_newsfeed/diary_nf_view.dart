@@ -4,7 +4,6 @@ import 'dart:ui';
 
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
 import 'package:bullet_journal/database/db_diary.dart';
-import 'package:bullet_journal/diary/diary_edit/diary_edit_test.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
 import 'package:bullet_journal/model/calendar/time.dart';
@@ -39,8 +38,8 @@ class DiaryNewFeedsView extends StatefulWidget {
 //   'assets/images/FB_IMG_1619157271674.jpg'
 // ];
 // bool isTaped = false, isTapedStatus = false;
-Size size;
-double spacing;
+Size _size;
+double _spacing;
 DiaryNewsFeedViewModel _diaryNewsFeedViewModel;
 Box<DiaryDB> diaryBox;
 
@@ -56,8 +55,8 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
-    spacing = size.width * 0.02;
+    _size = MediaQuery.of(context).size;
+    _spacing = _size.width * 0.02;
     return NestedScrollView(
       physics: NeverScrollableScrollPhysics(),
       headerSliverBuilder: (context, value) {
@@ -116,7 +115,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                             height: MediaQuery.of(context).size.height * 0.1,
                           ),
                           Container(
-                            margin: EdgeInsets.all(spacing),
+                            margin: EdgeInsets.all(_spacing),
                             height: MediaQuery.of(context).size.height * 0.125,
                             // padding: EdgeInsets.all(10),
                             padding: EdgeInsets.only(left: 10, right: 10),
@@ -128,9 +127,29 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                             // color: Colors.purple[50],
                             child: Stack(
                               children: [
-                                TextFormField(
-                                  // showCursor: isTapedStatus,
-                                  readOnly: true,
+                                // TextFormField(
+                                //   // showCursor: isTapedStatus,
+                                //   readOnly: true,
+                                //   onTap: () {
+                                //     Navigator.push(context, MaterialPageRoute(
+                                //       builder: (context) {
+                                //         return DiaryEditView(
+                                //           DiaryDB(DateTime.now()),
+                                //           state: 1,
+                                //         );
+                                //       },
+                                //     ));
+                                //   },
+                                //   maxLines: 3,
+                                //   style: TextStyle(fontSize: 16),
+                                //   cursorColor: Colors.black,
+                                //   decoration: InputDecoration(
+                                //       border: InputBorder.none,
+                                //       hintText: 'Hôm nay bạn thế nào?',
+                                //       hintStyle:
+                                //           TextStyle(color: Colors.grey[500])),
+                                // ),
+                                InkWell(
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
@@ -141,14 +160,16 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                                       },
                                     ));
                                   },
-                                  maxLines: 3,
-                                  style: TextStyle(fontSize: 16),
-                                  cursorColor: Colors.black,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Hôm nay bạn thế nào?',
-                                      hintStyle:
-                                          TextStyle(color: Colors.grey[500])),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: _spacing),
+                                    child: Container(
+                                      width: _size.width,
+                                      child: Text('Hôm nay bạn thế nào?',
+                                          style: TextStyle(
+                                              color: Colors.grey[500],
+                                              fontSize: 18)),
+                                    ),
+                                  ),
                                 ),
                                 Align(
                                   alignment: Alignment.bottomRight,
@@ -200,7 +221,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
         ];
       },
       body: Container(
-          height: size.height,
+          height: _size.height,
           color: Colors.white,
           child: ValueListenableBuilder(
             valueListenable: diaryBox.listenable(),
@@ -213,7 +234,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                 itemCount: diaryBox.values.length,
                 separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(
-                    height: size.height * 0.015,
+                    height: _size.height * 0.015,
                   );
                 },
 
@@ -339,9 +360,9 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
         ));
       },
       child: Padding(
-        padding: EdgeInsets.all(spacing),
+        padding: EdgeInsets.all(_spacing),
         child: Container(
-          height: size.height * 0.27,
+          height: _size.height * 0.27,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.brown[900],
@@ -356,12 +377,12 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
           ),
           child: Stack(children: [
             Positioned(
-              top: size.width * 0.02,
-              left: index % 2 == 0 ? null : size.width * 0.02,
-              right: index % 2 != 0 ? null : size.width * 0.02,
+              top: _size.width * 0.02,
+              left: index % 2 == 0 ? null : _size.width * 0.02,
+              right: index % 2 != 0 ? null : _size.width * 0.02,
               child: Container(
-                height: size.width * 0.46,
-                width: size.width * 0.46,
+                height: _size.width * 0.46,
+                width: _size.width * 0.46,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft:
@@ -382,7 +403,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                       flex: 8,
                       fit: FlexFit.loose,
                       child: Padding(
-                        padding: EdgeInsets.all(spacing),
+                        padding: EdgeInsets.all(_spacing),
                         child: Text(
                           item.diaryContent,
                           // '" Người giờ còn đây không? Thuyền này liệu còn sang sông? Buổi chiều dài mênh mông. Lòng người giờ hòa hay đông? Hồng mắt em cả bầu trời đỏ hoen..."',
@@ -400,12 +421,12 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
               ),
             ),
             Positioned(
-              top: size.width * 0.02,
-              left: index % 2 == 0 ? size.width * 0.02 : null,
-              right: index % 2 != 0 ? size.width * 0.02 : null,
+              top: _size.width * 0.02,
+              left: index % 2 == 0 ? _size.width * 0.02 : null,
+              right: index % 2 != 0 ? _size.width * 0.02 : null,
               child: Container(
-                height: size.width * 0.46,
-                width: size.width * 0.46,
+                height: _size.width * 0.46,
+                width: _size.width * 0.46,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft:
@@ -426,9 +447,9 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
               ),
             ),
             Positioned(
-              bottom: spacing,
-              left: index % 2 != 0 ? size.width * 0.02 : null,
-              right: index % 2 == 0 ? size.width * 0.02 : null,
+              bottom: _spacing,
+              left: index % 2 != 0 ? _size.width * 0.02 : null,
+              right: index % 2 == 0 ? _size.width * 0.02 : null,
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -447,9 +468,9 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
               ),
             ),
             Positioned(
-              bottom: size.width * 0.02,
-              left: index % 2 == 0 ? size.width * 0.02 : null,
-              right: index % 2 != 0 ? size.width * 0.02 : null,
+              bottom: _size.width * 0.02,
+              left: index % 2 == 0 ? _size.width * 0.02 : null,
+              right: index % 2 != 0 ? _size.width * 0.02 : null,
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: Text(MyDateTime(item.diaryTime).getTime.toString(),

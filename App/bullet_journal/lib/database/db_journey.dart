@@ -14,12 +14,19 @@ class JourneyDB extends HiveObject {
   DateTime journeyTime;
   @HiveField(4)
   String jouneyImage;
+  @HiveField(5)
+  String journeyContent;
   JourneyDB(String journeyTitle,
-      {int journeyId, int boxId, DateTime journeyTime, String jouneyImage}) {
+      {int journeyId,
+      int boxId,
+      DateTime journeyTime,
+      String jouneyImage,
+      String journeyContent = ''}) {
     this.journeyId = journeyId;
     this.journeyTitle = journeyTitle;
     this.boxId = boxId;
     this.journeyTime = journeyTime;
     this.jouneyImage = jouneyImage;
+    this.journeyContent = journeyContent;
   }
 }
