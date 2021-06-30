@@ -5,12 +5,10 @@ import 'package:bullet_journal/database/db_note.dart';
 import 'package:bullet_journal/note/m_record.dart';
 import 'package:bullet_journal/note/note_edit_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:dio/dio.dart';
 
 class NoteEditView extends StatefulWidget {
   int _state;

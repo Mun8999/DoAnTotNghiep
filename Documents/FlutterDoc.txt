@@ -1,4 +1,0 @@
-To enable null safety, type:
-
-  $ cd my_test
-  $ dart migrate --apply-changes

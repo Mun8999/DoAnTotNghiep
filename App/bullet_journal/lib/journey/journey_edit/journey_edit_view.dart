@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:bullet_journal/database/db_journey.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:bullet_journal/journey/journey_edit/journey_edit_viewmodel.dart';
-import 'package:bullet_journal/journey/journey_edit/journey_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
@@ -128,8 +127,18 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                           alignment: Alignment.centerLeft,
                           child: InkWell(
                               onTap: () {
-                                _items.add('abc');
-                                setState(() {});
+                                setState(() {
+                                  showModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(
+                                                _size.width * 0.06))),
+                                    context: context,
+                                    builder: (context) {
+                                      return _JouneyItem();
+                                    },
+                                  );
+                                });
                               },
                               child: Container(
                                 // decoration: BoxDecoration(color: Colors.red[300]),
@@ -145,7 +154,7 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                             .entries
                             .map((image) => _addImageWidget(image))
                             .toList(),
-                        ..._items.asMap().entries.map((e) => _JouneyItem()),
+                        // ..._items.asMap().entries.map((e) => _JouneyItem()),
                         // TextFormField(
                         //   minLines: 1,
                         //   maxLines: 20,
@@ -204,88 +213,150 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                 ))));
   }
 
-  DateTime _selectedDate;
+  bool _initCalender;
+  DateTime _selectedDate = DateTime.now();
+  // ignore: non_constant_identifier_names
   Widget _JouneyItem() {
-    _selectedDate = DateTime.now();
-    return Container(
-      width: _size.width,
-      height: _size.height * 0.12,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: _size.width,
-              height: _size.height * 0.1,
-              child: Stack(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      final DateTime datePicked = await showDatePicker(
-                        context: context,
-                        initialDate: _selectedDate,
-                        firstDate: DateTime(2010),
-                        lastDate: DateTime(2050),
-                      );
-                      if (datePicked != null && datePicked != _selectedDate) {
-                        setState(() {
-                          _selectedDate = datePicked;
-                        });
-                      }
-                    },
-                    child: Container(
-                      width: _size.width * 0.2,
-                      height: _size.width * 0.2,
-                      margin: EdgeInsets.all(_size.width * 0.01),
-                      decoration: BoxDecoration(
-                          color: Colors.amber[600], shape: BoxShape.circle),
-                      child: Center(
-                          child: Text(
-                        DateFormat('dd/MM').format(_selectedDate),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                  ),
-                  Positioned(
-                    top: -_size.width * 0.02,
-                    left: _size.width * 0.22,
-                    child: Container(
-                      width: _size.width * 0.8,
-                      height: _size.height * 0.2,
-                      child: ListView.builder(
-                        itemCount: 2,
-                        itemBuilder: (context, index) {
-                          return Row(
-                            children: [
-                              Checkbox(
-                                value: false,
-                                onChanged: (value) {},
-                              ),
-                              Text('Xuất phát')
-                            ],
-                          );
-                        },
+    _initCalender = true;
+    return StatefulBuilder(builder: (context, setState) {
+      return Container(
+        width: _size.width,
+        height: _size.height * 0.5,
+        margin: EdgeInsets.all(_size.width * 0.05),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: _size.width,
+                height: _size.height * 0.1,
+                child: Stack(
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        final DateTime datePicked = await showDatePicker(
+                          context: context,
+                          initialDate: _selectedDate,
+                          firstDate: DateTime(2010),
+                          lastDate: DateTime(2050),
+                        );
+                        if (datePicked != null) {
+                          _initCalender = false;
+                        }
+
+                        if (datePicked != null && datePicked != _selectedDate) {
+                          setState(() {
+                            _selectedDate = datePicked;
+                          });
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: _size.width * 0.2,
+                            height: _size.width * 0.2,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.red[400])),
+                          ),
+                          _initCalender
+                              ? Positioned(
+                                  left: _size.width * 0.05,
+                                  top: _size.width * 0.05,
+                                  child: Container(
+                                    height: _size.width * 0.1,
+                                    width: _size.width * 0.1,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/menu/black-paper-calendar-with-spring.svg',
+                                      color: Colors.red[400],
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                )
+                              : Positioned(
+                                  left: _size.width * 0.04,
+                                  top: _size.width * 0.07,
+                                  child: Text(
+                                    DateFormat('dd/MM').format(_selectedDate),
+                                    style: TextStyle(
+                                        color: Colors.red[400],
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                        top: 0,
+                        left: _size.width * 0.22,
+                        child: InkWell(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 18,
+                                color: Colors.blue[800],
+                              ),
+                              Text('Thêm lịch trình',
+                                  style: TextStyle(
+                                      color: Colors.blue[800],
+                                      fontWeight: FontWeight.w500))
+                            ],
+                          ),
+                        )),
+                    Positioned(
+                      top: _size.height * 0.02,
+                      left: _size.width * 0.2,
+                      child: Container(
+                        width: _size.width * 0.73,
+                        height: _size.height * 0.1,
+                        child: ListView.builder(
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+                            return TextFormField(
+                              style: TextStyle(fontSize: 16),
+                              decoration: InputDecoration(
+                                suffixIcon: Icon(
+                                  Icons.send,
+                                  color: Colors.blue,
+                                ),
+                                hintText: 'Nhập lịch trình',
+                                hintStyle: TextStyle(
+                                  color: Colors.black.withOpacity(0.3),
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 16,
+                                ),
+                                // labelText: 'Nhập lịch trình',
+                                // labelStyle: TextStyle(
+                                //   color: Colors.black.withOpacity(0.3),
+                                //   fontStyle: FontStyle.italic,
+                                //   fontSize: 16,
+                                // ),
+                                isCollapsed: true,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            // Container(
-            //   width: _size.width,
-            //   height: _size.height * 0.2,
-            //   color: Colors.red,
-            // )
-            Divider(
-              color: Colors.grey,
-              thickness: 3,
-            )
-          ],
+              // Container(
+              //   width: _size.width,
+              //   height: _size.height * 0.2,
+              //   color: Colors.red,
+              // )
+              // Divider(
+              //   color: Colors.grey,
+              //   thickness: 3,
+              // )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Future<File> cropImage(File file) async {

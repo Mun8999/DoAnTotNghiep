@@ -32,7 +32,7 @@ dependencies:
   # image picker
   image_picker: ^0.7.4
   multi_image_picker: ^4.8.1
-  dio: ^4.0.0
+  get: ^4.1.4
   numberpicker: ^2.0.1
   image_cropper: ^1.4.0
   flutter_svg: ^0.22.0

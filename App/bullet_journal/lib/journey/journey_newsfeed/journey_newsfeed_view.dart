@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:bullet_journal/database/db_journey.dart';
 import 'package:bullet_journal/journey/journey_edit/journey_edit_view.dart';
-import 'package:bullet_journal/task/daily_task_nf/daily_task_nf_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hive/hive.dart';
