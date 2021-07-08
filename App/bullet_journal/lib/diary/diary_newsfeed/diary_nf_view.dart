@@ -4,6 +4,7 @@ import 'dart:ui';
 
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
 import 'package:bullet_journal/database/db_diary.dart';
+import 'package:bullet_journal/diary/diary_edit/diary_edit_test.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
 import 'package:bullet_journal/model/calendar/time.dart';
@@ -153,7 +154,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
-                                        return DiaryEditView(
+                                        return DiaryEditViewTest(
                                           DiaryDB(DateTime.now()),
                                           state: 1,
                                         );
