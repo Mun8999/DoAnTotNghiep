@@ -498,10 +498,11 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
                               // if (_scrollController.offset > 0)
                               //   _initOffsetImage = _initOffsetImage +
                               //       Offset(0, _scrollController.offset);
-                              MyImage myImage = new MyImage(
-                                  file, _initOffsetImage, _imageSize);
-                              _images.add(myImage);
                               GlobalKey _key1 = GlobalKey();
+                              MyImage myImage = new MyImage(
+                                  file, _initOffsetImage, _imageSize,
+                                  globalKey: _key1);
+                              _images.add(myImage);
                               globalKeys.add(_key1);
                               print('503> Global key: ' + _key1.toString());
                             });
@@ -609,21 +610,16 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
         ));
   }
 
-  Offset _offset = Offset(10, 20);
-  Offset _preOffset;
   Widget _addImageWidget(File imageFile, int index, double space) {
     // print('1.chay do thang cha roi nè');
 
     if (imageFile == null && _images.length == 0) return null;
     _images[index].setImageId(index);
-
     return Positioned(
-        key: globalKeys[index],
-        left: _offset.dx,
-        top: _offset.dy - space,
-        child: _images[index].getEditState
-            ? _WidgetUnDrag(imageFile, index)
-            : _WidgetChildDrag(imageFile, index));
+        key: _images[index].getGlobalKey,
+        left: _images[index].getOffset.dx,
+        top: _images[index].getOffset.dy - space,
+        child: _WidgetChildDrag(imageFile, index));
   }
 
   Future<File> cropImage(File file) async {
@@ -834,16 +830,20 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
     );
   }
 
-  double _scale = 1.0;
+  Offset _preOffset;
   double _preScale = 1.0;
-// bool isEdit = false;
-
-  double _rotetate = 0.0;
   double _preRotetate = 0.0;
+
+  double _scale = 1.0;
+  double _rotetate = 0.0;
   Widget _WidgetChildDrag(File imageFile, int index) {
+    // _preOffset = _images[index].getOffset;
+    // _scale = _images[index].getScale;
+    // _rotetate = _images[index].getRotetate;
     return GestureDetector(
         onScaleStart: (details) {
-          RenderBox box = globalKeys[index].currentContext.findRenderObject();
+          RenderBox box =
+              _images[index].getGlobalKey.currentContext.findRenderObject();
           Offset position = box.localToGlobal(Offset.zero);
 
           /// lấy vị trí tại điểm chạm vào màn hình trừ cho vị trí tại điểm trên cùng của widget
@@ -856,11 +856,12 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
         },
         onScaleUpdate: (details) {
           /// cập nhật scale
-          print('49> scale: ' + details.scale.toString());
+          print('49> offset: ' + _images[index].getOffset.toString());
           _scale = _preScale * details.scale;
 
           /// cập nhật vị trí
-          _offset = details.focalPoint - _preOffset;
+          Offset _offset = details.focalPoint - _preOffset;
+          _images[index].setOffset(_offset);
           _rotetate = details.rotation;
           if (_rotetate == 0.0) _rotetate = _preRotetate;
           // print('onScaleUpdate> rotetate: ' + _rotetate.toString());

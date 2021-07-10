@@ -629,13 +629,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           onDraggableCanceled: (velocity, offset) {
             if (!_checkImageOffset(offset, _images[index].getSize)) return;
             setState(() {
-              if (_images[index].getResizeState) {
-                double d = offset.dx - _images[index].getOffset.dx;
-                _imageWidth = _imageWidth + d;
-                _imageHeight = _imageHeight + d;
-                _imageSize = Size(_imageWidth, _imageHeight);
-                _images[index].setSize(_imageSize);
-              }
+              _imageSize = Size(_imageWidth, _imageHeight);
               if (_scrollController.offset > 0) {
                 offset = offset + Offset(0, _scrollController.offset);
               }
@@ -834,7 +828,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                     child: InkWell(
                       onTapCancel: () {
                         print('ontapcancle');
-                        _images[index].setResizeState(true);
+                        // _images[index].setResizeState(true);
                         setState(() {});
                       },
                       onHover: (value) {

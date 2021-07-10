@@ -23,10 +23,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bullet Journal App',
-      debugShowCheckedModeBanner: false,
-      home: HomeView(),
+    return GestureDetector(
+      onTap: () {
+        // FocusScopeNode currentFocus = FocusScope.of(context);
+
+        // if (!currentFocus.hasPrimaryFocus) {
+        //   currentFocus.unfocus();
+        // }
+      },
+      child: MaterialApp(
+        title: 'Bullet Journal App',
+        debugShowCheckedModeBanner: false,
+        home: HomeView(),
+      ),
     );
   }
 }

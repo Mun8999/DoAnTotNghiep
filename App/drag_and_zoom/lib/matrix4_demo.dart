@@ -81,48 +81,6 @@ class _Matrix4DemoState extends State<Matrix4Demo> {
                           fit: BoxFit.contain)),
                 ),
               )
-              // : Draggable(
-              //     child: Transform(
-              //       alignment: FractionalOffset.center,
-              //       transform:
-              //           Matrix4.diagonal3(Vector3(scale, scale, scale)),
-              //       child: Container(
-              //         height: MediaQuery.of(context).size.width,
-              //         width: MediaQuery.of(context).size.width,
-              //         decoration: BoxDecoration(
-              //             color: Colors.red,
-              //             image: DecorationImage(
-              //                 image: AssetImage(
-              //                     'assets/FB_IMG_1619035803604.jpg'),
-              //                 fit: BoxFit.contain)),
-              //       ),
-              //     ),
-              //     feedback: Opacity(
-              //       opacity: 0.5,
-              //       child: Transform(
-              //         alignment: FractionalOffset.center,
-              //         transform:
-              //             Matrix4.diagonal3(Vector3(scale, scale, scale)),
-              //         child: Container(
-              //           height: MediaQuery.of(context).size.width,
-              //           width: MediaQuery.of(context).size.width,
-              //           decoration: BoxDecoration(
-              //               color: Colors.red,
-              //               image: DecorationImage(
-              //                   image: AssetImage(
-              //                       'assets/FB_IMG_1619035803604.jpg'),
-              //                   fit: BoxFit.contain)),
-              //         ),
-              //       ),
-              //     ),
-              //     onDraggableCanceled: (velocity, offset) {
-              //       _offset = offset;
-              //       setState(() {
-              //         print(_offset.toString());
-              //       });
-              //     },
-              //     childWhenDragging: Container(),
-              //   ),
               ),
         ),
       ],
