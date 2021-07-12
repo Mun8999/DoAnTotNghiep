@@ -27,11 +27,11 @@ class JourneyEditViewModel {
     await imageBox.close();
   }
 
-  saveJouney(Box<JourneyDB> journeyBox, int state, JourneyDB journeyDB,
-      List<String> images) async {
+  saveJouney(Box<JourneyDB> journeyBox, String image, int state,
+      JourneyDB journeyDB, List<String> images) async {
     int index = journeyBox.length;
     journeyDB.journeyTime = DateTime.now();
-    journeyDB.jouneyImage = images[0];
+    journeyDB.jouneyImage = image;
     print('38> index: ' + index.toString());
     if (state == 1) {
       journeyDB.journeyId = index;

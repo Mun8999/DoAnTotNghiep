@@ -153,17 +153,19 @@ class _JourneyNewsfeedViewState extends State<JourneyNewsfeedView> {
                             ),
                           ),
                           Positioned(
-                            bottom: 8,
+                            bottom: 5,
                             child: Container(
                               alignment: Alignment.centerLeft,
                               child: Padding(
                                 padding: EdgeInsets.all(_size.width * 0.02),
                                 child: Text(
                                   journeys.getAt(index).journeyTitle,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.nunitoSans(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
