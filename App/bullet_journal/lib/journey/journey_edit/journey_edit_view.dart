@@ -28,7 +28,7 @@ class JourneyEditView extends StatefulWidget {
 }
 
 Size _size;
-List<String> _images = [];
+// List<String> _images = [];
 JourneyEditViewModel _journeyEditViewModel;
 Box<JourneyDB> _journeyBox;
 
@@ -53,11 +53,13 @@ class _JourneyEditViewState extends State<JourneyEditView> {
     _focusNode = FocusNode();
     if (widget._state == 2) file = File(widget._journeyDB.jouneyImage);
     // _journalItem.add(item);
-    _journeyEditViewModel
-        .initNoteData(widget._journeyDB, widget._state, _images)
-        .then((value) => setState(() {
-              print('44> image lenght: ' + _images.length.toString());
-            }));
+//////fixxxx
+    // _journeyEditViewModel
+    //     .initNoteData(widget._journeyDB, widget._state, _images)
+    //     .then((value) => setState(() {
+    //           print('44> image lenght: ' + _images.length.toString());
+    //         }));
+
     print('state>49' + widget._state.toString());
     super.initState();
   }
@@ -92,7 +94,7 @@ class _JourneyEditViewState extends State<JourneyEditView> {
           IconButton(
             onPressed: () async {
               _journeyEditViewModel.saveJouney(_journeyBox, file.path,
-                  widget._state, widget._journeyDB, _images);
+                  widget._state, widget._journeyDB, _journalItems);
               widget._state = 2;
             },
             icon: Icon(
@@ -347,7 +349,8 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                         width: _size.width * 0.12,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.red[400])),
+                            border: Border.all(color: Colors.blue[900]),
+                            color: Colors.blue[50]),
                         child: IconButton(
                           onPressed: () async {
                             final DateTime datePicked = await showDatePicker(
@@ -370,7 +373,7 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                           icon: SvgPicture.asset(
                             'assets/icons/menu/black-paper-calendar-with-spring.svg',
                             width: _size.width * 0.05,
-                            color: Colors.red[400],
+                            color: Colors.blue[900],
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -384,7 +387,10 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                           _selectedDate != null
                               ? DateFormat('dd/MM/yyyy').format(_selectedDate)
                               : '',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue[900],
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -410,17 +416,15 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                                       _journalItems.length.toString(),
                                   _texts,
                                   _assets,
-                                  date: DateFormat('dd/MM/yyyy')
-                                      .format(_selectedDate));
+                                  date: _selectedDate);
                               _journalItems.add(journalItem);
                               _isEdit = true;
                             } else {
                               print('311>>>>> is edit');
                               int index = _journalItems.length - 1;
+                              _journalItems[index].deleteData();
                               if (_selectedDate != null)
-                                _journalItems[index].setDate(
-                                    DateFormat('dd/MM/yyyy')
-                                        .format(_selectedDate));
+                                _journalItems[index].setDate(_selectedDate);
                               _journalItems[index].setTexts(_texts);
                               _journalItems[index].setAssets(_assets);
                             }
@@ -894,123 +898,147 @@ class _JourneyEditViewState extends State<JourneyEditView> {
 
   Widget _JournalItem(JournalItem item, int index) {
     // print('605>iii' + e.value.getJournalItemId);
-    return Container(
-      height: _size.height * 0.4,
-      width: _size.width,
-      // color: Colors.red,
-      child: Column(
-        children: [
-          Expanded(
-              flex: 4,
-              child: Container(
-                // color: Colors.amber,
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                // borderRadius: BorderRadius.circular(_size.width * 0.02),
-                                color: Colors.red[400],
-                                shape: BoxShape.circle),
-                          ),
-                          Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                item.getDate
-                                    .substring(0, item.getDate.length - 5),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ))
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 7,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(_size.width * 0.02),
-                          // color: Colors.orange[400]
+    return InkWell(
+      onLongPress: () {
+        _isEdit = true;
+        _texts.clear();
+        _assets.clear();
+        _texts.addAll(item.getTexts);
+        _assets.addAll(item.getAssets);
+        showModalBottomSheet(
+          isDismissible: false,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(_size.width * 0.06))),
+          context: context,
+          builder: (context) {
+            return _UpdateJouneyItem(item, index);
+          },
+        ).then((value) => setState(() {}));
+      },
+      child: Container(
+        height: _size.height * 0.4,
+        width: _size.width,
+        // color: Colors.red,
+        child: Column(
+          children: [
+            Expanded(
+                flex: 4,
+                child: Container(
+                  // color: Colors.amber,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  // borderRadius: BorderRadius.circular(_size.width * 0.02),
+                                  color: Colors.blue[50],
+                                  shape: BoxShape.circle),
+                            ),
+                            Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  DateFormat('dd/MM').format(item.getDate),
+                                  style: TextStyle(
+                                      color: Colors.blue[900],
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ))
+                          ],
                         ),
-                        margin: EdgeInsets.all(_size.width * 0.02),
-                        child: ListView.separated(
-                          itemCount: item.getTexts.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              height: _size.width * 0.1,
-                              child: Row(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Container(
-                                          height: _size.width * 0.05,
-                                          width: _size.width * 0.05,
-                                          decoration: BoxDecoration(
-                                              color: Colors.blueAccent
-                                                  .withOpacity(0.2),
-                                              shape: BoxShape.circle),
+                      ),
+                      Expanded(
+                        flex: 7,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(_size.width * 0.02),
+                            // color: Colors.orange[400]
+                          ),
+                          margin: EdgeInsets.only(left: _size.width * 0.08),
+                          child: ListView.separated(
+                            itemCount: item.getTexts.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                height: _size.width * 0.1,
+                                child: Row(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Container(
+                                            height: _size.width * 0.05,
+                                            width: _size.width * 0.05,
+                                            decoration: BoxDecoration(
+                                                color: Colors.blueAccent
+                                                    .withOpacity(0.2),
+                                                shape: BoxShape.circle),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Container(
+                                            height: _size.width * 0.025,
+                                            width: _size.width * 0.025,
+                                            margin: EdgeInsets.only(
+                                                left: _size.width * 0.025 / 2),
+                                            decoration: BoxDecoration(
+                                                color: Colors.blueAccent,
+                                                shape: BoxShape.circle),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.all(_size.width * 0.02),
+                                      child: Flexible(
+                                        fit: FlexFit.loose,
+                                        child: Text(
+                                          item.getTexts[index],
+                                          style: TextStyle(fontSize: 16),
                                         ),
                                       ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Container(
-                                          height: _size.width * 0.025,
-                                          width: _size.width * 0.025,
-                                          margin: EdgeInsets.only(
-                                              left: _size.width * 0.025 / 2),
-                                          decoration: BoxDecoration(
-                                              color: Colors.blueAccent,
-                                              shape: BoxShape.circle),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(_size.width * 0.02),
-                                    child: Text(item.getTexts[index],
-                                        style: TextStyle(fontSize: 16)),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return SizedBox(
-                              height: _size.width * 0.07,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: VerticalDivider(
-                                  color: Colors.blueAccent,
-                                  thickness: 1,
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: _size.width * 0.05,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: VerticalDivider(
+                                    color: Colors.blueAccent,
+                                    thickness: 1,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              )),
-          item.getAssets.length > 0
-              ? Expanded(
-                  flex: 4,
-                  child: Container(
-                    child: _ListItemAsset(item.getAssets),
-                  ))
-              : Container(),
-          Expanded(
-              child: Divider(
-            color: Colors.grey.withOpacity(0.5),
-          ))
-        ],
+                      )
+                    ],
+                  ),
+                )),
+            item.getAssets.length > 0
+                ? Expanded(
+                    flex: 4,
+                    child: Container(
+                      child: _ListItemAsset(item.getAssets),
+                    ))
+                : Container(),
+            Expanded(
+                child: Divider(
+              color: Colors.grey.withOpacity(0.5),
+            ))
+          ],
+        ),
       ),
     );
   }
@@ -1117,6 +1145,276 @@ class _JourneyEditViewState extends State<JourneyEditView> {
         }),
       ),
     );
+  }
+
+  Widget _UpdateJouneyItem(JournalItem item, int index) {
+    _selectedDate = item.getDate;
+    return StatefulBuilder(builder: (context, setState) {
+      return Container(
+        width: _size.width,
+        height: _size.height * 0.8,
+        margin: EdgeInsets.all(_size.width * 0.05),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: _size.width,
+                height: _size.height * 0.05,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        height: _size.width * 0.12,
+                        width: _size.width * 0.12,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.blue[900]),
+                            color: Colors.blue[50]),
+                        child: IconButton(
+                          onPressed: () async {
+                            final DateTime datePicked = await showDatePicker(
+                              context: context,
+                              initialDate: _selectedDate,
+                              firstDate: DateTime(2010),
+                              lastDate: DateTime(2050),
+                            );
+                            // if (datePicked != null) {
+                            //   _initCalender = false;
+                            // }
+
+                            if (datePicked != null &&
+                                datePicked != _selectedDate) {
+                              setState(() {
+                                _selectedDate = datePicked;
+                              });
+                            }
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/icons/menu/black-paper-calendar-with-spring.svg',
+                            width: _size.width * 0.05,
+                            color: Colors.blue[900],
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 7,
+                      child: Padding(
+                        padding: EdgeInsets.all(_size.width * 0.02),
+                        child: Text(
+                          _selectedDate != null
+                              ? DateFormat('dd/MM/yyyy').format(_selectedDate)
+                              : '',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blue[900],
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                          onPressed: () {
+                            loadAssets(setState);
+                          },
+                          icon: Icon(
+                            Icons.add_a_photo_rounded,
+                            color: Colors.blue,
+                          )),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                          onPressed: () {
+                            print('311>>>>> is edit');
+                            // _journalItems[index].setTexts([]);
+                            // _journalItems[index].setAssets([]);
+                            item.deleteData();
+                            if (_selectedDate != null)
+                              _journalItems[index].setDate(_selectedDate);
+                            _journalItems[index].setTexts(_texts);
+                            _journalItems[index].setAssets(_assets);
+
+                            // _journalItems.forEach((element) {
+                            //   print(element.toString());
+                            // });
+                          },
+                          icon: Icon(
+                            Icons.save,
+                            color: Colors.blue,
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: _size.width * 0.02,
+              ),
+              Container(
+                  width: _size.width,
+                  height: _size.height * 0.1,
+                  child: TextFormField(
+                    style: TextStyle(fontSize: 15),
+                    focusNode: _focusNode,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_text.isNotEmpty) {
+                              _texts.add(_text);
+                              _textEditingController.text = '';
+                              _focusNode.unfocus();
+                            }
+                          });
+                        },
+                        icon: Icon(Icons.send),
+                        color: Colors.blue,
+                      ),
+                      fillColor: Colors.blue.withOpacity(0.1),
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(_size.width * 0.02),
+                          borderSide: BorderSide.none),
+                      hintText: 'Thêm lịch trình/ Kế hoạch chuyến đi',
+                      hintStyle: TextStyle(
+                        color: Colors.black.withOpacity(0.3),
+                        // fontStyle: FontStyle.italic,
+                        fontSize: 15,
+                      ),
+                    ),
+                    controller: _textEditingController,
+                    onChanged: (value) {
+                      setState(() {
+                        _text = value;
+                      });
+                    },
+                  )),
+              Container(
+                width: _size.width,
+                height: _size.height * 0.2,
+                child: ListView.separated(
+                  itemCount: _texts.length,
+                  itemBuilder: (context, index) {
+                    return Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 1 / 6,
+                      closeOnScroll: true,
+                      actions: [
+                        IconButton(
+                            onPressed: () {
+                              _texts.removeAt(index);
+                              setState(() {});
+                            },
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  String editText = '';
+                                  return AlertDialog(
+                                    title: Text('Chỉnh sửa'),
+                                    content: TextFormField(
+                                      initialValue: _texts[index],
+                                      onChanged: (value) {
+                                        editText = value;
+                                      },
+                                    ),
+                                    actions: [
+                                      FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('Hủy')),
+                                      FlatButton(
+                                          onPressed: () {
+                                            _texts[index] = editText;
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('Lưu')),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                            ))
+                      ],
+                      child: Container(
+                        height: _size.width * 0.1,
+                        child: Row(
+                          children: [
+                            Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    height: _size.width * 0.05,
+                                    width: _size.width * 0.05,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            Colors.blueAccent.withOpacity(0.2),
+                                        shape: BoxShape.circle),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    height: _size.width * 0.025,
+                                    width: _size.width * 0.025,
+                                    margin: EdgeInsets.only(
+                                        left: _size.width * 0.025 / 2),
+                                    decoration: BoxDecoration(
+                                        color: Colors.blueAccent,
+                                        shape: BoxShape.circle),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(_size.width * 0.02),
+                              child: Text(_texts[index],
+                                  style: TextStyle(fontSize: 16)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      height: _size.width * 0.07,
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: _size.width * 0.02,
+              ),
+              _AddListAsset(_assets),
+              // Container(
+              //   width: _size.width,
+              //   height: _size.height * 0.2,
+              //   color: Colors.red,
+              // )
+              // Divider(
+              //   color: Colors.grey,
+              //   thickness: 3,
+              // )
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   // Widget _addImageWidget(MapEntry<int, String> image) {

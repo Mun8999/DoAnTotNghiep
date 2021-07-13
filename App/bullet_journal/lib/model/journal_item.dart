@@ -3,11 +3,11 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 
 class JournalItem {
   String _journalItemId;
-  String _date;
+  DateTime _date;
   List<String> _texts = [];
   List<Asset> _assets = [];
   JournalItem(String journalItemId, List<String> texts, List<Asset> assets,
-      {String date}) {
+      {DateTime date}) {
     if (date != null) {
       this._date = date;
     }
@@ -24,11 +24,16 @@ class JournalItem {
   }
 
   setJournalItemId(String journalItemId) => this._journalItemId = journalItemId;
-  setDate(String date) => this._date = date;
-  setTexts(List<String> texts) => this._texts = texts;
-  setAssets(List<Asset> assets) => this._assets = assets;
+  setDate(DateTime date) => this._date = date;
+  setTexts(List<String> texts) => this._texts.addAll(texts);
+  setAssets(List<Asset> assets) => this._assets.addAll(assets);
+  deleteData() {
+    this._assets.clear();
+    this._texts.clear();
+  }
+
   String get getJournalItemId => this._journalItemId;
-  String get getDate => this._date;
+  DateTime get getDate => this._date;
   List<String> get getTexts => this._texts;
   List<Asset> get getAssets => this._assets;
 }

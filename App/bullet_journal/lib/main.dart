@@ -5,6 +5,7 @@ import 'package:bullet_journal/database/db_component.dart';
 import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/database/db_emotion.dart';
 import 'package:bullet_journal/database/db_image.dart';
+import 'package:bullet_journal/database/db_journalitem.dart';
 import 'package:bullet_journal/database/db_journey.dart';
 import 'package:bullet_journal/database/db_note.dart';
 import 'package:bullet_journal/database/db_text.dart';
@@ -52,8 +53,9 @@ void main() async {
     ..registerAdapter(AssetDBAdapter())
     ..registerAdapter(EmotionDBAdapter())
     ..registerAdapter(AddressDBAdapter())
+    ..registerAdapter(DailyTaskDBAdapter())
     ..registerAdapter(
-        DailyTaskDBAdapter()); // bai hoc xuong mau> class extend phai de o cuoi cung nha -_-
+        JournalItemDBAdapter()); // bai hoc xuong mau> class extend phai de o cuoi cung nha -_-
 
   await Hive.openBox<DiaryDB>('diaries');
   await Hive.openBox<NoteDB>('notes');
