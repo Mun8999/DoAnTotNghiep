@@ -54,11 +54,11 @@ class _JourneyEditViewState extends State<JourneyEditView> {
     if (widget._state == 2) file = File(widget._journeyDB.jouneyImage);
     // _journalItem.add(item);
 //////fixxxx
-    // _journeyEditViewModel
-    //     .initNoteData(widget._journeyDB, widget._state, _images)
-    //     .then((value) => setState(() {
-    //           print('44> image lenght: ' + _images.length.toString());
-    //         }));
+    _journeyEditViewModel
+        .initJourneyData(widget._journeyDB, widget._state, _journalItems)
+        .then((value) => setState(() {
+              print('44> image lenght: ' + _journalItems.length.toString());
+            }));
 
     print('state>49' + widget._state.toString());
     super.initState();
@@ -996,12 +996,9 @@ class _JourneyEditViewState extends State<JourneyEditView> {
                                     Padding(
                                       padding:
                                           EdgeInsets.all(_size.width * 0.02),
-                                      child: Flexible(
-                                        fit: FlexFit.loose,
-                                        child: Text(
-                                          item.getTexts[index],
-                                          style: TextStyle(fontSize: 16),
-                                        ),
+                                      child: Text(
+                                        item.getTexts[index],
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                     ),
                                   ],
