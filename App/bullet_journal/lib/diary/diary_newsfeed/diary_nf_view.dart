@@ -154,7 +154,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
-                                        return DiaryEditViewTest(
+                                        return DiaryEditView(
                                           DiaryDB(DateTime.now()),
                                           state: 1,
                                         );

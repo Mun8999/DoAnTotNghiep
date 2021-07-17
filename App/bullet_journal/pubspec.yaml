@@ -36,7 +36,7 @@ dependencies:
   numberpicker: ^2.0.1
   image_cropper: ^1.4.0
   flutter_svg: ^0.22.0
-  flutter_svg_provider: ^0.1.9
+  image_size_getter: ^1.0.0
   photo_view: ^0.11.1
   # sound
   flutter_sound: ^8.1.4

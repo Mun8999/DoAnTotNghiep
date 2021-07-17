@@ -31,7 +31,7 @@ class DiaryEditViewTest extends StatefulWidget {
   _DiaryEditViewTestState createState() => _DiaryEditViewTestState();
 }
 
-Size size;
+Size _size;
 bool _isEditButtonTaped = false;
 FocusNode _focusTyping = FocusNode();
 ScrollController _scrollController;
@@ -60,6 +60,7 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
     _diaryEditViewModel.setBottomStateController(3, false);
     _diaryEditViewModel.setBottomStateController(4, false);
     _initData();
+    print('image length: ' + _images.length.toString());
   }
 
   @override
@@ -69,9 +70,9 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
 
   @override
   Widget build(BuildContext context) {
-    size = MediaQuery.of(context).size;
-    _imageWidth = size.width * 0.6;
-    _imageHeight = size.width * 0.6;
+    _size = MediaQuery.of(context).size;
+    _imageWidth = _size.width * 0.6;
+    _imageHeight = _size.width * 0.6;
     _imageSize = Size(_imageWidth, _imageHeight);
     _space = MediaQuery.of(context).padding.top + kToolbarHeight;
     GlobalKey _key = GlobalKey();
@@ -133,8 +134,8 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
           builder: (context) {
             return SafeArea(
               child: Container(
-                  height: size.height * 2,
-                  width: size.width,
+                  height: _size.height * 2,
+                  width: _size.width,
                   color: Colors.white,
                   child: StreamBuilder<List<bool>>(
                       initialData: [false, false, false, false, false],
@@ -331,7 +332,7 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
                                                   // }
                                                   // gan lai vi tri cho stream sau khi di chuyen
                                                   _emotion.setEmotionComponent(
-                                                      Component(offset, size));
+                                                      Component(offset, _size));
                                                   _diaryEditViewModel
                                                       .setEmotionStatus(
                                                           _emotion);
@@ -355,8 +356,8 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
                                                 bottomButton.data[3]
                                             ? Positioned(
                                                 right: 0,
-                                                bottom: size.height +
-                                                    size.height * 0.22,
+                                                bottom: _size.height +
+                                                    _size.height * 0.22,
                                                 child: Container(
                                                   margin: EdgeInsets.only(
                                                       left: 10, right: 10),
@@ -472,7 +473,7 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
                 // print('438: ' + bottomButton.data[3].toString());
                 return Container(
                     margin: EdgeInsets.all(20),
-                    height: size.height * 0.07,
+                    height: _size.height * 0.07,
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(20),
@@ -488,20 +489,21 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
                             final file = await Utils.pickMedia(
                                 isGallery: true, cropImage: cropImage);
                             if (file == null) {
-                              // _diaryEditViewModel.setBottomStateController(0);
+                              _diaryEditViewModel.setBottomStateController(
+                                  0, false);
                               return;
                             }
 
                             setState(() {
                               Offset _initOffsetImage =
-                                  Offset(size.width / 4, size.height / 4);
+                                  Offset(0, _size.height / 4);
                               // if (_scrollController.offset > 0)
                               //   _initOffsetImage = _initOffsetImage +
                               //       Offset(0, _scrollController.offset);
                               GlobalKey _key1 = GlobalKey();
                               MyImage myImage = new MyImage(
                                   file, _initOffsetImage, _imageSize,
-                                  globalKey: _key1);
+                                  globalKey: _key1, scale: 1.0, rotetate: 0.0);
                               _images.add(myImage);
                               globalKeys.add(_key1);
                               print('503> Global key: ' + _key1.toString());
@@ -768,8 +770,8 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
             Positioned(
               top: 15,
               child: Container(
-                height: size.width * 0.5,
-                width: size.width * 0.5,
+                height: _size.width * 0.5,
+                width: _size.width * 0.5,
                 child: ClipRRect(
                   child: Image.file(imageFile),
                 ),
@@ -848,26 +850,59 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
 
           /// lấy vị trí tại điểm chạm vào màn hình trừ cho vị trí tại điểm trên cùng của widget
           _preOffset = details.focalPoint - position;
-          _preScale = _scale;
-          _rotetate = _preRotetate;
+          print('853> scale: ' + _images[index].getScale.toString());
+          _preScale = _images[index].getScale;
+          _images[index].setRotetate(_preRotetate);
+          // _scale = _images[index].getScale;
+          // _rotetate = _images[index].getRotetate;
           // print('onScaleStart> rotetate: ' + _rotetate.toString());
           // print('onScaleStart> pre_rotetate: ' + _preRotetate.toString());
           setState(() {});
+
+          /// code cũ
+          // RenderBox box =
+          //     _images[index].getGlobalKey.currentContext.findRenderObject();
+          // Offset position = box.localToGlobal(Offset.zero);
+
+          // /// lấy vị trí tại điểm chạm vào màn hình trừ cho vị trí tại điểm trên cùng của widget
+          // _preOffset = details.focalPoint - position;
+          // _preScale = _scale;
+          // _rotetate = _preRotetate;
+          // // print('onScaleStart> rotetate: ' + _rotetate.toString());
+          // // print('onScaleStart> pre_rotetate: ' + _preRotetate.toString());
+          // setState(() {});
         },
         onScaleUpdate: (details) {
           /// cập nhật scale
           print('49> offset: ' + _images[index].getOffset.toString());
-          _scale = _preScale * details.scale;
+          _images[index].setScale(_preScale * details.scale);
 
           /// cập nhật vị trí
           Offset _offset = details.focalPoint - _preOffset;
           _images[index].setOffset(_offset);
-          _rotetate = details.rotation;
-          if (_rotetate == 0.0) _rotetate = _preRotetate;
+          _images[index].setRotetate(details.rotation);
+          if (_images[index].getRotetate == 0.0)
+            _images[index].setRotetate(_preRotetate);
+          // _scale = _images[index].getScale;
+          // _rotetate = _images[index].getRotetate;
           // print('onScaleUpdate> rotetate: ' + _rotetate.toString());
           // print(
           //     'onScaleUpdate> pre_rotetate: ' + _preRotetate.toString());
           setState(() {});
+
+          /// code cũ
+          // print('49> offset: ' + _images[index].getOffset.toString());
+          // _scale = _preScale * details.scale;
+
+          // /// cập nhật vị trí
+          // Offset _offset = details.focalPoint - _preOffset;
+          // _images[index].setOffset(_offset);
+          // _rotetate = details.rotation;
+          // if (_rotetate == 0.0) _rotetate = _preRotetate;
+          // // print('onScaleUpdate> rotetate: ' + _rotetate.toString());
+          // // print(
+          // //     'onScaleUpdate> pre_rotetate: ' + _preRotetate.toString());
+          // setState(() {});
         },
         onScaleEnd: (details) {
           // print(details);
@@ -875,13 +910,21 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
           // print('onScaleEnd> rotetate: ' + _rotetate.toString());
           // print('onScaleEnd> pre_rotetate: ' + _preRotetate.toString());
           _preScale = 1.0;
-          _preRotetate = _rotetate;
+          _preRotetate = _images[index].getRotetate;
+          // _scale = _images[index].getScale;
+          // _rotetate = _images[index].getRotetate;
           setState(() {});
+
+          /// code cũ
+          // _preScale = 1.0;
+          // _preRotetate = _rotetate;
+          // setState(() {});
         },
         child: Transform(
           alignment: FractionalOffset.center,
-          transform: Matrix4.diagonal3(vector3.Vector3(_scale, _scale, _scale))
-            ..rotateZ(_rotetate),
+          transform: Matrix4.diagonal3(vector3.Vector3(_images[index].getScale,
+              _images[index].getScale, _images[index].getScale))
+            ..rotateZ(_images[index].getRotetate),
           child: Container(
             height: MediaQuery.of(context).size.width,
             width: MediaQuery.of(context).size.width,
@@ -896,15 +939,15 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
     return Opacity(
       opacity: 0.5,
       child: Container(
-        height: size.width * 0.6,
-        width: size.width * 0.6,
+        height: _size.width * 0.6,
+        width: _size.width * 0.6,
         child: Stack(
           children: [
             Positioned(
               top: 15,
               child: Container(
-                height: size.width * 0.5,
-                width: size.width * 0.5,
+                height: _size.width * 0.5,
+                width: _size.width * 0.5,
                 child: ClipRRect(
                   child: Image.file(imageFile),
                 ),
@@ -918,8 +961,8 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
 
   bool _checkEmotionOfffset(Offset offset) {
     if (offset.dx < 0 ||
-        offset.dx > size.width - 50 ||
-        offset.dy > size.height - size.height * 0.07 - 85 ||
+        offset.dx > _size.width - 50 ||
+        offset.dy > _size.height - _size.height * 0.07 - 85 ||
         offset.dy < _space)
       return false;
     else
@@ -928,8 +971,9 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
 
   bool _checkImageOffset(Offset offset, Size sizeImage) {
     if (offset.dx < -sizeImage.width * 0.5 ||
-        offset.dx > size.width - sizeImage.width * 0.5 ||
-        offset.dy > size.height - size.height * 0.07 - sizeImage.height * 0.5 ||
+        offset.dx > _size.width - sizeImage.width * 0.5 ||
+        offset.dy >
+            _size.height - _size.height * 0.07 - sizeImage.height * 0.5 ||
         offset.dy < _space - 15)
       return false;
     else
@@ -942,14 +986,14 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
         left: e.value.getOffset.dx,
         top: e.value.getOffset.dy - space,
         child: Container(
-          width: size.width * 0.75,
+          width: _size.width * 0.75,
           // color: Colors.transparent,
 
           child: Draggable(
             child: Stack(
               children: [
                 Container(
-                  width: size.width * 0.67,
+                  width: _size.width * 0.67,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.yellow.withOpacity(0.5),
@@ -1043,7 +1087,7 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
             feedback: Opacity(
               opacity: 0.5,
               child: Container(
-                width: size.width * 0.67,
+                width: _size.width * 0.67,
                 // color: Colors.transparent,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -1163,7 +1207,7 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
     textBox.values.toList().forEach((element) {
       print('>content ' + element.textContent + '\n>offset ');
       _editTexts.add(MyText('', TextStyle(), element.textContent,
-          Offset(element.offset_dx, element.offset_dy), size));
+          Offset(element.offset_dx, element.offset_dy), _size));
     });
     await textBox.close();
   }
