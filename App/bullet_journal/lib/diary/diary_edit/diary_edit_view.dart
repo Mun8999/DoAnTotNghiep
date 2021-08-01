@@ -9,12 +9,15 @@ import 'package:bullet_journal/diary/diary_edit/diary_edit_viewmodel.dart';
 import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:bullet_journal/model/component.dart';
 import 'package:bullet_journal/model/emotion.dart';
+import 'package:bullet_journal/model/filter.dart';
+import 'package:bullet_journal/model/frame.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:image_size_getter/file_input.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -45,6 +48,8 @@ double _imageWidth;
 double _imageHeight;
 Size _imageSize;
 List<String> _editImageMenu = ['Bộ lọc', 'Khung', 'Độ trong suốt'];
+Filters _filters;
+List<Frame> _frames;
 
 Emotion _emotion;
 bool _emotionEditState = false;
@@ -76,6 +81,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     _imageHeight = _size.width * 0.6;
     _imageSize = Size(_imageWidth, _imageHeight);
     _space = MediaQuery.of(context).padding.top + kToolbarHeight;
+    _frames = Frames().getFrames;
     GlobalKey _key = GlobalKey();
     PopupMenu.context = context;
 
@@ -134,120 +140,71 @@ class _DiaryEditViewState extends State<DiaryEditView> {
         body: Builder(
           builder: (context) {
             return SafeArea(
-              child: Container(
-                  height: _size.height * 2,
-                  width: _size.width,
-                  color: Colors.white,
-                  child: StreamBuilder<List<bool>>(
-                      initialData: [false, false, false, false, false],
-                      stream: _diaryEditViewModel.getBottomStateStream,
-                      builder: (context, bottomButton) {
-                        // print('143: ' + bottomButton.data[3].toString());
-                        return Stack(
-                            children: _images
-                                    .asMap()
-                                    .entries
-                                    .map((e) => _addImageWidget(
-                                        e.value.getImageFile, e.key, _space))
-                                    .toList() +
-                                [
-                                  StreamBuilder<Emotion>(
-                                    stream: _diaryEditViewModel
-                                        .getEmotionStatusStream,
-                                    builder: (context, emotion) {
-                                      if (emotion.hasData &&
-                                          emotion.data.getEmotionComponent
-                                                  .getState !=
-                                              3) {
-                                        // print('174>> emotion state: ' +
-                                        //     emotion.data.getEmotionComponent
-                                        //         .getState
-                                        //         .toString());
-                                        _emotion = Emotion(
-                                            emotion.data.getEmotionId,
-                                            emotion.data.getEmotionName,
-                                            emotion.data.getEmotionImage,
-                                            component: Component(
-                                                emotion.data.getEmotionComponent
-                                                    .getOffset,
-                                                Size.zero));
-                                        // print('175> emotion offset: ' +
-                                        //     _emotion
-                                        //         .getEmotionComponent.getOffset
-                                        //         .toString());
-                                      }
-                                      return emotion.hasData &&
-                                              emotion.data.getEmotionComponent
-                                                      .getState !=
-                                                  3
-                                          ? Positioned(
-                                              left: emotion
-                                                  .data
-                                                  .getEmotionComponent
-                                                  .getOffset
-                                                  .dx,
-                                              top: emotion
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Container(
+                    height: _size.height * 2,
+                    width: _size.width,
+                    color: Colors.white,
+                    child: StreamBuilder<List<bool>>(
+                        initialData: [false, false, false, false, false],
+                        stream: _diaryEditViewModel.getBottomStateStream,
+                        builder: (context, bottomButton) {
+                          // print('143: ' + bottomButton.data[3].toString());
+                          return Stack(
+                              children: _images
+                                      .asMap()
+                                      .entries
+                                      .map((e) => _addImageWidget(
+                                          e.value.getImageFile, e.key, _space))
+                                      .toList() +
+                                  [
+                                    StreamBuilder<Emotion>(
+                                      stream: _diaryEditViewModel
+                                          .getEmotionStatusStream,
+                                      builder: (context, emotion) {
+                                        if (emotion.hasData &&
+                                            emotion.data.getEmotionComponent
+                                                    .getState !=
+                                                3) {
+                                          // print('174>> emotion state: ' +
+                                          //     emotion.data.getEmotionComponent
+                                          //         .getState
+                                          //         .toString());
+                                          _emotion = Emotion(
+                                              emotion.data.getEmotionId,
+                                              emotion.data.getEmotionName,
+                                              emotion.data.getEmotionImage,
+                                              component: Component(
+                                                  emotion
                                                       .data
                                                       .getEmotionComponent
-                                                      .getOffset
-                                                      .dy -
-                                                  _space,
-                                              child: Draggable(
-                                                feedback: Opacity(
-                                                  opacity: 0.5,
-                                                  child: Container(
-                                                      height: 50,
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Container(
-                                                            height: 50,
-                                                            width: 50,
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              emotion.data
-                                                                  .getEmotionImage,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            ' - Đang cảm thấy ',
-                                                            style: GoogleFonts.koHo(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 14,
-                                                                color: Colors
-                                                                    .black,
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none),
-                                                          ),
-                                                          Text(
-                                                            emotion.data
-                                                                .getEmotionName
-                                                                .toLowerCase(),
-                                                            style: GoogleFonts.koHo(
-                                                                fontSize: 14,
-                                                                color: Colors
-                                                                    .black,
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .none),
-                                                          )
-                                                        ],
-                                                      )),
-                                                ),
-                                                child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _emotionEditState =
-                                                            !_emotionEditState;
-                                                      });
-                                                    },
+                                                      .getOffset,
+                                                  Size.zero));
+                                          // print('175> emotion offset: ' +
+                                          //     _emotion
+                                          //         .getEmotionComponent.getOffset
+                                          //         .toString());
+                                        }
+                                        return emotion.hasData &&
+                                                emotion.data.getEmotionComponent
+                                                        .getState !=
+                                                    3
+                                            ? Positioned(
+                                                left: emotion
+                                                    .data
+                                                    .getEmotionComponent
+                                                    .getOffset
+                                                    .dx,
+                                                top: emotion
+                                                        .data
+                                                        .getEmotionComponent
+                                                        .getOffset
+                                                        .dy -
+                                                    _space,
+                                                child: Draggable(
+                                                  feedback: Opacity(
+                                                    opacity: 0.5,
                                                     child: Container(
                                                         height: 50,
                                                         child: Row(
@@ -271,194 +228,254 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                                               style: GoogleFonts.koHo(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .bold),
+                                                                          .bold,
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .none),
                                                             ),
                                                             Text(
                                                               emotion.data
                                                                   .getEmotionName
                                                                   .toLowerCase(),
-                                                              style: GoogleFonts
-                                                                  .koHo(),
-                                                            ),
-                                                            InkWell(
-                                                              onTap: () {
-                                                                _diaryEditViewModel
-                                                                    .setBottomStateController(
-                                                                        2,
-                                                                        false);
-                                                                _emotion
-                                                                    .getEmotionComponent
-                                                                    .setState(
-                                                                        3);
-                                                                _diaryEditViewModel
-                                                                    .setEmotionStatus(
-                                                                        _emotion);
-                                                              },
-                                                              child: _emotionEditState
-                                                                  ? Container(
-                                                                      margin: EdgeInsets.only(left: 10),
-                                                                      height: 20,
-                                                                      width: 20,
-                                                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black),
-                                                                      child: Icon(
-                                                                        Icons
-                                                                            .close_rounded,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        size:
-                                                                            15,
-                                                                      ))
-                                                                  : Container(),
+                                                              style: GoogleFonts.koHo(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .none),
                                                             )
                                                           ],
-                                                        ))),
-                                                childWhenDragging: Container(),
-                                                onDraggableCanceled:
-                                                    (velocity, offset) {
-                                                  // kiem tra vi tri co ngoai man hinh ko?
-                                                  if (!_checkEmotionOfffset(
-                                                      offset)) return;
-                                                  print('327>>>>>>>offset ' +
-                                                      offset.toString());
-                                                  // cong toa do neu nguoi dung cuon xuong
-                                                  if (_scrollController.offset >
-                                                      0) {
-                                                    offset = offset +
-                                                        Offset(
-                                                            0,
-                                                            _scrollController
-                                                                .offset);
-                                                  }
-                                                  // gan lai vi tri cho stream sau khi di chuyen
-                                                  _emotion.setEmotionComponent(
-                                                      Component(offset, _size));
-                                                  _diaryEditViewModel
-                                                      .setEmotionStatus(
-                                                          _emotion);
-                                                },
-                                              ),
-                                            )
-                                          : Container();
-                                    },
-                                  ),
-                                  StreamBuilder<String>(
-                                      stream:
-                                          _diaryEditViewModel.getAddressStream,
-                                      initialData: '',
-                                      builder: (context, address) {
-                                        // if (address.data.isNotEmpty &&
-                                        //     bottomButton.data[3]) {
-                                        //   print(
-                                        //       '322 address: ' + address.data);
-                                        // }
-                                        return address.data.isNotEmpty &&
-                                                bottomButton.data[3]
-                                            ? Positioned(
-                                                right: 0,
-                                                bottom: _size.height +
-                                                    _size.height * 0.22,
-                                                child: Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 10, right: 10),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
+                                                        )),
                                                   ),
-                                                  child: Row(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.all(10),
-                                                        child: SvgPicture.asset(
-                                                          'assets/icons/pointer-on-the-map.svg',
-                                                          color: Colors.black,
-                                                          height: 20,
-                                                          width: 20,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                top: 10,
-                                                                right: 10,
-                                                                bottom: 10),
-                                                        child: Text(
-                                                          address.data,
-                                                          style:
-                                                              GoogleFonts.koHo(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ))
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _emotionEditState =
+                                                              !_emotionEditState;
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                          height: 50,
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Container(
+                                                                height: 50,
+                                                                width: 50,
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  emotion.data
+                                                                      .getEmotionImage,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                ' - Đang cảm thấy ',
+                                                                style: GoogleFonts.koHo(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                              Text(
+                                                                emotion.data
+                                                                    .getEmotionName
+                                                                    .toLowerCase(),
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .koHo(),
+                                                              ),
+                                                              InkWell(
+                                                                onTap: () {
+                                                                  _diaryEditViewModel
+                                                                      .setBottomStateController(
+                                                                          2,
+                                                                          false);
+                                                                  _emotion
+                                                                      .getEmotionComponent
+                                                                      .setState(
+                                                                          3);
+                                                                  _diaryEditViewModel
+                                                                      .setEmotionStatus(
+                                                                          _emotion);
+                                                                },
+                                                                child: _emotionEditState
+                                                                    ? Container(
+                                                                        margin: EdgeInsets.only(left: 10),
+                                                                        height: 20,
+                                                                        width: 20,
+                                                                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+                                                                        child: Icon(
+                                                                          Icons
+                                                                              .close_rounded,
+                                                                          color:
+                                                                              Colors.white,
+                                                                          size:
+                                                                              15,
+                                                                        ))
+                                                                    : Container(),
+                                                              )
+                                                            ],
+                                                          ))),
+                                                  childWhenDragging:
+                                                      Container(),
+                                                  onDraggableCanceled:
+                                                      (velocity, offset) {
+                                                    // kiem tra vi tri co ngoai man hinh ko?
+                                                    if (!_checkEmotionOfffset(
+                                                        offset)) return;
+                                                    print('327>>>>>>>offset ' +
+                                                        offset.toString());
+                                                    // cong toa do neu nguoi dung cuon xuong
+                                                    if (_scrollController
+                                                            .offset >
+                                                        0) {
+                                                      offset = offset +
+                                                          Offset(
+                                                              0,
+                                                              _scrollController
+                                                                  .offset);
+                                                    }
+                                                    // gan lai vi tri cho stream sau khi di chuyen
+                                                    _emotion
+                                                        .setEmotionComponent(
+                                                            Component(
+                                                                offset, _size));
+                                                    _diaryEditViewModel
+                                                        .setEmotionStatus(
+                                                            _emotion);
+                                                  },
+                                                ),
+                                              )
                                             : Container();
-                                      }),
-                                  // fgfdfdfdfdfdfdf
-                                  ..._editTexts
-                                      .asMap()
-                                      .entries
-                                      .map((e) => _addEditTextWidget(e, _space))
-                                ]
-                            //   [
-                            //   Padding(
-                            //     padding: const EdgeInsets.all(10),
-                            //     child: Column(children: [
-                            //       TextFormField(
-                            //         // controller: _titleController,
-                            //         initialValue: widget.diary.getDiaryTitle,
-                            //         readOnly: !_isEditButtonTaped,
-                            //         onTap: () {
-                            //           if (_isEditButtonTaped == false)
-                            //             Scaffold.of(context).showSnackBar(snackBar);
-                            //         },
-                            //         minLines: 1,
-                            //         maxLines: 3,
-                            //         cursorColor: Colors.brown[800],
-                            //         style: GoogleFonts.dancingScript(
-                            //             fontSize: 25, color: Colors.brown[800]),
-                            //         decoration: InputDecoration(
-                            //             border: InputBorder.none,
-                            //             hintText: 'Chủ đề',
-                            //             hintStyle: TextStyle(
-                            //                 color: Colors.brown[700].withOpacity(0.6))),
-                            //       ),
-                            //       TextFormField(
-                            //         // controller: _contentController,
-                            //         initialValue: widget.diary.getDiaryContent,
-                            //         readOnly: !_isEditButtonTaped,
-                            //         focusNode: _focusTyping,
-                            //         onTap: () {
-                            //           if (_isEditButtonTaped == false)
-                            //             Scaffold.of(context).showSnackBar(snackBar);
-                            //         },
-                            //         cursorColor: Colors.brown[500],
-                            //         minLines: 1,
-                            //         maxLines: 50,
-                            //         style: GoogleFonts.dancingScript(
-                            //             fontSize: 20, color: Colors.brown[500]),
-                            //         decoration: InputDecoration(
-                            //           border: InputBorder.none,
-                            //         ),
-                            //       ),
-                            //       // ImageListWidget(imageFiles)
-                            //     ]),
-                            //   ),
-                            //   ..._images
-                            //       .asMap()
-                            //       .entries
-                            //       .map((e) =>
-                            //           addImageWidget(e.value.getImageFile, e.key, _space))
-                            //       .toList()
-                            // ]
-                            );
-                      })),
+                                      },
+                                    ),
+                                    StreamBuilder<String>(
+                                        stream: _diaryEditViewModel
+                                            .getAddressStream,
+                                        initialData: '',
+                                        builder: (context, address) {
+                                          // if (address.data.isNotEmpty &&
+                                          //     bottomButton.data[3]) {
+                                          //   print(
+                                          //       '322 address: ' + address.data);
+                                          // }
+                                          return address.data.isNotEmpty &&
+                                                  bottomButton.data[3]
+                                              ? Positioned(
+                                                  right: 0,
+                                                  bottom: _size.height +
+                                                      _size.height * 0.22,
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10, right: 10),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.black),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  10),
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            'assets/icons/pointer-on-the-map.svg',
+                                                            color: Colors.black,
+                                                            height: 20,
+                                                            width: 20,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 10,
+                                                                  right: 10,
+                                                                  bottom: 10),
+                                                          child: Text(
+                                                            address.data,
+                                                            style: GoogleFonts.koHo(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ))
+                                              : Container();
+                                        }),
+                                    // fgfdfdfdfdfdfdf
+                                    ..._editTexts.asMap().entries.map(
+                                        (e) => _addEditTextWidget(e, _space))
+                                  ]
+                              //   [
+                              //   Padding(
+                              //     padding: const EdgeInsets.all(10),
+                              //     child: Column(children: [
+                              //       TextFormField(
+                              //         // controller: _titleController,
+                              //         initialValue: widget.diary.getDiaryTitle,
+                              //         readOnly: !_isEditButtonTaped,
+                              //         onTap: () {
+                              //           if (_isEditButtonTaped == false)
+                              //             Scaffold.of(context).showSnackBar(snackBar);
+                              //         },
+                              //         minLines: 1,
+                              //         maxLines: 3,
+                              //         cursorColor: Colors.brown[800],
+                              //         style: GoogleFonts.dancingScript(
+                              //             fontSize: 25, color: Colors.brown[800]),
+                              //         decoration: InputDecoration(
+                              //             border: InputBorder.none,
+                              //             hintText: 'Chủ đề',
+                              //             hintStyle: TextStyle(
+                              //                 color: Colors.brown[700].withOpacity(0.6))),
+                              //       ),
+                              //       TextFormField(
+                              //         // controller: _contentController,
+                              //         initialValue: widget.diary.getDiaryContent,
+                              //         readOnly: !_isEditButtonTaped,
+                              //         focusNode: _focusTyping,
+                              //         onTap: () {
+                              //           if (_isEditButtonTaped == false)
+                              //             Scaffold.of(context).showSnackBar(snackBar);
+                              //         },
+                              //         cursorColor: Colors.brown[500],
+                              //         minLines: 1,
+                              //         maxLines: 50,
+                              //         style: GoogleFonts.dancingScript(
+                              //             fontSize: 20, color: Colors.brown[500]),
+                              //         decoration: InputDecoration(
+                              //           border: InputBorder.none,
+                              //         ),
+                              //       ),
+                              //       // ImageListWidget(imageFiles)
+                              //     ]),
+                              //   ),
+                              //   ..._images
+                              //       .asMap()
+                              //       .entries
+                              //       .map((e) =>
+                              //           addImageWidget(e.value.getImageFile, e.key, _space))
+                              //       .toList()
+                              // ]
+                              );
+                        })),
+              ),
             );
           },
         ),
@@ -488,12 +505,15 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                             final file = await Utils.pickMedia(
                                 isGallery: true, cropImage: cropImage);
                             if (file == null) {
-                              // _diaryEditViewModel.setBottomStateController(0);
+                              _diaryEditViewModel.setBottomStateController(
+                                  0, false);
                               return;
                             }
                             setState(() {
-                              Offset _initOffsetImage =
-                                  Offset(_size.width / 4, _size.height / 4);
+                              Offset _initOffsetImage = Offset(0, _space);
+                              if (_scrollController.offset > 0)
+                                _initOffsetImage +=
+                                    Offset(0, _scrollController.offset);
 
                               /// set offset when scroll
                               // if (_scrollController.offset > 0)
@@ -504,14 +524,18 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                       FileInput(file));
                               double tile = file_size.height / file_size.width;
                               print('505?tỉ lệ: ' + tile.toString());
-                              _imageSize = Size(
-                                  _size.width / 2, (_size.width / 2) * tile);
+                              _imageSize =
+                                  Size(_size.width, (_size.width) * tile);
                               print(
                                   '507? image size: ' + _imageSize.toString());
                               GlobalKey _key1 = GlobalKey();
+                              Frame _frame = _frames[0];
                               MyImage myImage = new MyImage(
                                   file, _initOffsetImage, _imageSize,
-                                  globalKey: _key1, scale: 1.0, rotetate: 0.0);
+                                  globalKey: _key1,
+                                  scale: 1.0,
+                                  rotetate: 0.0,
+                                  imageFrame: _frame);
 
                               _images.add(myImage);
                             });
@@ -1108,7 +1132,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           });
         },
         onLongPress: () {
-          _showEditImagePopUp(imageFile);
+          _showEditImagePopUp(imageFile, index);
         },
         onScaleStart: (details) {
           RenderBox box =
@@ -1116,7 +1140,10 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           Offset position = box.localToGlobal(Offset.zero);
 
           /// lấy vị trí tại điểm chạm vào màn hình trừ cho vị trí tại điểm trên cùng của widget
+
           _preOffset = details.focalPoint - position;
+          // if (_scrollController.offset > 0)
+          //   _preOffset += Offset(0, _scrollController.offset);
           // print('853> scale: ' + _images[index].getScale.toString());
           _preScale = _images[index].getScale;
           _images[index].setRotetate(_preRotetate);
@@ -1130,6 +1157,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
           /// cập nhật vị trí
           Offset _offset = details.focalPoint - _preOffset;
+          if (_scrollController.offset > 0)
+            _offset += Offset(0, _scrollController.offset);
           _images[index].setOffset(_offset);
           _images[index].setRotetate(details.rotation);
           if (_images[index].getRotetate == 0.0)
@@ -1143,55 +1172,340 @@ class _DiaryEditViewState extends State<DiaryEditView> {
 
           setState(() {});
         },
-        child: Transform(
-          alignment: FractionalOffset.center,
-          transform: Matrix4.diagonal3(vector3.Vector3(_images[index].getScale,
-              _images[index].getScale, _images[index].getScale))
-            ..rotateZ(_images[index].getRotetate),
-          child: Container(
-            height: _images[index].getSize.height,
-            width: _images[index].getSize.width,
-            // decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(_size.width * 0.02)),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  child: Image.file(imageFile),
-                ),
-                _images[index].getEditState
-                    ? Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          height: 30,
-                          width: 30,
+        child: Stack(
+          children: [
+            Transform(
+              alignment: FractionalOffset.center,
+              transform: Matrix4.diagonal3(vector3.Vector3(
+                  _images[index].getScale,
+                  _images[index].getScale,
+                  _images[index].getScale))
+                ..rotateZ(_images[index].getRotetate),
+              child: Opacity(
+                  opacity: _images[index].getOpacity != null
+                      ? _images[index].getOpacity
+                      : 1.0,
+                  child: _images[index].getImageFrame.getTypeOfFrame != 0
+                      ? Container(
+                          height: _images[index].getSize.width,
+                          width: _images[index].getSize.width,
+                          ////test frame
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black)),
-                          child: IconButton(
-                              alignment: Alignment.center,
-                              iconSize: 13,
-                              onPressed: () async {
-                                setState(() {
-                                  print('1170?xóaaaaaa');
-                                  _images[index].setState(3);
-                                  if (_images[index].getState == 3) {
-                                    _images.removeAt(index);
-                                    if (_images.length == 0)
-                                      _diaryEditViewModel
-                                          .setBottomStateController(0, false);
-                                  }
-                                });
-                              },
-                              icon: Icon(
-                                Icons.close_rounded,
-                                color: Colors.black,
-                              )),
-                        ))
-                    : Container(),
-              ],
+                            shape: BoxShape.circle,
+                          ),
+                          ////test frame
+                          child: (_images[index].getImageFilter != null &&
+                                  _images[index].getImageFilter.getId != 0)
+                              ? Stack(
+                                  children: [
+                                    ////test frame
+                                    Container(
+                                      height: _images[index].getSize.width,
+                                      width: _images[index].getSize.width,
+                                      decoration:
+                                          BoxDecoration(shape: BoxShape.circle),
+                                      child: ClipOval(
+                                        child: Image.file(
+                                          imageFile,
+                                          colorBlendMode: _images[index]
+                                              .getImageFilter
+                                              .getBlendMode,
+                                          color: Colors.white.withOpacity(0.2),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: _images[index].getSize.width,
+                                      width: _images[index].getSize.width,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: _images[index]
+                                            .getImageFilter
+                                            .getColor1
+                                            .withOpacity(0.1),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: _images[index].getSize.width,
+                                      width: _images[index].getSize.width,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: _images[index]
+                                            .getImageFilter
+                                            .getColor2
+                                            .withOpacity(0.1),
+                                      ),
+                                    ),
+                                    Transform.scale(
+                                      scale:
+                                          _images[index].getImageFrame.getTiLe,
+                                      child: Container(
+                                        height: _images[index].getSize.width,
+                                        width: _images[index].getSize.width,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(_images[index]
+                                                    .getImageFrame
+                                                    .getFramePath))),
+                                      ),
+                                    ),
+                                    _images[index].getEditState
+                                        ? Positioned(
+                                            top: 0,
+                                            right: 0,
+                                            child: Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      color: Colors.black)),
+                                              child: IconButton(
+                                                  alignment: Alignment.center,
+                                                  iconSize: 13,
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      print('1170?xóaaaaaa');
+                                                      _images[index]
+                                                          .setState(3);
+                                                      if (_images[index]
+                                                              .getState ==
+                                                          3) {
+                                                        _images.removeAt(index);
+                                                        if (_images.length == 0)
+                                                          _diaryEditViewModel
+                                                              .setBottomStateController(
+                                                                  0, false);
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.close_rounded,
+                                                    color: Colors.black,
+                                                  )),
+                                            ))
+                                        : Container(),
+                                  ],
+                                )
+                              : Stack(
+                                  children: [
+                                    Container(
+                                      height: _images[index].getSize.width,
+                                      width: _images[index].getSize.width,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: ClipOval(
+                                        child: Image.file(
+                                          imageFile,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Transform.scale(
+                                      scale:
+                                          _images[index].getImageFrame.getTiLe,
+                                      child: Container(
+                                        height: _images[index].getSize.width,
+                                        width: _images[index].getSize.width,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(_images[index]
+                                                    .getImageFrame
+                                                    .getFramePath))),
+                                      ),
+                                    ),
+                                    _images[index].getEditState
+                                        ? Positioned(
+                                            top: 0,
+                                            right: 0,
+                                            child: Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      color: Colors.black)),
+                                              child: IconButton(
+                                                  alignment: Alignment.center,
+                                                  iconSize: 13,
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      print('1170?xóaaaaaa');
+                                                      _images[index]
+                                                          .setState(3);
+                                                      if (_images[index]
+                                                              .getState ==
+                                                          3) {
+                                                        _images.removeAt(index);
+                                                        if (_images.length == 0)
+                                                          _diaryEditViewModel
+                                                              .setBottomStateController(
+                                                                  0, false);
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.close_rounded,
+                                                    color: Colors.black,
+                                                  )),
+                                            ))
+                                        : Container(),
+                                  ],
+                                ),
+                        )
+                      : Container(
+                          height: _images[index].getSize.height,
+                          width: _images[index].getSize.width,
+                          ////test frame
+                          // decoration: BoxDecoration(
+                          //   shape: BoxShape.circle,
+                          // ),
+                          ////test frame
+                          child: (_images[index].getImageFilter != null &&
+                                  _images[index].getImageFilter.getId != 0)
+                              ? Stack(
+                                  children: [
+                                    Container(
+                                      height: _images[index].getSize.height,
+                                      width: _images[index].getSize.width,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              _images[index].getImageRadius *
+                                                  0.01 *
+                                                  _size.width),
+                                          color: Colors.red),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            _images[index].getImageRadius *
+                                                0.01 *
+                                                _size.width),
+                                        child: Image.file(
+                                          imageFile,
+                                          colorBlendMode: _images[index]
+                                              .getImageFilter
+                                              .getBlendMode,
+                                          color: Colors.white.withOpacity(0.2),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: _images[index].getSize.height,
+                                      width: _images[index].getSize.width,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            _images[index].getImageRadius *
+                                                0.01 *
+                                                _size.width),
+                                        color: _images[index]
+                                            .getImageFilter
+                                            .getColor1
+                                            .withOpacity(0.1),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: _images[index].getSize.height,
+                                      width: _images[index].getSize.width,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            _images[index].getImageRadius *
+                                                0.01 *
+                                                _size.width),
+                                        color: _images[index]
+                                            .getImageFilter
+                                            .getColor2
+                                            .withOpacity(0.1),
+                                      ),
+                                    ),
+                                    _images[index].getEditState
+                                        ? Positioned(
+                                            top: 0,
+                                            right: 0,
+                                            child: Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      color: Colors.black)),
+                                              child: IconButton(
+                                                  alignment: Alignment.center,
+                                                  iconSize: 13,
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      print('1170?xóaaaaaa');
+                                                      _images[index]
+                                                          .setState(3);
+                                                      if (_images[index]
+                                                              .getState ==
+                                                          3) {
+                                                        _images.removeAt(index);
+                                                        if (_images.length == 0)
+                                                          _diaryEditViewModel
+                                                              .setBottomStateController(
+                                                                  0, false);
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.close_rounded,
+                                                    color: Colors.black,
+                                                  )),
+                                            ))
+                                        : Container(),
+                                  ],
+                                )
+                              : Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          _images[index].getImageRadius *
+                                              0.01 *
+                                              _size.width),
+                                      child: Image.file(imageFile),
+                                    ),
+                                    _images[index].getEditState
+                                        ? Positioned(
+                                            top: 0,
+                                            right: 0,
+                                            child: Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      color: Colors.black)),
+                                              child: IconButton(
+                                                  alignment: Alignment.center,
+                                                  iconSize: 13,
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      print('1170?xóaaaaaa');
+                                                      _images[index]
+                                                          .setState(3);
+                                                      if (_images[index]
+                                                              .getState ==
+                                                          3) {
+                                                        _images.removeAt(index);
+                                                        if (_images.length == 0)
+                                                          _diaryEditViewModel
+                                                              .setBottomStateController(
+                                                                  0, false);
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.close_rounded,
+                                                    color: Colors.black,
+                                                  )),
+                                            ))
+                                        : Container(),
+                                  ],
+                                ),
+                        )),
             ),
-          ),
+          ],
         ));
   }
 
@@ -1242,6 +1556,7 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     await _initText();
     await _initImage();
     await _initEmotion();
+    _filters = Filters();
     _initBottomState();
   }
 
@@ -1303,8 +1618,13 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     // if()
   }
 
-  void _showEditImagePopUp(File imageFile) {
+  int filterSelected;
+  void _showEditImagePopUp(File imageFile, int imageIndex) {
     int selected = 0;
+    if (_images[imageIndex].getImageFilter != null)
+      filterSelected = _images[imageIndex].getImageFilter.getId;
+    else
+      filterSelected = 0;
     showModalBottomSheet(
       isScrollControlled: true,
       isDismissible: false,
@@ -1313,120 +1633,258 @@ class _DiaryEditViewState extends State<DiaryEditView> {
               BorderRadius.vertical(top: Radius.circular(_size.width * 0.07))),
       context: context,
       builder: (context) {
-        return Container(
-          height: _size.height * 0.4,
-          width: _size.width,
-          padding: EdgeInsets.all(_size.width * 0.05),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(_size.width * 0.02)),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _editImageMenu.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        setState(() {
-                          selected = index;
-                        });
+        return StatefulBuilder(
+          builder: (context, setEditImagePopUpState) {
+            return Container(
+              height: _size.height * 0.4,
+              width: _size.width,
+              padding: EdgeInsets.all(_size.width * 0.05),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(_size.width * 0.02)),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _editImageMenu.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            setEditImagePopUpState(() {
+                              selected = index;
+                            });
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(_editImageMenu[index],
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.amber[700])),
+                              Divider(
+                                color: Colors.black,
+                                thickness: 2,
+                              )
+                            ],
+                          ),
+                        );
                       },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(_editImageMenu[index],
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.amber[700])),
-                          Divider(
-                            color: Colors.black,
-                            thickness: 2,
-                          )
-                        ],
+                      separatorBuilder: (context, index) => SizedBox(
+                        width: _size.width * 0.2,
                       ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(
-                    width: _size.width * 0.2,
+                    ),
                   ),
-                ),
+                  Expanded(
+                      flex: 5,
+                      child: _EditPopUpItem(selected, imageFile, imageIndex,
+                          setEditImagePopUpState)),
+                ],
               ),
-              Expanded(flex: 5, child: _EditPopUpItem(selected, imageFile)),
-            ],
-          ),
+            );
+          },
         );
       },
     );
   }
 
-  Widget _EditPopUpItem(int selected, File imageFile) {
+  Widget _EditPopUpItem(int selected, File imageFile, int imageIndex,
+      StateSetter setEditImagePopUpState) {
     switch (selected) {
       case 0:
         {
-          List<BlendMode> blendModes = [];
-          blendModes.add(BlendMode.values[2]);
-          blendModes.add(BlendMode.values[4]);
-          blendModes.add(BlendMode.values[15]);
-          blendModes.add(BlendMode.values[16]);
-          blendModes.add(BlendMode.values[19]);
-          blendModes.add(BlendMode.values[21]);
-          blendModes.add(BlendMode.values[25]);
-          blendModes.add(BlendMode.values[27]);
-          return ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: _size.width * 0.5,
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: _size.width * 0.5,
-                        width: _size.width * 0.5,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(_size.width * 0.05),
-                            color: Colors.black),
-                        child: Image.file(
-                          imageFile,
-                          colorBlendMode: blendModes[index],
-                          color: Colors.white,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      // Text(index.toString()),
-                      Container(
-                        height: _size.width * 0.5,
-                        width: _size.width * 0.5,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(_size.width * 0.02),
-                          color: Colors.teal.withOpacity(0.1),
-                        ),
-                      ),
-                      Container(
-                        // height: _size.width * 0.5,
-                        // width: _size.width * 0.5,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(_size.width * 0.02),
-                          color: Colors.black.withOpacity(0.1),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return SizedBox(
-                  width: _size.width * 0.02,
-                );
-              },
-              itemCount: blendModes.length);
+          return _FilterMenu(imageFile, imageIndex, setEditImagePopUpState);
+        }
+      case 1:
+        {
+          return _FrameMenu(imageIndex, setEditImagePopUpState);
         }
     }
+  }
+
+  Widget _FilterMenu(
+      File imageFile, int imageIndex, StateSetter setEditImagePopUpState) {
+    return ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: () {
+              _images[imageIndex].setImageFilter(_filters.getFilters[index]);
+              filterSelected = index;
+              setEditImagePopUpState(() {});
+              setState(() {});
+            },
+            child: Container(
+              width: _size.height * 0.2,
+              decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.all(Radius.circular(_size.width * 0.02)),
+              ),
+              child: Stack(
+                children: [
+                  Container(
+                      height: _size.height * 0.25,
+                      width: _size.height * 0.2,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(_size.width * 0.02),
+                            topRight: Radius.circular(_size.width * 0.02)),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(_size.width * 0.02),
+                            topRight: Radius.circular(_size.width * 0.02)),
+                        child: index != 0
+                            ? Image.file(
+                                imageFile,
+                                colorBlendMode:
+                                    _filters.getFilters[index].getBlendMode,
+                                color: Colors.white.withOpacity(0.2),
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                imageFile,
+                                color: Colors.white.withOpacity(0.2),
+                                fit: BoxFit.cover,
+                              ),
+                      )),
+                  // Text(index.toString()),
+                  index != 0
+                      ? Container(
+                          height: _size.height * 0.25,
+                          width: _size.height * 0.2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(_size.width * 0.02),
+                                topRight: Radius.circular(_size.width * 0.02)),
+                            color: _filters.getFilters[index].getColor1
+                                .withOpacity(0.1),
+                          ),
+                        )
+                      : Container(),
+                  index != 0
+                      ? Container(
+                          height: _size.height * 0.25,
+                          width: _size.height * 0.2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(_size.width * 0.02),
+                                topRight: Radius.circular(_size.width * 0.02)),
+                            color: _filters.getFilters[index].getColor2
+                                .withOpacity(0.1),
+                          ),
+                        )
+                      : Container(),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: Container(
+                      height: _size.height * 0.05,
+                      width: _size.height * 0.2,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: filterSelected == index
+                              ? Colors.brown[200]
+                              : Colors.brown[600],
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(_size.width * 0.02),
+                              bottomRight:
+                                  Radius.circular(_size.width * 0.02))),
+                      child: Text(_filters.getFilters[index].getName,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(
+            width: _size.width * 0.01,
+          );
+        },
+        itemCount: _filters.getFilters.length);
+  }
+
+  double opacitySelected, radiusSelected;
+  int frameselected = 0;
+  Widget _FrameMenu(int imageIndex, StateSetter setEditImagePopUpState) {
+    if (_images[imageIndex].getOpacity != null)
+      opacitySelected = _images[imageIndex].getOpacity * 10;
+    else
+      opacitySelected = 10;
+    // _images[imageIndex].setImageRadius(radius)
+    radiusSelected = _images[imageIndex].getImageRadius;
+    // print('1592> radius: ' + _images[imageIndex].getImageRadius.toString());
+    return Container(
+      child: Column(
+        children: [
+          Slider(
+            min: 1,
+            max: 10,
+            divisions: 9,
+            value: opacitySelected,
+            label: opacitySelected.round().toString(),
+            onChanged: (value) {
+              double opacity = value / 10;
+              _images[imageIndex].setOpacity(opacity);
+              opacitySelected = value;
+              setEditImagePopUpState(() {});
+              setState(() {});
+            },
+          ),
+          Slider(
+            min: 0,
+            max: 10,
+            divisions: 10,
+            value: radiusSelected,
+            label: radiusSelected.round().toString(),
+            onChanged: (value) {
+              radiusSelected = value;
+              _images[imageIndex].setImageRadius(radiusSelected);
+              // print('1621> radius: ' +
+              //     _images[imageIndex].getImageRadius.toString());
+              setState(() {});
+              setEditImagePopUpState(() {});
+            },
+          ),
+          Container(
+            height: _size.height * 0.15,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return index != 0
+                      ? InkWell(
+                          onTap: () {
+                            _images[imageIndex].setImageFrame(_frames[index]);
+                            setState(() {});
+                          },
+                          child: Container(
+                            height: _size.height * 0.15,
+                            width: _size.height * 0.15,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage(_frames[index].getFramePath),
+                                  fit: BoxFit.contain),
+                            ),
+                          ),
+                        )
+                      : Container();
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                      width: _size.width * 0.02,
+                    ),
+                itemCount: _frames.length),
+          )
+        ],
+      ),
+    );
   }
 }
 

@@ -1,292 +1,254 @@
 import 'dart:async';
-
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_screen_lock/configurations/input_button_config.dart';
+import 'package:flutter_screen_lock/configurations/screen_lock_config.dart';
+import 'package:flutter_screen_lock/configurations/secret_config.dart';
+import 'package:flutter_screen_lock/configurations/secrets_config.dart';
+import 'package:flutter_screen_lock/functions.dart';
+import 'package:flutter_screen_lock/input_controller.dart';
+import 'package:flutter_screen_lock/screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Example',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  final LocalAuthentication auth = LocalAuthentication();
-  _SupportState _supportState = _SupportState.unknown;
-  bool _canCheckBiometrics;
-  List<BiometricType> _availableBiometrics;
-  String _authorized = 'Not Authorized';
-  bool _isAuthenticating = false;
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+Timer timer;
+
+class _MyHomePageState extends State<MyHomePage> {
+  Future<void> localAuth(BuildContext context) async {
+    final localAuth = LocalAuthentication();
+    final didAuthenticate = await localAuth.authenticate(
+      localizedReason: 'Please authenticate',
+      biometricOnly: true,
+    );
+    if (didAuthenticate) {
+      Navigator.pop(context);
+    }
+  }
 
   @override
   void initState() {
-    super.initState();
-    auth.isDeviceSupported().then(
-          (isSupported) => setState(() => _supportState = isSupported
-              ? _SupportState.supported
-              : _SupportState.unsupported),
-        );
+    timer = Timer.periodic(
+        Duration(seconds: 1), (Timer t) => checkForNewSharedLists());
   }
 
-  Future<void> _checkBiometrics() async {
-    bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      canCheckBiometrics = false;
-      print(e);
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
-    });
-  }
-
-  Future<void> _getAvailableBiometrics() async {
-    List<BiometricType> availableBiometrics;
-    try {
-      availableBiometrics = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      availableBiometrics = <BiometricType>[];
-      print(e);
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _availableBiometrics = availableBiometrics;
-    });
-  }
-
-  // Future<void> _authenticate() async {
-  //   bool authenticated = false;
-  //   try {
-  //     setState(() {
-  //       _isAuthenticating = true;
-  //       _authorized = 'Authenticating';
-  //     });
-  //     // _isAuthenticating = true;
-  //     // _authorized = 'Authenticating';
-  //     authenticated = await auth.authenticate(
-  //         localizedReason: 'Let OS determine authentication method',
-  //         useErrorDialogs: true,
-  //         stickyAuth: true);
-  //     setState(() {
-  //       _isAuthenticating = false;
-  //     });
-  //     // _isAuthenticating = false;
-  //   } on PlatformException catch (e) {
-  //     print(e);
-  //     // setState(() {
-  //     //   _isAuthenticating = false;
-  //     //   _authorized = "Error - ${e.message}";
-  //     // });
-  //     _isAuthenticating = false;
-  //     _authorized = "Error - ${e.message}";
-  //     return;
-  //   }
-  //   if (!mounted) return;
-  //   _authorized = authenticated ? 'Authorized' : 'Not Authorized';
-  //   // setState(
-  //   //     () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
-  // }
-
-  // Future<void> _authenticateWithBiometrics() async {
-  //   bool authenticated = false;
-  //   try {
-  //     // setState(() {
-  //     //   _isAuthenticating = true;
-  //     //   _authorized = 'Authenticating';
-  //     // });
-  //     _isAuthenticating = false;
-  //     _authorized = 'Authenticating';
-  //     authenticated = await auth.authenticate(
-  //         localizedReason:
-  //             'Scan your fingerprint (or face or whatever) to authenticate',
-  //         useErrorDialogs: true,
-  //         stickyAuth: true,
-  //         biometricOnly: true);
-  //     // setState(() {
-  //     //   _isAuthenticating = false;
-  //     //   _authorized = 'Authenticating';
-  //     // });
-  //     _isAuthenticating = false;
-  //     _authorized = 'Authenticating';
-  //   } on PlatformException catch (e) {
-  //     print('abcccccc' + e.message);
-  //     setState(() {
-  //       _isAuthenticating = false;
-  //       _authorized = "Error - ${e.message}";
-  //     });
-  //     // _isAuthenticating = false;
-  //     // _authorized = "Error - ${e.message}";
-  //     // _cancelAuthentication();
-  //     return;
-  //   }
-  //   if (!mounted) {
-  //     // _cancelAuthentication();
-  //     return;
-  //   }
-
-  //   final String message = authenticated ? 'Authorized' : 'Not Authorized';
-  //   setState(() {
-  //     _authorized = message;
-  //   });
-  //   // _authorized = message;
-  //   // _cancelAuthentication();
-  // }
-  Future<void> _authenticate() async {
-    bool authenticated = false;
-    try {
-      setState(() {
-        _isAuthenticating = true;
-        _authorized = 'Authenticating';
-      });
-      authenticated = await auth.authenticate(
-          localizedReason: 'Let OS determine authentication method',
-          useErrorDialogs: true,
-          stickyAuth: true);
-      setState(() {
-        _isAuthenticating = false;
-      });
-    } on PlatformException catch (e) {
-      print(e);
-      setState(() {
-        _isAuthenticating = false;
-        _authorized = "Error - ${e.message}";
-      });
-      return;
-    }
-    if (!mounted) return;
-
-    setState(
-        () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
-  }
-
-  Future<void> _authenticateWithBiometrics() async {
-    bool authenticated = false;
-    try {
-      setState(() {
-        _isAuthenticating = true;
-        _authorized = 'Authenticating';
-      });
-      authenticated = await auth.authenticate(
-          localizedReason:
-              'Scan your fingerprint (or face or whatever) to authenticate',
-          useErrorDialogs: true,
-          stickyAuth: true,
-          biometricOnly: true);
-      setState(() {
-        _isAuthenticating = false;
-        _authorized = 'Authenticating';
-      });
-    } on PlatformException catch (e) {
-      print(e);
-      setState(() {
-        _isAuthenticating = false;
-        _authorized = "Error - ${e.message}";
-      });
-      return;
-    }
-    if (!mounted) return;
-
-    final String message = authenticated ? 'Authorized' : 'Not Authorized';
-    setState(() {
-      _authorized = message;
-    });
-  }
-
-  void _cancelAuthentication() async {
-    await auth.stopAuthentication();
-    setState(() => _isAuthenticating = false);
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _checkBiometrics();
-    _getAvailableBiometrics();
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.only(top: 30),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Next Screen Lock'),
+      ),
+      body: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (_supportState == _SupportState.unknown)
-                  CircularProgressIndicator()
-                else if (_supportState == _SupportState.supported)
-                  Text("This device is supported")
-                else
-                  Text("This device is not supported"),
-                Divider(height: 100),
-                Text('Can check biometrics: $_canCheckBiometrics\n'),
-                ElevatedButton(
-                  child: const Text('Check biometrics'),
-                  onPressed: _checkBiometrics,
+            ElevatedButton(
+              onPressed: () => showDialog<void>(
+                context: context,
+                builder: (context) {
+                  return const ScreenLock(correctString: '1234');
+                },
+              ),
+              child: const Text('Manualy open'),
+            ),
+            ElevatedButton(
+              onPressed: () => screenLock<void>(
+                context: context,
+                correctString: '1234',
+                canCancel: false,
+              ),
+              child: const Text('Not cancelable'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Define it to control the confirmation state with its own events.
+                final inputController = InputController();
+                screenLock<void>(
+                  context: context,
+                  correctString: '',
+                  confirmation: true,
+                  inputController: inputController,
+                  didConfirmed: (matchedText) {
+                    print(matchedText);
+                  },
+                  footer: TextButton(
+                    onPressed: () {
+                      // Release the confirmation state and return to the initial input state.
+                      inputController.unsetConfirmed();
+                    },
+                    child: const Text('Return enter mode.'),
+                  ),
+                );
+              },
+              child: const Text('Confirm mode'),
+            ),
+            ElevatedButton(
+              onPressed: () => screenLock<void>(
+                context: context,
+                correctString: '1234',
+                customizedButtonChild: const Icon(
+                  Icons.fingerprint,
                 ),
-                Divider(height: 100),
-                Text('Available biometrics: $_availableBiometrics\n'),
-                ElevatedButton(
-                  child: const Text('Get available biometrics'),
-                  onPressed: _getAvailableBiometrics,
+                customizedButtonTap: () async {
+                  await localAuth(context);
+                },
+                didOpened: () async {
+                  await localAuth(context);
+                },
+              ),
+              child: const Text(
+                'use local_auth \n(Show local_auth when opened)',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => screenLock<void>(
+                context: context,
+                correctString: '123456',
+                canCancel: false,
+                footer: Container(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: OutlinedButton(
+                    child: const Text('Cancel'),
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ),
                 ),
-                Divider(height: 100),
-                Text('Current State: $_authorized\n'),
-                (_isAuthenticating)
-                    ? ElevatedButton(
-                        onPressed: _cancelAuthentication,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text("Cancel Authentication"),
-                            Icon(Icons.cancel),
-                          ],
-                        ),
-                      )
-                    : Column(
-                        children: [
-                          ElevatedButton(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('Authenticate'),
-                                Icon(Icons.perm_device_information),
-                              ],
+              ),
+              child: const Text('Using footer'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                screenLock<void>(
+                  context: context,
+                  title: const Text('change title'),
+                  confirmTitle: const Text('change confirm title'),
+                  correctString: '1234',
+                  confirmation: true,
+                  screenLockConfig: const ScreenLockConfig(
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                  secretsConfig: SecretsConfig(
+                    spacing: 15, // or spacingRatio
+                    padding: const EdgeInsets.all(40),
+                    secretConfig: SecretConfig(
+                      borderColor: Colors.amber,
+                      borderSize: 2.0,
+                      disabledColor: Colors.black,
+                      enabledColor: Colors.amber,
+                      height: 15,
+                      width: 15,
+                      build: (context, {@required config, @required enabled}) {
+                        return SizedBox(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              color: enabled
+                                  ? config.enabledColor
+                                  : config.disabledColor,
+                              border: Border.all(
+                                width: config.borderSize,
+                                color: config.borderColor,
+                              ),
                             ),
-                            onPressed: _authenticate,
+                            padding: const EdgeInsets.all(10),
+                            width: config.width,
+                            height: config.height,
                           ),
-                          ElevatedButton(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(_isAuthenticating
-                                    ? 'Cancel'
-                                    : 'Authenticate: biometrics only'),
-                                Icon(Icons.fingerprint),
-                              ],
-                            ),
-                            onPressed: _authenticateWithBiometrics,
-                          ),
-                        ],
+                          width: config.width,
+                          height: config.height,
+                        );
+                      },
+                    ),
+                  ),
+                  inputButtonConfig: InputButtonConfig(
+                      textStyle: InputButtonConfig.getDefaultTextStyle(context)
+                          .copyWith(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
                       ),
-              ],
+                      buttonStyle: OutlinedButton.styleFrom(
+                        shape: const RoundedRectangleBorder(),
+                        backgroundColor: Colors.deepOrange,
+                      ),
+                      displayStrings: [
+                        '零',
+                        '壱',
+                        '弐',
+                        '参',
+                        '肆',
+                        '伍',
+                        '陸',
+                        '質',
+                        '捌',
+                        '玖'
+                      ]),
+                  cancelButton: const Icon(Icons.close),
+                  deleteButton: const Icon(Icons.delete),
+                );
+              },
+              child: const Text('Customize styles'),
             ),
           ],
         ),
       ),
     );
   }
-}
 
-enum _SupportState {
-  unknown,
-  supported,
-  unsupported,
+  checkForNewSharedLists() {
+    timer.cancel();
+    return screenLock<void>(
+      context: context,
+      correctString: '1234',
+      customizedButtonChild: const Icon(
+        Icons.fingerprint,
+      ),
+      canCancel: false,
+      customizedButtonTap: () async {
+        await localAuth(context);
+      },
+      didOpened: () async {
+        // await localAuth(context);
+      },
+      didConfirmed: (matchedText) {
+        timer = new Timer.periodic(
+            Duration(seconds: 1), (Timer t) => checkForNewSharedLists());
+      },
+    );
+  }
 }

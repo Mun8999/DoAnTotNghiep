@@ -30,7 +30,7 @@ dependencies:
   flutter_slidable: ^0.6.0
   flutter_local_notifications: ^6.0.0
   # image picker
-  image_picker: ^0.7.4
+  image_picker: ^0.8.2
   multi_image_picker: ^4.8.1
   get: ^4.1.4
   numberpicker: ^2.0.1
@@ -90,6 +90,8 @@ flutter:
     - assets/gifs/
     - assets/icons/menu/
     - assets/icons/note_edit/
+    - assets/icons/frame/circle/
+    - assets/icons/frame/rectangle/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -111,10 +113,10 @@ flutter:
         - asset: assets/icons/my_icon/LoginViewIcon.ttf
     - family: DancingScript
       fonts:
-      - asset: assets/fonts/google_fonts/DancingScript-Bold.ttf
-      - asset: assets/fonts/google_fonts/DancingScript-Medium.ttf
-      - asset: assets/fonts/google_fonts/DancingScript-Regular.ttf
-      - asset: assets/fonts/google_fonts/DancingScript-SemiBold.ttf
+      - asset: assets/fonts/google_fonts/DacingScript/DancingScript-Bold.ttf
+      - asset: assets/fonts/google_fonts/DacingScript/DancingScript-Medium.ttf
+      - asset: assets/fonts/google_fonts/DacingScript/DancingScript-Regular.ttf
+      - asset: assets/fonts/google_fonts/DacingScript/DancingScript-Regular.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

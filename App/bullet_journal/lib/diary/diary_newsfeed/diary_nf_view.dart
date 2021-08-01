@@ -4,7 +4,6 @@ import 'dart:ui';
 
 // import 'package:bullet_journel/edit_image/edit_image_view.dart';
 import 'package:bullet_journal/database/db_diary.dart';
-import 'package:bullet_journal/diary/diary_edit/diary_edit_test.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
 import 'package:bullet_journal/model/calendar/time.dart';
