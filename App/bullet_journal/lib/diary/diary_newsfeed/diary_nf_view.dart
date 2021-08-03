@@ -6,7 +6,9 @@ import 'dart:ui';
 import 'package:bullet_journal/database/db_diary.dart';
 import 'package:bullet_journal/diary/diary_edit/diary_edit_view.dart';
 import 'package:bullet_journal/diary/diary_newsfeed/diary_nf_viewmodel.dart';
+import 'package:bullet_journal/diary/diary_newsfeed/searchbar.dart';
 import 'package:bullet_journal/model/calendar/time.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
@@ -42,15 +44,20 @@ Size _size;
 double _spacing;
 DiaryNewsFeedViewModel _diaryNewsFeedViewModel;
 Box<DiaryDB> diaryBox;
+bool _isSearching = false;
+ValueListenable<Box<DiaryDB>> _valueListenable;
 
-class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
+class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    _diaryNewsFeedViewModel = DiaryNewsFeedViewModel();
-    diaryBox = Hive.box<DiaryDB>('diaries');
-    // _diaryNewsFeedViewModel.prepareDB(diaryBox);
-    _diaryNewsFeedViewModel.getDiaries(diaryBox);
+    _initData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -69,33 +76,64 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                   backgroundColor: Colors.white,
                   leadingWidth: 150,
                   leading: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'My Style',
-                          style: GoogleFonts.sacramento(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        // Text(
-                        //   'Style',
-                        //   style: GoogleFonts.righteous(
-                        //     fontSize: 25,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: Colors.yellow[900],
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
+                      child: !_isSearching
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'My Style',
+                                  style: GoogleFonts.sacramento(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                // Text(
+                                //   'Style',
+                                //   style: GoogleFonts.righteous(
+                                //     fontSize: 25,
+                                //     fontWeight: FontWeight.bold,
+                                //     color: Colors.yellow[900],
+                                //   ),
+                                // ),
+                              ],
+                            )
+                          : Container()),
                   actions: [
+                    _isSearching
+                        ? IconButton(
+                            onPressed: () {
+                              _diaryNewsFeedViewModel.backEvent();
+                              setState(() {
+                                _isSearching = false;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
+                            ))
+                        : Container(),
+                    _isSearching
+                        ? Container(
+                            width: _size.width * 0.75,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  hintText: 'Nhập từ khóa cần tìm',
+                                  hintStyle: TextStyle(color: Colors.black38)),
+                              onChanged: (value) {
+                                _diaryNewsFeedViewModel.searchDiary(value);
+                              },
+                            ))
+                        : Container(),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // showSearch(context: context, delegate: DataSearch());
+                          setState(() {
+                            _isSearching = true;
+                          });
+                        },
                         icon: Icon(
                           Icons.search_rounded,
                           color: Colors.black,
@@ -105,117 +143,117 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                   pinned: true,
                   snap: false,
                   elevation: 1,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.27,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(_spacing),
-                            height: MediaQuery.of(context).size.height * 0.125,
-                            // padding: EdgeInsets.all(10),
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey[600]),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(20),
-                                    bottomLeft: Radius.circular(20))),
-                            // color: Colors.purple[50],
-                            child: Stack(
-                              children: [
-                                // TextFormField(
-                                //   // showCursor: isTapedStatus,
-                                //   readOnly: true,
-                                //   onTap: () {
-                                //     Navigator.push(context, MaterialPageRoute(
-                                //       builder: (context) {
-                                //         return DiaryEditView(
-                                //           DiaryDB(DateTime.now()),
-                                //           state: 1,
-                                //         );
-                                //       },
-                                //     ));
-                                //   },
-                                //   maxLines: 3,
-                                //   style: TextStyle(fontSize: 16),
-                                //   cursorColor: Colors.black,
-                                //   decoration: InputDecoration(
-                                //       border: InputBorder.none,
-                                //       hintText: 'Hôm nay bạn thế nào?',
-                                //       hintStyle:
-                                //           TextStyle(color: Colors.grey[500])),
-                                // ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return DiaryEditView(
-                                          DiaryDB(DateTime.now()),
-                                          state: 1,
-                                        );
-                                      },
-                                    ));
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: _spacing),
-                                    child: Container(
-                                      width: _size.width,
-                                      child: Text('Hôm nay bạn thế nào?',
-                                          style: TextStyle(
-                                              color: Colors.grey[500],
-                                              fontSize: 18)),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, right: 10, bottom: 10),
-                                        child: SvgPicture.asset(
-                                          'assets/icons/emotion/smile-face.svg',
-                                          height: 25,
-                                          width: 25,
-                                          color: Colors.red[400],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, right: 10, bottom: 10),
-                                        child: SvgPicture.asset(
-                                          'assets/icons/insert-picture-icon.svg',
-                                          height: 25,
-                                          width: 25,
-                                          color: Colors.red[400],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, bottom: 10),
-                                        child: SvgPicture.asset(
-                                          'assets/icons/pointer-on-the-map.svg',
-                                          height: 25,
-                                          width: 25,
-                                          color: Colors.red[400],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // expandedHeight: MediaQuery.of(context).size.height * 0.27,
+                  // flexibleSpace: FlexibleSpaceBar(
+                  //   background: SingleChildScrollView(
+                  //     physics: NeverScrollableScrollPhysics(),
+                  //     child: Column(
+                  //       children: [
+                  //         SizedBox(
+                  //           height: MediaQuery.of(context).size.height * 0.1,
+                  //         ),
+                  //         Container(
+                  //           margin: EdgeInsets.all(_spacing),
+                  //           height: MediaQuery.of(context).size.height * 0.125,
+                  //           // padding: EdgeInsets.all(10),
+                  //           padding: EdgeInsets.only(left: 10, right: 10),
+                  //           decoration: BoxDecoration(
+                  //               border: Border.all(color: Colors.grey[600]),
+                  //               borderRadius: BorderRadius.only(
+                  //                   topRight: Radius.circular(20),
+                  //                   bottomLeft: Radius.circular(20))),
+                  //           // color: Colors.purple[50],
+                  //           child: Stack(
+                  //             children: [
+                  //               // TextFormField(
+                  //               //   // showCursor: isTapedStatus,
+                  //               //   readOnly: true,
+                  //               //   onTap: () {
+                  //               //     Navigator.push(context, MaterialPageRoute(
+                  //               //       builder: (context) {
+                  //               //         return DiaryEditView(
+                  //               //           DiaryDB(DateTime.now()),
+                  //               //           state: 1,
+                  //               //         );
+                  //               //       },
+                  //               //     ));
+                  //               //   },
+                  //               //   maxLines: 3,
+                  //               //   style: TextStyle(fontSize: 16),
+                  //               //   cursorColor: Colors.black,
+                  //               //   decoration: InputDecoration(
+                  //               //       border: InputBorder.none,
+                  //               //       hintText: 'Hôm nay bạn thế nào?',
+                  //               //       hintStyle:
+                  //               //           TextStyle(color: Colors.grey[500])),
+                  //               // ),
+                  //               InkWell(
+                  //                 onTap: () {
+                  //                   Navigator.push(context, MaterialPageRoute(
+                  //                     builder: (context) {
+                  //                       return DiaryEditView(
+                  //                         DiaryDB(DateTime.now()),
+                  //                         state: 1,
+                  //                       );
+                  //                     },
+                  //                   ));
+                  //                 },
+                  //                 child: Padding(
+                  //                   padding: EdgeInsets.only(top: _spacing),
+                  //                   child: Container(
+                  //                     width: _size.width,
+                  //                     child: Text('Hôm nay bạn thế nào?',
+                  //                         style: TextStyle(
+                  //                             color: Colors.grey[500],
+                  //                             fontSize: 18)),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //               Align(
+                  //                 alignment: Alignment.bottomRight,
+                  //                 child: Row(
+                  //                   mainAxisAlignment: MainAxisAlignment.end,
+                  //                   children: [
+                  //                     Padding(
+                  //                       padding: const EdgeInsets.only(
+                  //                           top: 10, right: 10, bottom: 10),
+                  //                       child: SvgPicture.asset(
+                  //                         'assets/icons/emotion/smile-face.svg',
+                  //                         height: 25,
+                  //                         width: 25,
+                  //                         color: Colors.red[400],
+                  //                       ),
+                  //                     ),
+                  //                     Padding(
+                  //                       padding: const EdgeInsets.only(
+                  //                           top: 10, right: 10, bottom: 10),
+                  //                       child: SvgPicture.asset(
+                  //                         'assets/icons/insert-picture-icon.svg',
+                  //                         height: 25,
+                  //                         width: 25,
+                  //                         color: Colors.red[400],
+                  //                       ),
+                  //                     ),
+                  //                     Padding(
+                  //                       padding: const EdgeInsets.only(
+                  //                           top: 10, bottom: 10),
+                  //                       child: SvgPicture.asset(
+                  //                         'assets/icons/pointer-on-the-map.svg',
+                  //                         height: 25,
+                  //                         width: 25,
+                  //                         color: Colors.red[400],
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               )
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 )),
           )
         ];
@@ -226,24 +264,71 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
           child: ValueListenableBuilder(
             valueListenable: diaryBox.listenable(),
             builder: (context, Box<DiaryDB> diaryBox, child) {
-              return ListView.separated(
-                itemBuilder: (BuildContext context, int index) {
-                  // diaryBox.values.elementAt(index).diaryId = index;
-                  return _itemDiaryList(diaryBox.getAt(index), index);
-                },
-                itemCount: diaryBox.values.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                    height: _size.height * 0.015,
-                  );
-                },
+              return StreamBuilder<List<DiaryDB>>(
+                  initialData: diaryBox.values.toList(),
+                  stream: _diaryNewsFeedViewModel.getSearchStream,
+                  builder: (context, diaryList) {
+                    return ListView.separated(
+                      itemBuilder: (BuildContext context, int index) {
+                        // diaryBox.values.elementAt(index).diaryId = index;
+                        return _itemDiaryList(diaryList.data[index], index);
+                      },
+                      itemCount: diaryList.data.length,
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: _size.height * 0.015,
+                        );
+                      },
 
-                // children: diaryBox.values
-                //     .toList()
-                //     .asMap()
-                //     .entries
-                //     .map((e) => _itemDiaryList(e))
-              );
+                      // children: diaryBox.values
+                      //     .toList()
+                      //     .asMap()
+                      //     .entries
+                      //     .map((e) => _itemDiaryList(e))
+                    );
+                  });
+              // _isSearching
+              //     ? ListView.separated(
+              //         itemBuilder: (BuildContext context, int index) {
+              //           // diaryBox.values.elementAt(index).diaryId = index;
+              //           return _itemDiaryList(diaryBox.getAt(index), index);
+              //         },
+              //         itemCount: diaryBox.values.length,
+              //         separatorBuilder: (BuildContext context, int index) {
+              //           return SizedBox(
+              //             height: _size.height * 0.015,
+              //           );
+              //         },
+
+              //         // children: diaryBox.values
+              //         //     .toList()
+              //         //     .asMap()
+              //         //     .entries
+              //         //     .map((e) => _itemDiaryList(e))
+              //       )
+              //     : StreamBuilder<List<DiaryDB>>(
+              //         initialData: diaryBox.values.toList(),
+              //         stream: _diaryNewsFeedViewModel.getSearchStream,
+              //         builder: (context, diaryList) {
+              //           return ListView.separated(
+              //             itemBuilder: (BuildContext context, int index) {
+              //               // diaryBox.values.elementAt(index).diaryId = index;
+              //               return _itemDiaryList(diaryBox.getAt(index), index);
+              //             },
+              //             itemCount: diaryList.data.length,
+              //             separatorBuilder: (BuildContext context, int index) {
+              //               return SizedBox(
+              //                 height: _size.height * 0.015,
+              //               );
+              //             },
+
+              //             // children: diaryBox.values
+              //             //     .toList()
+              //             //     .asMap()
+              //             //     .entries
+              //             //     .map((e) => _itemDiaryList(e))
+              //           );
+              //         });
             },
           )),
     );
@@ -335,7 +420,7 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
     //     diaryBox.getAt(index).diaryContent +
     //     '\nImage: ' +
     //     diaryBox.getAt(index).diaryImage);
-///////////////123
+    ///////////////123
     // print('325>item diary box image: ' + item.diaryBox.toString());
     return InkWell(
       onLongPress: () {
@@ -407,11 +492,15 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
                         child: Text(
                           item.diaryContent,
                           // '" Người giờ còn đây không? Thuyền này liệu còn sang sông? Buổi chiều dài mênh mông. Lòng người giờ hòa hay đông? Hồng mắt em cả bầu trời đỏ hoen..."',
-                          style: TextStyle(
-                            fontFamily: 'DancingScript',
+                          style: GoogleFonts.oswald(
                             fontSize: 15,
                             color: Colors.brown[900],
                           ),
+                          // TextStyle(
+                          //   fontFamily: 'DancingScript',
+                          //   fontSize: 15,
+                          //   color: Colors.brown[900],
+                          // ),
                           textAlign: TextAlign.left,
                         ),
                       ),
@@ -499,6 +588,14 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView> {
     textBox.deleteFromDisk();
     var emotionBox = await Hive.openBox('emotion' + boxIndex.toString());
     emotionBox.deleteFromDisk();
+  }
+
+  _initData() {
+    diaryBox = Hive.box<DiaryDB>('diaries');
+    _diaryNewsFeedViewModel = DiaryNewsFeedViewModel(diaryBox.values.toList());
+    _valueListenable = diaryBox.listenable();
+    // _diaryNewsFeedViewModel.prepareDB(diaryBox);
+    _diaryNewsFeedViewModel.getDiaries(diaryBox);
   }
 }
 // ListView.separated(
