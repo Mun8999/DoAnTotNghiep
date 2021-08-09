@@ -3,21 +3,14 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MyAddress extends MyLocation {
-  String _number, _street, _ward, _district, _city, _nation;
+  String _street, _ward, _district, _city, _nation;
   MyLocation _myLocation = MyLocation();
-  List<String> _numberStreet = [];
   initAddress() async {
     await _myLocation.innitLocation();
     print('innitAddress');
     if (_myLocation.getCurrentAddress != null) {
       // print('abc' + _myLocation.getCurrentAddress);
-      String _numberStreetString = _myLocation.getCurrentAddress.split(', ')[0];
-      _numberStreet = _numberStreetString.split(' ');
-      this._number = _myLocation.getCurrentAddress.split(' ')[0];
-      this._street = '';
-      for (int i = 1; i < _numberStreet.length; i++) {
-        this._street += _numberStreet[i] + ' ';
-      }
+      this._street = _myLocation.getCurrentAddress.split(', ')[0];
       this._ward = _myLocation.getCurrentAddress.split(', ')[1];
       this._district = _myLocation.getCurrentAddress.split(', ')[2];
       this._city = _myLocation.getCurrentAddress.split(', ')[3];
@@ -32,9 +25,7 @@ class MyAddress extends MyLocation {
   }
 
   String getFullAddress() {
-    return getNumber +
-        ' ' +
-        getStreet +
+    return getStreet +
         ', ' +
         getWard +
         ', ' +
@@ -46,7 +37,6 @@ class MyAddress extends MyLocation {
   }
 
   MyAddress() {}
-  String get getNumber => this._number;
   String get getStreet => this._street;
   String get getWard => this._ward;
   String get getDistrict => this._district;

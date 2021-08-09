@@ -17,7 +17,8 @@ class DiaryNewsFeedViewModel {
     // _diaryData.addAll(diaryDBData);
   }
 
-  bool searchDiary(String key) {
+  bool searchDiary(String key, List<DiaryDB> diaryDBData) {
+    initData(diaryDBData);
     if (key.isEmpty) {
       _searchController.sink.add(_diaryData);
       return true;

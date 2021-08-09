@@ -49,7 +49,7 @@ class _HomeViewState extends State<HomeView> {
         elevation: 2.0,
       ),
       bottomNavigationBar: FABBottomAppBar(
-        centerItemText: 'Trang chủ',
+        centerItemText: 'Nhật ký',
         color: Colors.black38,
         backgroundColor: Colors.white,
         selectedColor: _selectedColor,

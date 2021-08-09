@@ -15,37 +15,40 @@ class TextDB extends ComponentDB {
   @HiveField(9)
   String textFont;
   @HiveField(10)
-  String textWeight;
+  int textWeight;
   @HiveField(11)
-  String textColor;
+  int textColor;
   @HiveField(12)
-  int textSize;
+  double textSize;
   @HiveField(13)
-  String backgroundColor;
-
+  int backgroundColor;
+  @HiveField(14)
+  int textFrameId;
   TextDB(
-      String textType,
-      String textContent,
-      int textLine,
-      String textFont,
-      String textWeight,
-      String textColor,
-      int textSize,
-      String backgroundColor,
-      double offset_dx,
-      double offset_dy,
-      double size_width,
-      double size_height,
-      double opacity)
-      : super(offset_dx, offset_dy, size_width, size_height, opacity) {
+    String textType,
+    String textContent,
+    int textLine,
+    String textFont,
+    int textColor,
+    double offset_dx,
+    double offset_dy,
+    double size_width,
+    double size_height, {
+    int textBackgroundColor,
+    int textFrameId,
+    double opacity = 1.0,
+    int textWeight,
+    double textSize = 18,
+  }) : super(offset_dx, offset_dy, size_width, size_height, opacity) {
     this.textType = textType;
     this.textFont = textFont;
     this.textWeight = textWeight;
     this.textColor = textColor;
     this.textSize = textSize;
-    this.backgroundColor = backgroundColor;
     this.textContent = textContent;
     this.textLine = textLine;
+    if (textFrameId != null) this.textFrameId = textFrameId;
+    if (textBackgroundColor != null) this.backgroundColor = textBackgroundColor;
   }
   // TextDB(
   // String textType,

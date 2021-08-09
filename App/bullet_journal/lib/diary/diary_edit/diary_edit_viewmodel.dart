@@ -107,11 +107,18 @@ class DiaryEditViewModel {
     images.forEach((image) async {
       imageDB = ImageDB(
           image.getImageFile.path,
+          image.getImageFilter.getId,
           image.getOffset.dx,
           image.getOffset.dy,
           image.getSize.width,
           image.getSize.height,
-          image.getOpacity);
+          image.getOpacity,
+          frameId: image.getImageFrame.getFrameId,
+          frameRadius: image.getImageRadius,
+          imageScale: image.getScale,
+          imageRotetate: image.getRotetate);
+      if (image.getImageFrameColor != null)
+        imageDB.colorFrame = image.getImageFrameColor.value;
       // imageBox.put(image.getImageId, imageDB);
       imageBox.add(imageDB);
     });
@@ -141,19 +148,20 @@ class DiaryEditViewModel {
     TextDB textDB;
     editTexts.forEach((text) async {
       textDB = TextDB(
-          '',
-          text.getTextContent,
-          2,
-          'textFont',
-          'textWeight',
-          'textColor',
-          1,
-          'backgroundColor',
-          text.getOffset.dx,
-          text.getOffset.dy,
-          0,
-          0,
-          0);
+        '',
+        text.getTextContent,
+        2,
+        text.getTextStyle.fontFamily,
+        text.getTextStyle.color.value,
+        text.getOffset.dx,
+        text.getOffset.dy,
+        0,
+        0,
+      );
+      if (text.getTextBackgroundColor != null)
+        textDB.backgroundColor = text.getTextBackgroundColor.value;
+      if (text.getTextFrame != null)
+        textDB.textFrameId = text.getTextFrame.getFrameId;
       // textBox.put(text.getTextId, textDB);
       textBox.add(textDB);
     });

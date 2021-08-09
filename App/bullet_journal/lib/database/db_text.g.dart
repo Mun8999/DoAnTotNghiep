@@ -22,22 +22,24 @@ class TextDBAdapter extends TypeAdapter<TextDB> {
       fields[7] as String,
       fields[8] as int,
       fields[9] as String,
-      fields[10] as String,
-      fields[11] as String,
-      fields[12] as int,
-      fields[13] as String,
+      fields[11] as int,
       fields[0] as double,
       fields[1] as double,
       fields[2] as double,
       fields[3] as double,
-      fields[4] as double,
-    )..state = fields[5] as int;
+      textFrameId: fields[14] as int,
+      opacity: fields[4] as double,
+      textWeight: fields[10] as int,
+      textSize: fields[12] as double,
+    )
+      ..backgroundColor = fields[13] as int
+      ..state = fields[5] as int;
   }
 
   @override
   void write(BinaryWriter writer, TextDB obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(6)
       ..write(obj.textType)
       ..writeByte(7)
@@ -54,6 +56,8 @@ class TextDBAdapter extends TypeAdapter<TextDB> {
       ..write(obj.textSize)
       ..writeByte(13)
       ..write(obj.backgroundColor)
+      ..writeByte(14)
+      ..write(obj.textFrameId)
       ..writeByte(0)
       ..write(obj.offset_dx)
       ..writeByte(1)

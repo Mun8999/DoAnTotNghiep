@@ -10,17 +10,19 @@ import 'package:bullet_journal/edit_image/utils.dart';
 import 'package:bullet_journal/model/component.dart';
 import 'package:bullet_journal/model/emotion.dart';
 import 'package:bullet_journal/model/filter.dart';
+import 'package:bullet_journal/model/font.dart';
 import 'package:bullet_journal/model/frame.dart';
 import 'package:bullet_journal/model/image.dart';
 import 'package:bullet_journal/model/text.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:image_size_getter/file_input.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:vector_math/vector_math_64.dart' as vector3;
 import 'package:image_size_getter/image_size_getter.dart' as image_getter;
 
@@ -47,7 +49,6 @@ double _space;
 double _imageWidth;
 double _imageHeight;
 Size _imageSize;
-List<String> _editImageMenu = ['Bộ lọc', 'Khung', 'Độ trong suốt'];
 Filters _filters;
 List<Frame> _frames;
 
@@ -55,6 +56,7 @@ Emotion _emotion;
 bool _emotionEditState = false;
 
 List<MyText> _editTexts = [];
+List<String> _fonts = [];
 
 class _DiaryEditViewState extends State<DiaryEditView> {
   @override
@@ -505,8 +507,9 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                             final file = await Utils.pickMedia(
                                 isGallery: true, cropImage: cropImage);
                             if (file == null) {
-                              _diaryEditViewModel.setBottomStateController(
-                                  0, false);
+                              if (_images.length == 0)
+                                _diaryEditViewModel.setBottomStateController(
+                                    0, false);
                               return;
                             }
                             setState(() {
@@ -535,8 +538,8 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                   globalKey: _key1,
                                   scale: 1.0,
                                   rotetate: 0.0,
-                                  imageFrame: _frame);
-
+                                  imageFrame: _frame,
+                                  imageFilter: _filters.getFilters[0]);
                               _images.add(myImage);
                             });
                           },
@@ -559,8 +562,17 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                               _innitTextOffset = _innitTextOffset +
                                   Offset(0, _scrollController.offset);
                             }
-                            MyText _text = MyText('title', TextStyle(), '',
-                                _innitTextOffset, Size.zero);
+                            MyText _text = MyText(
+                                'title',
+                                TextStyle(
+                                  fontFamily: 'DancingScript',
+                                  fontSize: 18,
+                                  color: Colors.yellow[900],
+                                ),
+                                '',
+                                _innitTextOffset,
+                                Size.zero,
+                                textBackgroundColor: Colors.yellow[300]);
                             _editTexts.add(_text);
                           },
                           icon: Container(
@@ -700,103 +712,6 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           CropAspectRatioPreset.ratio16x9,
         ]);
   }
-
-  // void showMyBottomSheet() {
-  //   showModalBottomSheet<dynamic>(
-  //     // enableDrag: true,
-  //     backgroundColor: Colors.transparent,
-  //     isScrollControlled: true,
-  //     context: context,
-  //     builder: (context) {
-  //       return Container(
-  //           margin: EdgeInsets.all(20),
-  //           // width: size.width - size.width * 0.2,
-  //           height: size.height * 0.07,
-  //           decoration: BoxDecoration(
-  //             color: Colors.black,
-  //             borderRadius: BorderRadius.circular(20),
-  //           ),
-  //           child: Row(
-  //             mainAxisSize: MainAxisSize.min,
-  //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //             children: [
-  //               Container(
-  //                 height: 30,
-  //                 width: 30,
-  //                 child: SvgPicture.asset(
-  //                   'assets/icons/black-shop-tag.svg',
-  //                   color: Colors.white,
-  //                 ),
-  //               ),
-  //               Container(
-  //                 height: 30,
-  //                 width: 30,
-  //                 child: SvgPicture.asset(
-  //                   'assets/icons/insert-picture-icon.svg',
-  //                   color: Colors.white,
-  //                 ),
-  //               ),
-  //               Container(
-  //                 height: 30,
-  //                 width: 30,
-  //                 child: SvgPicture.asset(
-  //                   'assets/icons/cotton-t-shirt.svg',
-  //                   color: Colors.white,
-  //                 ),
-  //               ),
-  //               Container(
-  //                 height: 30,
-  //                 width: 30,
-  //                 child: SvgPicture.asset(
-  //                   'assets/icons/pointer-on-the-map.svg',
-  //                   color: Colors.white,
-  //                 ),
-  //               ),
-  //               InkWell(
-  //                   onTap: () {},
-  //                   child: FocusedMenuHolder(
-  //                     child: Container(
-  //                       height: 30,
-  //                       width: 30,
-  //                       child: SvgPicture.asset(
-  //                         'assets/icons/smile.svg',
-  //                         color: Colors.white,
-  //                       ),
-  //                     ),
-  //                     onPressed: () {},
-  //                     menuItems: <FocusedMenuItem>[
-  //                       // Add Each FocusedMenuItem  for Menu Options
-  //                       FocusedMenuItem(
-  //                           title: Text("Open"),
-  //                           trailingIcon: Icon(Icons.open_in_new),
-  //                           onPressed: () {
-  //                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenTwo()));
-  //                           }),
-  //                       FocusedMenuItem(
-  //                           title: Text("Share"),
-  //                           trailingIcon: Icon(Icons.share),
-  //                           onPressed: () {}),
-  //                       FocusedMenuItem(
-  //                           title: Text("Favorite"),
-  //                           trailingIcon: Icon(Icons.favorite_border),
-  //                           onPressed: () {}),
-  //                       FocusedMenuItem(
-  //                           title: Text(
-  //                             "Delete",
-  //                             style: TextStyle(color: Colors.redAccent),
-  //                           ),
-  //                           trailingIcon: Icon(
-  //                             Icons.delete,
-  //                             color: Colors.redAccent,
-  //                           ),
-  //                           onPressed: () {}),
-  //                     ],
-  //                   )),
-  //             ],
-  //           ));
-  //     },
-  //   );
-  // }
 
   Widget _WidgetChildDrag(File imageFile, int index) {
     return GestureDetector(
@@ -956,152 +871,277 @@ class _DiaryEditViewState extends State<DiaryEditView> {
           // color: Colors.transparent,
 
           child: Draggable(
-            child: Stack(
-              children: [
-                Container(
-                  width: _size.width * 0.67,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.yellow.withOpacity(0.5),
-                  ),
-                  child: TextFormField(
-                      onTap: () {
-                        setState(() {
-                          e.value.setEditState(!e.value.getEditState);
-                          print('904>Edit state: ' +
-                              e.value.getEditState.toString());
-                          if (e.value.getEditState) {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              builder: (context) {
-                                return Container(
-                                    height: _size.height * 0.4,
-                                    width: _size.width,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            _size.width * 0.02)));
-                              },
-                            );
-                          }
-                        });
-                      },
-                      initialValue: e.value.getTextContent,
-                      onChanged: (value) {
-                        e.value.setTextContent(value);
-                      },
-                      cursorColor: Colors.yellow[900],
-                      minLines: 1,
-                      maxLines: 50,
-                      style: GoogleFonts.dancingScript(
-                        fontSize: 20,
-                        color: Colors.yellow[900],
+            child: _editTexts[e.key].getTextFrame == null
+                ? Stack(
+                    children: [
+                      Container(
+                        width: _size.width * 0.67,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(_size.width * 0.02),
+                          color: _editTexts[e.key].getTextBackgroundColor,
+                        ),
+                        child: TextFormField(
+                            onTap: () {
+                              setState(() {
+                                e.value.setEditState(!e.value.getEditState);
+                                print('904>Edit state: ' +
+                                    e.value.getEditState.toString());
+                              });
+                            },
+                            initialValue: e.value.getTextContent,
+                            onChanged: (value) {
+                              e.value.setTextContent(value);
+                            },
+                            cursorColor: _editTexts[e.key].getTextStyle.color,
+                            minLines: 2,
+                            maxLines: 50,
+                            style: _editTexts[e.key].getTextStyle,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.all(10))),
                       ),
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(10))),
-                ),
-                e.value.getEditState
-                    ? Positioned(
-                        top: 7,
-                        right: 0,
+                      e.value.getEditState
+                          ? Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black),
+                                child: IconButton(
+                                    alignment: Alignment.center,
+                                    iconSize: 15,
+                                    onPressed: () async {
+                                      setState(() {
+                                        e.value.setState(3);
+                                        if (e.value.getState == 3) {
+                                          _editTexts.removeAt(e.key);
+                                          if (_editTexts.length == 0)
+                                            _diaryEditViewModel
+                                                .setBottomStateController(
+                                                    1, false);
+                                        }
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.close_rounded,
+                                      color: Colors.white,
+                                    )),
+                              ))
+                          : Container(),
+                      e.value.getEditState
+                          ? Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black),
+                                child: IconButton(
+                                    alignment: Alignment.center,
+                                    iconSize: 15,
+                                    onPressed: () {
+                                      _showEditTextPopUp(e.key);
+                                    },
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    )),
+                              ))
+                          : Container(),
+                    ],
+                  )
+                : Stack(
+                    children: [
+                      Transform.scale(
+                        scale: _editTexts[e.key].getTextFrame.getTiLe,
                         child: Container(
-                          height: 30,
-                          width: 30,
+                          width: _size.width * 0.67,
+                          height: _size.width * 0.67,
                           decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.black),
-                          child: IconButton(
-                              alignment: Alignment.center,
-                              iconSize: 15,
-                              onPressed: () async {
+                              borderRadius:
+                                  BorderRadius.circular(_size.width * 0.02),
+                              image: DecorationImage(
+                                  image: AssetImage(_editTexts[e.key]
+                                      .getTextFrame
+                                      .getFramePath),
+                                  fit: BoxFit.fill)),
+                        ),
+                      ),
+                      Positioned(
+                        left: 0,
+                        top: _size.width * 0.67 / 4,
+                        child: Container(
+                          width: _size.width * 0.67,
+                          decoration: BoxDecoration(shape: BoxShape.circle),
+                          child: TextFormField(
+                              onTap: () {
                                 setState(() {
-                                  e.value.setState(3);
-                                  if (e.value.getState == 3) {
-                                    _editTexts.removeAt(e.key);
-                                    if (_editTexts.length == 0)
-                                      _diaryEditViewModel
-                                          .setBottomStateController(1, false);
-                                  }
+                                  e.value.setEditState(!e.value.getEditState);
+                                  print('904>Edit state: ' +
+                                      e.value.getEditState.toString());
                                 });
                               },
-                              icon: Icon(
-                                Icons.close_rounded,
-                                color: Colors.white,
-                              )),
-                        ))
-                    : Container(),
-                // e.value.getEditState
-                //     ? Positioned(
-                //         bottom: 0,
-                //         right: 0,
-                //         child: InkWell(
-                //           // onTapCancel: () {
-                //           //   print('ontapcancle');
-                //           //   _images[index].setResizeState(true);
-                //           //   setState(() {});
-                //           // },
-                //           // onHover: (value) {
-                //           //   print('onhover');
-                //           // },
-                //           child: Container(
-                //             height: 30,
-                //             width: 30,
-                //             decoration: BoxDecoration(
-                //                 shape: BoxShape.circle, color: Colors.black),
-                //             child: IconButton(
-                //                 alignment: Alignment.center,
-                //                 iconSize: 15,
-                //                 onPressed: () {},
-                //                 icon: RotatedBox(
-                //                   quarterTurns: 1,
-                //                   child: Icon(
-                //                     Icons.open_in_full_rounded,
-                //                     color: Colors.white,
-                //                   ),
-                //                 )),
-                //           ),
-                //         ))
-                //     : Container(),
-              ],
-            ),
+                              initialValue: e.value.getTextContent,
+                              onChanged: (value) {
+                                e.value.setTextContent(value);
+                              },
+                              cursorColor: _editTexts[e.key].getTextStyle.color,
+                              minLines: 2,
+                              maxLines: 50,
+                              style: _editTexts[e.key].getTextStyle,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding:
+                                      EdgeInsets.all(_size.width * 0.02))),
+                        ),
+                      ),
+                      e.value.getEditState
+                          ? Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black),
+                                child: IconButton(
+                                    alignment: Alignment.center,
+                                    iconSize: 15,
+                                    onPressed: () async {
+                                      setState(() {
+                                        e.value.setState(3);
+                                        if (e.value.getState == 3) {
+                                          _editTexts.removeAt(e.key);
+                                          if (_editTexts.length == 0)
+                                            _diaryEditViewModel
+                                                .setBottomStateController(
+                                                    1, false);
+                                        }
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.close_rounded,
+                                      color: Colors.white,
+                                    )),
+                              ))
+                          : Container(),
+                      e.value.getEditState
+                          ? Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black),
+                                child: IconButton(
+                                    alignment: Alignment.center,
+                                    iconSize: 15,
+                                    onPressed: () {
+                                      _showEditTextPopUp(e.key);
+                                    },
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    )),
+                              ))
+                          : Container(),
+                    ],
+                  ),
             feedback: Opacity(
               opacity: 0.5,
-              child: Container(
-                width: _size.width * 0.67,
-                // color: Colors.transparent,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.yellow.withOpacity(0.5),
-                ),
-                child: Material(
-                  color: Colors.yellow,
-                  child: TextFormField(
-                      // controller: _contentController,
-                      initialValue: e.value.getTextContent,
-                      readOnly: true,
-                      focusNode: _focusTyping,
-                      cursorColor: Colors.yellow[900],
-                      minLines: 1,
-                      maxLines: 50,
-                      style: GoogleFonts.dancingScript(
-                          fontSize: 20, color: Colors.brown[500]),
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(10))
+              child: _editTexts[e.key].getTextFrame == null
+                  ? Material(
+                      child: Container(
+                        width: _size.width * 0.67,
+                        // color: Colors.transparent,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(_size.width * 0.02),
+                          color: _editTexts[e.key].getTextBackgroundColor,
+                        ),
+                        child: TextFormField(
+                            // controller: _contentController,
+                            initialValue: e.value.getTextContent,
+                            readOnly: true,
+                            focusNode: _focusTyping,
+                            cursorColor: _editTexts[e.key].getTextStyle.color,
+                            minLines: 2,
+                            maxLines: 50,
+                            style: _editTexts[e.key].getTextStyle,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding:
+                                    EdgeInsets.all(_size.width * 0.02))
 
-                      // decoration: InputDecoration(
-                      //     enabledBorder: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(5),
-                      //         borderSide: BorderSide(color: Colors.black)),
-                      //     border: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(5),
-                      //         borderSide: BorderSide(color: Colors.black)),
-                      //     focusedBorder: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(5),
-                      //         borderSide: BorderSide(color: Colors.black))),
+                            // decoration: InputDecoration(
+                            //     enabledBorder: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(5),
+                            //         borderSide: BorderSide(color: Colors.black)),
+                            //     border: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(5),
+                            //         borderSide: BorderSide(color: Colors.black)),
+                            //     focusedBorder: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(5),
+                            //         borderSide: BorderSide(color: Colors.black))),
+                            ),
                       ),
-                ),
-              ),
+                    )
+                  : Material(
+                      child: Container(
+                        width: _size.width * 0.67,
+                        child: Stack(
+                          children: [
+                            Transform.scale(
+                              scale: _editTexts[e.key].getTextFrame.getTiLe,
+                              child: Container(
+                                width: _size.width * 0.67,
+                                height: _size.width * 0.67,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        _size.width * 0.02),
+                                    image: DecorationImage(
+                                        image: AssetImage(_editTexts[e.key]
+                                            .getTextFrame
+                                            .getFramePath),
+                                        fit: BoxFit.fill)),
+                              ),
+                            ),
+                            Positioned(
+                              left: 0,
+                              top: _size.width * 0.67 / 4,
+                              child: Container(
+                                width: _size.width * 0.67,
+                                decoration:
+                                    BoxDecoration(shape: BoxShape.circle),
+                                child: TextFormField(
+                                    initialValue: e.value.getTextContent,
+                                    onChanged: (value) {
+                                      e.value.setTextContent(value);
+                                    },
+                                    cursorColor:
+                                        _editTexts[e.key].getTextStyle.color,
+                                    minLines: 2,
+                                    maxLines: 50,
+                                    style: _editTexts[e.key].getTextStyle,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.all(
+                                            _size.width * 0.02))),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
             ),
             childWhenDragging: Container(),
             onDraggableCanceled: (velocity, offset) {
@@ -1191,7 +1231,10 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                           width: _images[index].getSize.width,
                           ////test frame
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
+                            shape:
+                                _images[index].getImageFrame.getTypeOfFrame == 1
+                                    ? BoxShape.circle
+                                    : BoxShape.rectangle,
                           ),
                           ////test frame
                           child: (_images[index].getImageFilter != null &&
@@ -1202,24 +1245,48 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                     Container(
                                       height: _images[index].getSize.width,
                                       width: _images[index].getSize.width,
-                                      decoration:
-                                          BoxDecoration(shape: BoxShape.circle),
-                                      child: ClipOval(
-                                        child: Image.file(
-                                          imageFile,
-                                          colorBlendMode: _images[index]
-                                              .getImageFilter
-                                              .getBlendMode,
-                                          color: Colors.white.withOpacity(0.2),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                      decoration: BoxDecoration(
+                                          shape: _images[index]
+                                                      .getImageFrame
+                                                      .getTypeOfFrame ==
+                                                  1
+                                              ? BoxShape.circle
+                                              : BoxShape.rectangle),
+                                      child: _images[index]
+                                                  .getImageFrame
+                                                  .getTypeOfFrame ==
+                                              1
+                                          ? ClipOval(
+                                              child: Image.file(
+                                                imageFile,
+                                                colorBlendMode: _images[index]
+                                                    .getImageFilter
+                                                    .getBlendMode,
+                                                color: Colors.white
+                                                    .withOpacity(0.2),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : Image.file(
+                                              imageFile,
+                                              colorBlendMode: _images[index]
+                                                  .getImageFilter
+                                                  .getBlendMode,
+                                              color:
+                                                  Colors.white.withOpacity(0.2),
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
                                     Container(
                                       height: _images[index].getSize.width,
                                       width: _images[index].getSize.width,
                                       decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
+                                        shape: _images[index]
+                                                    .getImageFrame
+                                                    .getTypeOfFrame ==
+                                                1
+                                            ? BoxShape.circle
+                                            : BoxShape.rectangle,
                                         color: _images[index]
                                             .getImageFilter
                                             .getColor1
@@ -1230,7 +1297,12 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                       height: _images[index].getSize.width,
                                       width: _images[index].getSize.width,
                                       decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
+                                        shape: _images[index]
+                                                    .getImageFrame
+                                                    .getTypeOfFrame ==
+                                                1
+                                            ? BoxShape.circle
+                                            : BoxShape.rectangle,
                                         color: _images[index]
                                             .getImageFilter
                                             .getColor2
@@ -1294,14 +1366,27 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                       height: _images[index].getSize.width,
                                       width: _images[index].getSize.width,
                                       decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
+                                        shape: _images[index]
+                                                    .getImageFrame
+                                                    .getTypeOfFrame ==
+                                                1
+                                            ? BoxShape.circle
+                                            : BoxShape.rectangle,
                                       ),
-                                      child: ClipOval(
-                                        child: Image.file(
-                                          imageFile,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                      child: _images[index]
+                                                  .getImageFrame
+                                                  .getTypeOfFrame ==
+                                              1
+                                          ? ClipOval(
+                                              child: Image.file(
+                                                imageFile,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : Image.file(
+                                              imageFile,
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
                                     Transform.scale(
                                       scale:
@@ -1371,11 +1456,12 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                                       height: _images[index].getSize.height,
                                       width: _images[index].getSize.width,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              _images[index].getImageRadius *
-                                                  0.01 *
-                                                  _size.width),
-                                          color: Colors.red),
+                                        borderRadius: BorderRadius.circular(
+                                          _images[index].getImageRadius *
+                                              0.01 *
+                                              _size.width,
+                                        ),
+                                      ),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(
                                             _images[index].getImageRadius *
@@ -1551,12 +1637,13 @@ class _DiaryEditViewState extends State<DiaryEditView> {
   }
 
   Future _initData() async {
+    _fonts = Font().getFonts;
+    _filters = Filters();
     _images.clear();
     _editTexts.clear();
     await _initText();
     await _initImage();
     await _initEmotion();
-    _filters = Filters();
     _initBottomState();
   }
 
@@ -1566,11 +1653,26 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     // print('1105> boxId: ' + widget._diaryDB.diaryBox.toString());
     if (imageBox.length == 0) return;
     MyImage myImage;
+    Filter imageFilter;
+    Frame imageFrame;
     imageBox.toMap().values.forEach((image) {
       myImage = MyImage(
           File(image.imagePath),
           Offset(image.offset_dx, image.offset_dy),
-          Size(image.size_width, image.size_height));
+          Size(image.size_width, image.size_height),
+          scale: image.imageScale,
+          rotetate: image.imageRotetate,
+          opacity: image.opacity,
+          radius: image.frameRadius,
+          globalKey: new GlobalKey());
+      if (image.colorFrame != null)
+        myImage.setImageFrameColor(new Color(image.colorFrame));
+      imageFilter = _filters.getFilters
+          .firstWhere((element) => element.getId == image.filterId);
+      if (imageFilter != null) myImage.setImageFilter(imageFilter);
+      imageFrame =
+          _frames.firstWhere((element) => element.getFrameId == image.frameId);
+      if (imageFrame != null) myImage.setImageFrame(imageFrame);
       _images.add(myImage);
     });
     await imageBox.close();
@@ -1580,10 +1682,26 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     var textBox = await Hive.openBox<TextDB>(
         'texts' + widget._diaryDB.diaryBox.toString());
     if (textBox.length == 0) return;
-    textBox.values.toList().forEach((element) {
-      print('>content ' + element.textContent + '\n>offset ');
-      _editTexts.add(MyText('', TextStyle(), element.textContent,
-          Offset(element.offset_dx, element.offset_dy), _size));
+    MyText text;
+    Frame textFrame;
+    textBox.values.toList().forEach((textDB) {
+      text = MyText(
+          '',
+          TextStyle(
+              fontFamily: textDB.textFont,
+              color: new Color(textDB.textColor),
+              fontSize: textDB.textSize),
+          textDB.textContent,
+          Offset(textDB.offset_dx, textDB.offset_dy),
+          _size);
+      if (textDB.backgroundColor != null)
+        text.setTextBackgroundColor(new Color(textDB.backgroundColor));
+      if (textDB.textFrameId != null) {
+        textFrame = _frames
+            .firstWhere((element) => element.getFrameId == textDB.textFrameId);
+        if (textFrame != null) text.setTextFram(textFrame);
+      }
+      _editTexts.add(text);
     });
     await textBox.close();
   }
@@ -1618,13 +1736,17 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     // if()
   }
 
-  int filterSelected;
+  int _filterSelected;
+  int _imageMenuSelected;
+  List<String> _editImageMenu = ['Bộ lọc', 'Khung', 'Độ trong suốt'];
   void _showEditImagePopUp(File imageFile, int imageIndex) {
-    int selected = 0;
+    // int selected = 0;
+    _imageMenuSelected = 0;
     if (_images[imageIndex].getImageFilter != null)
-      filterSelected = _images[imageIndex].getImageFilter.getId;
+      _filterSelected = _images[imageIndex].getImageFilter.getId;
     else
-      filterSelected = 0;
+      _filterSelected = 0;
+
     showModalBottomSheet(
       isScrollControlled: true,
       isDismissible: false,
@@ -1645,41 +1767,48 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _editImageMenu.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            setEditImagePopUpState(() {
-                              selected = index;
-                            });
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(_editImageMenu[index],
+                    child: Container(
+                      height: _size.height * 0.03,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _editImageMenu.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              setEditImagePopUpState(() {
+                                _imageMenuSelected = index;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(_size.width * 0.02),
+                                  color: _imageMenuSelected != index
+                                      ? Colors.black
+                                      : Colors.blueGrey),
+                              padding: EdgeInsets.all(_size.width * 0.01),
+                              child: Center(
+                                child: Text(
+                                  _editImageMenu[index],
                                   style: TextStyle(
+                                      color: Colors.white,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.amber[700])),
-                              Divider(
-                                color: Colors.black,
-                                thickness: 2,
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) => SizedBox(
-                        width: _size.width * 0.2,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: _size.width * 0.02,
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
-                      flex: 5,
-                      child: _EditPopUpItem(selected, imageFile, imageIndex,
-                          setEditImagePopUpState)),
+                      flex: 9,
+                      child: _EditPopUpItem(_imageMenuSelected, imageFile,
+                          imageIndex, setEditImagePopUpState)),
                 ],
               ),
             );
@@ -1689,184 +1818,512 @@ class _DiaryEditViewState extends State<DiaryEditView> {
     );
   }
 
+  double _radiusSelected;
+  double _opacitySelected;
+  Color _pickerImageFrameColor;
   Widget _EditPopUpItem(int selected, File imageFile, int imageIndex,
       StateSetter setEditImagePopUpState) {
+    _radiusSelected = _images[imageIndex].getImageRadius;
+
+    if (_images[imageIndex].getOpacity != null)
+      _opacitySelected = _images[imageIndex].getOpacity * 10;
+    else
+      _opacitySelected = 10;
+    if (_images[imageIndex].getImageFrameColor != null)
+      _pickerImageFrameColor = _images[imageIndex].getImageFrameColor;
+    else
+      _pickerImageFrameColor = Colors.transparent;
     switch (selected) {
       case 0:
         {
-          return _FilterMenu(imageFile, imageIndex, setEditImagePopUpState);
+          return Padding(
+            padding: EdgeInsets.all(_size.width * 0.02),
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      _images[imageIndex]
+                          .setImageFilter(_filters.getFilters[index]);
+                      _filterSelected = index;
+                      setEditImagePopUpState(() {});
+                      setState(() {});
+                    },
+                    child: Container(
+                      height: _size.width * 0.02,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(_size.width * 0.02)),
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 9,
+                            child: Stack(
+                              children: [
+                                Container(
+                                    height: _size.height * 0.25,
+                                    width: _size.height * 0.2,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(
+                                              _size.width * 0.02),
+                                          topRight: Radius.circular(
+                                              _size.width * 0.02)),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(
+                                              _size.width * 0.02),
+                                          topRight: Radius.circular(
+                                              _size.width * 0.02)),
+                                      child: index != 0
+                                          ? Image.file(
+                                              imageFile,
+                                              colorBlendMode: _filters
+                                                  .getFilters[index]
+                                                  .getBlendMode,
+                                              color:
+                                                  Colors.white.withOpacity(0.2),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.file(
+                                              imageFile,
+                                              fit: BoxFit.cover,
+                                            ),
+                                    )),
+                                // Text(index.toString()),
+                                index != 0
+                                    ? Container(
+                                        height: _size.height * 0.25,
+                                        width: _size.height * 0.2,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  _size.width * 0.02),
+                                              topRight: Radius.circular(
+                                                  _size.width * 0.02)),
+                                          color: _filters
+                                              .getFilters[index].getColor1
+                                              .withOpacity(0.1),
+                                        ),
+                                      )
+                                    : Container(),
+                                index != 0
+                                    ? Container(
+                                        height: _size.height * 0.25,
+                                        width: _size.height * 0.2,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  _size.width * 0.02),
+                                              topRight: Radius.circular(
+                                                  _size.width * 0.02)),
+                                          color: _filters
+                                              .getFilters[index].getColor2
+                                              .withOpacity(0.1),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              width: _size.height * 0.2,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: _filterSelected == index
+                                      ? Colors.black26
+                                      : Colors.black,
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft:
+                                          Radius.circular(_size.width * 0.02),
+                                      bottomRight:
+                                          Radius.circular(_size.width * 0.02))),
+                              child: Text(_filters.getFilters[index].getName,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(
+                    width: _size.width * 0.01,
+                  );
+                },
+                itemCount: _filters.getFilters.length),
+          );
         }
       case 1:
         {
-          return _FrameMenu(imageIndex, setEditImagePopUpState);
+          return ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return index != 0
+                    ? InkWell(
+                        onTap: () {
+                          _images[imageIndex].setImageFrame(_frames[index]);
+                          setState(() {});
+                        },
+                        child: Container(
+                          width: _size.height * 0.3,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(_frames[index].getFramePath),
+                                fit: BoxFit.contain),
+                          ),
+                        ),
+                      )
+                    : Container();
+              },
+              separatorBuilder: (context, index) => SizedBox(
+                    width: _size.width * 0.02,
+                  ),
+              itemCount: _frames.length);
+        }
+      // case 2:
+      //   {
+      //     return Container(
+      //       child: Column(
+      //         children: [
+      //           Expanded(
+      //             flex: 1,
+      //             child: Slider(
+      //               min: 0,
+      //               max: 10,
+      //               divisions: 10,
+      //               value: radiusSelected,
+      //               label: radiusSelected.round().toString(),
+      //               onChanged: (value) {
+      //                 radiusSelected = value;
+      //                 _images[imageIndex].setImageFrameRadius(radiusSelected);
+      //                 // print('1621> radius: ' +
+      //                 //     _images[imageIndex].getImageRadius.toString());
+      //                 setState(() {});
+      //                 setEditImagePopUpState(() {});
+      //               },
+      //             ),
+      //           ),
+      //           Expanded(
+      //               flex: 9,
+      //               child: SizedBox(
+      //                 width: _size.width,
+      //                 child: Padding(
+      //                   padding: EdgeInsets.all(_size.width * 0.02),
+      //                   child: Card(
+      //                     elevation: 2,
+      //                     child: SingleChildScrollView(
+      //                       child: ColorPicker(
+      //                         // Use the screenPickerColor as start color.
+      //                         color: _pickerImageFrameColor,
+      //                         // Update the screenPickerColor using the callback.
+      //                         onColorChanged: (Color color) {
+      //                           setEditImagePopUpState(
+      //                               () => _pickerImageFrameColor = color);
+      //                           setState(() => _images[imageIndex]
+      //                               .setImageFrameColor(color));
+      //                         },
+      //                         width: 44,
+      //                         height: 44,
+      //                         borderRadius: 22,
+      //                         heading: Text(
+      //                           'Chọn màu khung',
+      //                           style: Theme.of(context).textTheme.headline5,
+      //                         ),
+      //                         subheading: Text(
+      //                           'Độ đậm nhạt',
+      //                           style: Theme.of(context).textTheme.subtitle1,
+      //                         ),
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ))
+      //         ],
+      //       ),
+      //     );
+      //   }
+      case 2:
+        {
+          return Container(
+            child: Slider(
+              min: 1,
+              max: 10,
+              divisions: 9,
+              value: _opacitySelected,
+              label: _opacitySelected.round().toString(),
+              onChanged: (value) {
+                double opacity = value / 10;
+                _images[imageIndex].setOpacity(opacity);
+                _opacitySelected = value;
+                setEditImagePopUpState(() {});
+                setState(() {});
+              },
+            ),
+          );
+        }
+      default:
+        {
+          return Container();
         }
     }
   }
 
-  Widget _FilterMenu(
-      File imageFile, int imageIndex, StateSetter setEditImagePopUpState) {
-    return ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              _images[imageIndex].setImageFilter(_filters.getFilters[index]);
-              filterSelected = index;
-              setEditImagePopUpState(() {});
-              setState(() {});
-            },
-            child: Container(
-              width: _size.height * 0.2,
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.all(Radius.circular(_size.width * 0.02)),
-              ),
-              child: Stack(
-                children: [
-                  Container(
-                      height: _size.height * 0.25,
-                      width: _size.height * 0.2,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(_size.width * 0.02),
-                            topRight: Radius.circular(_size.width * 0.02)),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(_size.width * 0.02),
-                            topRight: Radius.circular(_size.width * 0.02)),
-                        child: index != 0
-                            ? Image.file(
-                                imageFile,
-                                colorBlendMode:
-                                    _filters.getFilters[index].getBlendMode,
-                                color: Colors.white.withOpacity(0.2),
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                imageFile,
-                                color: Colors.white.withOpacity(0.2),
-                                fit: BoxFit.cover,
-                              ),
-                      )),
-                  // Text(index.toString()),
-                  index != 0
-                      ? Container(
-                          height: _size.height * 0.25,
-                          width: _size.height * 0.2,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(_size.width * 0.02),
-                                topRight: Radius.circular(_size.width * 0.02)),
-                            color: _filters.getFilters[index].getColor1
-                                .withOpacity(0.1),
-                          ),
-                        )
-                      : Container(),
-                  index != 0
-                      ? Container(
-                          height: _size.height * 0.25,
-                          width: _size.height * 0.2,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(_size.width * 0.02),
-                                topRight: Radius.circular(_size.width * 0.02)),
-                            color: _filters.getFilters[index].getColor2
-                                .withOpacity(0.1),
-                          ),
-                        )
-                      : Container(),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    child: Container(
-                      height: _size.height * 0.05,
-                      width: _size.height * 0.2,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: filterSelected == index
-                              ? Colors.brown[200]
-                              : Colors.brown[600],
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(_size.width * 0.02),
-                              bottomRight:
-                                  Radius.circular(_size.width * 0.02))),
-                      child: Text(_filters.getFilters[index].getName,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        },
-        separatorBuilder: (context, index) {
-          return SizedBox(
-            width: _size.width * 0.01,
-          );
-        },
-        itemCount: _filters.getFilters.length);
+  // double opacitySelected, radiusSelected;
+  // int frameselected = 0;
+  // Widget _FrameImageMenu(int imageIndex, StateSetter setEditImagePopUpState) {
+  //   return Expanded(
+  //     flex: 9,
+  //     child: ListView.separated(
+  //         scrollDirection: Axis.horizontal,
+  //         itemBuilder: (context, index) {
+  //           return index != 0
+  //               ? InkWell(
+  //                   onTap: () {
+  //                     _images[imageIndex].setImageFrame(_frames[index]);
+  //                     setState(() {});
+  //                   },
+  //                   child: Container(
+  //                     width: _size.height * 0.2,
+  //                     decoration: BoxDecoration(
+  //                       image: DecorationImage(
+  //                           image: AssetImage(_frames[index].getFramePath),
+  //                           fit: BoxFit.contain),
+  //                     ),
+  //                   ),
+  //                 )
+  //               : Container();
+  //         },
+  //         separatorBuilder: (context, index) => SizedBox(
+  //               width: _size.width * 0.02,
+  //             ),
+  //         itemCount: _frames.length),
+  //   );
+  // }
+//  if (_images[imageIndex].getOpacity != null)
+//       opacitySelected = _images[imageIndex].getOpacity * 10;
+//     else
+//       opacitySelected = 10;
+//     // _images[imageIndex].setImageRadius(radius)
+//     radiusSelected = _images[imageIndex].getImageRadius;
+  // print('1592> radius: ' + _images[imageIndex].getImageRadius.toString());
+// Slider(
+//             min: 1,
+//             max: 10,
+//             divisions: 9,
+//             value: opacitySelected,
+//             label: opacitySelected.round().toString(),
+//             onChanged: (value) {
+//               double opacity = value / 10;
+//               _images[imageIndex].setOpacity(opacity);
+//               opacitySelected = value;
+//               setEditImagePopUpState(() {});
+//               setState(() {});
+//             },
+//           ),
+//           Slider(
+//             min: 0,
+//             max: 10,
+//             divisions: 10,
+//             value: radiusSelected,
+//             label: radiusSelected.round().toString(),
+//             onChanged: (value) {
+//               radiusSelected = value;
+//               _images[imageIndex].setImageRadius(radiusSelected);
+//               // print('1621> radius: ' +
+//               //     _images[imageIndex].getImageRadius.toString());
+//               setState(() {});
+//               setEditImagePopUpState(() {});
+//             },
+//           ),
+
+  int _selectedFont;
+  List<String> _editTextMenu = ['Kiểu chữ', 'Màu sắc', 'Khung', 'Nền'];
+  int _editTextMenuSelected;
+  void _showEditTextPopUp(int key) {
+    _editTextMenuSelected = 0;
+    _selectedFont = _fonts.indexWhere(
+        (element) => element == _editTexts[key].getTextStyle.fontFamily);
+    showModalBottomSheet(
+      isScrollControlled: true,
+      isDismissible: false,
+      shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.vertical(top: Radius.circular(_size.width * 0.07))),
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setEditTextPopUpMenu) {
+            return Container(
+              height: _size.height * 0.4,
+              width: _size.width,
+              padding: EdgeInsets.all(_size.width * 0.05),
+              // decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(_size.width * 0.02)),
+              child: _buildTextMenu(key, setEditTextPopUpMenu),
+            );
+          },
+        );
+      },
+    );
   }
 
-  double opacitySelected, radiusSelected;
-  int frameselected = 0;
-  Widget _FrameMenu(int imageIndex, StateSetter setEditImagePopUpState) {
-    if (_images[imageIndex].getOpacity != null)
-      opacitySelected = _images[imageIndex].getOpacity * 10;
-    else
-      opacitySelected = 10;
-    // _images[imageIndex].setImageRadius(radius)
-    radiusSelected = _images[imageIndex].getImageRadius;
-    // print('1592> radius: ' + _images[imageIndex].getImageRadius.toString());
-    return Container(
-      child: Column(
-        children: [
-          Slider(
-            min: 1,
-            max: 10,
-            divisions: 9,
-            value: opacitySelected,
-            label: opacitySelected.round().toString(),
-            onChanged: (value) {
-              double opacity = value / 10;
-              _images[imageIndex].setOpacity(opacity);
-              opacitySelected = value;
-              setEditImagePopUpState(() {});
-              setState(() {});
-            },
+  Widget _buildTextMenu(int key, StateSetter setEditTextPopUpMenu) {
+    return Column(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            height: _size.height * 0.03,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      setEditTextPopUpMenu(() {
+                        _editTextMenuSelected = index;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(_size.width * 0.02),
+                          color: _editTextMenuSelected != index
+                              ? Colors.black
+                              : Colors.blueGrey),
+                      padding: EdgeInsets.all(_size.width * 0.01),
+                      child: Center(
+                        child: Text(
+                          _editTextMenu[index],
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                      width: _size.width * 0.03,
+                    ),
+                itemCount: _editTextMenu.length),
           ),
-          Slider(
-            min: 0,
-            max: 10,
-            divisions: 10,
-            value: radiusSelected,
-            label: radiusSelected.round().toString(),
-            onChanged: (value) {
-              radiusSelected = value;
-              _images[imageIndex].setImageRadius(radiusSelected);
-              // print('1621> radius: ' +
-              //     _images[imageIndex].getImageRadius.toString());
-              setState(() {});
-              setEditImagePopUpState(() {});
-            },
-          ),
-          Container(
-            height: _size.height * 0.15,
+        ),
+        _builtTextMenuItem(key, setEditTextPopUpMenu),
+      ],
+    );
+  }
+
+  Color _pickerTextColor;
+  Color _pickerBackgroundColor;
+  Widget _builtTextMenuItem(int key, StateSetter setEditTextPopUpMenu) {
+    _pickerTextColor = _editTexts[key].getTextStyle.color;
+    _pickerBackgroundColor = _editTexts[key].getTextBackgroundColor;
+    switch (_editTextMenuSelected) {
+      case 0:
+        {
+          return Expanded(
+            flex: 9,
+            child: Padding(
+              padding: EdgeInsets.all(_size.width * 0.02),
+              child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        setEditTextPopUpMenu(() {
+                          _selectedFont = index;
+                        });
+                        setState(() {
+                          _editTexts[key].setTextStyle(TextStyle(
+                              fontFamily: _fonts[index],
+                              fontSize: _editTexts[key].getTextStyle.fontSize,
+                              color: _editTexts[key].getTextStyle.color));
+                        });
+                      },
+                      child: Text(
+                        _fonts[index],
+                        style: TextStyle(
+                            fontFamily: _fonts[index],
+                            fontSize: 20,
+                            color: _selectedFont == index
+                                ? Colors.red
+                                : Colors.black),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                        height: _size.width * 0.02,
+                      ),
+                  itemCount: _fonts.length),
+            ),
+          );
+        }
+      case 1:
+        {
+          return Expanded(
+              flex: 9,
+              child: SizedBox(
+                width: _size.width,
+                child: Padding(
+                  padding: EdgeInsets.all(_size.width * 0.02),
+                  child: Card(
+                    elevation: 2,
+                    child: SingleChildScrollView(
+                      child: ColorPicker(
+                        // Use the screenPickerColor as start color.
+                        color: _pickerTextColor,
+                        enableOpacity: true,
+                        // Update the screenPickerColor using the callback.
+                        onColorChanged: (Color color) {
+                          setEditTextPopUpMenu(() => _pickerTextColor = color);
+                          setState(() => _editTexts[key].setTextStyle(TextStyle(
+                              fontFamily:
+                                  _editTexts[key].getTextStyle.fontFamily,
+                              fontSize: _editTexts[key].getTextStyle.fontSize,
+                              color: _pickerTextColor)));
+                        },
+                        width: 44,
+                        height: 44,
+                        borderRadius: 22,
+                        heading: Text(
+                          'Chọn màu chữ',
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                        subheading: Text(
+                          'Độ đậm nhạt',
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ));
+        }
+      case 2:
+        {
+          return Expanded(
+            flex: 9,
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return index != 0
                       ? InkWell(
                           onTap: () {
-                            _images[imageIndex].setImageFrame(_frames[index]);
+                            _editTexts[key].setTextFram(_frames[index]);
                             setState(() {});
                           },
                           child: Container(
-                            height: _size.height * 0.15,
-                            width: _size.height * 0.15,
+                            height: _size.height * 0.3,
+                            width: _size.height * 0.3,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                   image:
@@ -1881,10 +2338,56 @@ class _DiaryEditViewState extends State<DiaryEditView> {
                       width: _size.width * 0.02,
                     ),
                 itemCount: _frames.length),
-          )
-        ],
-      ),
-    );
+          );
+        }
+      case 3:
+        {
+          return Expanded(
+              flex: 9,
+              child: Container(
+                child: SizedBox(
+                  width: _size.width,
+                  child: Padding(
+                    padding: EdgeInsets.all(_size.width * 0.02),
+                    child: Card(
+                      elevation: 2,
+                      child: SingleChildScrollView(
+                        child: ColorPicker(
+                          // Use the screenPickerColor as start color.
+                          color: _pickerBackgroundColor,
+                          enableOpacity: true,
+                          // Update the screenPickerColor using the callback.
+                          onColorChanged: (Color color) {
+                            setEditTextPopUpMenu(
+                                () => _pickerBackgroundColor = color);
+                            setState(() {
+                              _editTexts[key].setTextBackgroundColor(color);
+                              _editTexts[key].setTextFram(null);
+                            });
+                          },
+                          width: 44,
+                          height: 44,
+                          borderRadius: 22,
+                          heading: Text(
+                            'Chọn màu nền',
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                          subheading: Text(
+                            'Độ đậm nhạt',
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ));
+        }
+      default:
+        {
+          return Expanded(flex: 9, child: Container());
+        }
+    }
   }
 }
 

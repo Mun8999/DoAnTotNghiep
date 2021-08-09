@@ -38,6 +38,8 @@ dependencies:
   flutter_svg: ^0.22.0
   image_size_getter: ^1.0.0
   photo_view: ^0.11.1
+  # color
+  flex_color_picker: ^2.1.2
   # sound
   flutter_sound: ^8.1.4
   path_provider: ^2.0.2
@@ -90,8 +92,8 @@ flutter:
     - assets/gifs/
     - assets/icons/menu/
     - assets/icons/note_edit/
-    - assets/icons/frame/circle/
-    - assets/icons/frame/rectangle/
+    - assets/images/frame/circle/
+    - assets/images/frame/rectangle/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -111,12 +113,76 @@ flutter:
     - family:  LoginViewIcon
       fonts:
         - asset: assets/icons/my_icon/LoginViewIcon.ttf
+
+    - family: Anton
+      fonts:
+      - asset: assets/fonts/google_fonts/Anton/Anton-Regular.ttf
+    - family: Caveat
+      fonts:
+      - asset: assets/fonts/google_fonts/Caveat/Caveat-VariableFont_wght.ttf
+    - family: Courgette
+      fonts:
+      - asset: assets/fonts/google_fonts/Courgette/Courgette-Regular.ttf
     - family: DancingScript
       fonts:
       - asset: assets/fonts/google_fonts/DacingScript/DancingScript-Bold.ttf
       - asset: assets/fonts/google_fonts/DacingScript/DancingScript-Medium.ttf
       - asset: assets/fonts/google_fonts/DacingScript/DancingScript-Regular.ttf
       - asset: assets/fonts/google_fonts/DacingScript/DancingScript-Regular.ttf
+    - family: Great_Vibes
+      fonts:
+      - asset: assets/fonts/google_fonts/Great_Vibes/GreatVibes-Regular.ttf
+    - family: Indie_Flower
+      fonts:
+      - asset: assets/fonts/google_fonts/Indie_Flower/IndieFlower-Regular.ttf
+    - family: Lobster
+      fonts:
+      - asset: assets/fonts/google_fonts/Lobster/Lobster-Regular.ttf
+    - family: MonteCarlo
+      fonts:
+      - asset: assets/fonts/google_fonts/MonteCarlo/MonteCarlo-Regular.ttf
+    - family: Pacifico
+      fonts:
+      - asset: assets/fonts/google_fonts/Pacifico/Pacifico-Regular.ttf
+    - family: Roboto
+      fonts:
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-Black.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-BlackItalic.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-Bold.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-BoldItalic.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-Italic.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-Light.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-LightItalic.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-Medium.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-MediumItalic.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-Regular.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-Thin.ttf
+      - asset: assets/fonts/google_fonts/Roboto/Roboto-ThinItalic.ttf
+    - family: Roboto_Condensed
+      fonts:
+      - asset: assets/fonts/google_fonts/Roboto_Condensed/RobotoCondensed-Bold.ttf
+      - asset: assets/fonts/google_fonts/Roboto_Condensed/RobotoCondensed-BoldItalic.ttf
+      - asset: assets/fonts/google_fonts/Roboto_Condensed/RobotoCondensed-Italic.ttf
+      - asset: assets/fonts/google_fonts/Roboto_Condensed/RobotoCondensed-Light.ttf
+      - asset: assets/fonts/google_fonts/Roboto_Condensed/RobotoCondensed-LightItalic.ttf
+      - asset: assets/fonts/google_fonts/Roboto_Condensed/RobotoCondensed-Regular.ttf
+    - family: Satisfy
+      fonts: 
+      - asset: assets/fonts/google_fonts/Satisfy/Satisfy-Regular.ttf
+    - family: Shadows_Into_Light
+      fonts:
+      - asset: assets/fonts/google_fonts/Shadows_Into_Light/ShadowsIntoLight-Regular.ttf
+    - family: STIXTwoText
+      fonts:
+      - asset: assets/fonts/google_fonts/STIXTwoText/STIXTwoText-Italic-VariableFont_wght.ttf
+      - asset: assets/fonts/google_fonts/STIXTwoText/STIXTwoText-VariableFont_wght.ttf
+    - family: Style_Script
+      fonts:
+      - asset: assets/fonts/google_fonts/Style_Script/StyleScript-Regular.ttf
+    - family: WindSong
+      fonts:
+      - asset: assets/fonts/google_fonts/WindSong/WindSong-Medium.ttf
+      - asset: assets/fonts/google_fonts/WindSong/WindSong-Regular.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

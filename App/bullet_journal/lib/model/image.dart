@@ -12,12 +12,15 @@ class MyImage extends Component {
   File _imageFile;
   Filter _imageFilter;
   Frame _imageFrame;
-  double _radius;
+  double _frameRadius;
+  Color _frameColor;
   setImageId(int imageId) => this._imageId = imageId;
   setImageFile(File imageFile) => this._imageFile = imageFile;
   setImageFilter(Filter imageFilter) => this._imageFilter = imageFilter;
-  setImageRadius(double radius) => this._radius = radius;
+  setImageFrameRadius(double radius) => this._frameRadius = radius;
   setImageFrame(Frame frame) => this._imageFrame = frame;
+  setImageFrameColor(Color imageFrameColor) =>
+      this._frameColor = imageFrameColor;
   MyImage(File imageFile, Offset offset, Size size,
       {int imageId,
       Filter imageFilter,
@@ -26,22 +29,27 @@ class MyImage extends Component {
       double rotetate,
       double opacity = 1.0,
       double radius = 0.0,
-      BlendMode blendMode,
-      Frame imageFrame})
-      : super(offset, size,
-            globalKey: globalKey,
-            scale: scale,
-            rotetate: rotetate,
-            opacity: opacity,
-            blendMode: blendMode) {
+      Frame imageFrame,
+      Color imageFrameColor})
+      : super(
+          offset,
+          size,
+          globalKey: globalKey,
+          scale: scale,
+          rotetate: rotetate,
+          opacity: opacity,
+        ) {
     this._imageId = imageId;
     this._imageFile = imageFile;
-    this._radius = radius;
+    this._frameRadius = radius;
     if (imageFilter != null) {
       this._imageFilter = imageFilter;
     }
     if (imageFrame != null) {
       this._imageFrame = imageFrame;
+    }
+    if (imageFrameColor != null) {
+      this._frameColor = imageFrameColor;
     }
   }
   String toString() {
@@ -58,6 +66,7 @@ class MyImage extends Component {
   int get getImageId => this._imageId;
   File get getImageFile => this._imageFile;
   Filter get getImageFilter => this._imageFilter;
-  double get getImageRadius => this._radius;
+  double get getImageRadius => this._frameRadius;
   Frame get getImageFrame => this._imageFrame;
+  Color get getImageFrameColor => this._frameColor;
 }

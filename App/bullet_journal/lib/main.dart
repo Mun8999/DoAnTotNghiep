@@ -47,12 +47,12 @@ void main() async {
     ..registerAdapter(DiaryDBAdapter())
     ..registerAdapter(ImageDBAdapter())
     ..registerAdapter(TextDBAdapter())
-    ..registerAdapter(ComponentDBAdapter())
     ..registerAdapter(NoteDBAdapter())
     ..registerAdapter(JourneyDBAdapter())
     ..registerAdapter(AssetDBAdapter())
     ..registerAdapter(EmotionDBAdapter())
     ..registerAdapter(AddressDBAdapter())
+    ..registerAdapter(ComponentDBAdapter())
     ..registerAdapter(DailyTaskDBAdapter())
     ..registerAdapter(
         JournalItemDBAdapter()); // bai hoc xuong mau> class extend phai de o cuoi cung nha -_-

@@ -123,7 +123,9 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView>
                                   hintText: 'Nhập từ khóa cần tìm',
                                   hintStyle: TextStyle(color: Colors.black38)),
                               onChanged: (value) {
-                                _diaryNewsFeedViewModel.searchDiary(value);
+                                diaryBox = Hive.box('diaries');
+                                _diaryNewsFeedViewModel.searchDiary(
+                                    value, diaryBox.values.toList());
                               },
                             ))
                         : Container(),
@@ -261,157 +263,116 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView>
       body: Container(
           height: _size.height,
           color: Colors.white,
-          child: ValueListenableBuilder(
-            valueListenable: diaryBox.listenable(),
-            builder: (context, Box<DiaryDB> diaryBox, child) {
-              return StreamBuilder<List<DiaryDB>>(
-                  initialData: diaryBox.values.toList(),
-                  stream: _diaryNewsFeedViewModel.getSearchStream,
-                  builder: (context, diaryList) {
-                    return ListView.separated(
-                      itemBuilder: (BuildContext context, int index) {
-                        // diaryBox.values.elementAt(index).diaryId = index;
-                        return _itemDiaryList(diaryList.data[index], index);
-                      },
-                      itemCount: diaryList.data.length,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          height: _size.height * 0.015,
+          child: Stack(
+            children: [
+              ValueListenableBuilder(
+                valueListenable: diaryBox.listenable(),
+                builder: (context, Box<DiaryDB> diaryBox, child) {
+                  return StreamBuilder<List<DiaryDB>>(
+                      initialData: diaryBox.values.toList(),
+                      stream: _diaryNewsFeedViewModel.getSearchStream,
+                      builder: (context, diaryList) {
+                        return ListView.separated(
+                          itemBuilder: (BuildContext context, int index) {
+                            // diaryBox.values.elementAt(index).diaryId = index;
+                            return _itemDiaryList(
+                                _isSearching
+                                    ? diaryList.data[index]
+                                    : diaryBox.getAt(index),
+                                index);
+                          },
+                          itemCount: _isSearching
+                              ? diaryList.data.length
+                              : diaryBox.values.length,
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              height: _size.height * 0.015,
+                            );
+                          },
+
+                          // children: diaryBox.values
+                          //     .toList()
+                          //     .asMap()
+                          //     .entries
+                          //     .map((e) => _itemDiaryList(e))
                         );
-                      },
+                      });
+                  // _isSearching
+                  //     ? ListView.separated(
+                  //         itemBuilder: (BuildContext context, int index) {
+                  //           // diaryBox.values.elementAt(index).diaryId = index;
+                  //           return _itemDiaryList(diaryBox.getAt(index), index);
+                  //         },
+                  //         itemCount: diaryBox.values.length,
+                  //         separatorBuilder: (BuildContext context, int index) {
+                  //           return SizedBox(
+                  //             height: _size.height * 0.015,
+                  //           );
+                  //         },
 
-                      // children: diaryBox.values
-                      //     .toList()
-                      //     .asMap()
-                      //     .entries
-                      //     .map((e) => _itemDiaryList(e))
-                    );
-                  });
-              // _isSearching
-              //     ? ListView.separated(
-              //         itemBuilder: (BuildContext context, int index) {
-              //           // diaryBox.values.elementAt(index).diaryId = index;
-              //           return _itemDiaryList(diaryBox.getAt(index), index);
-              //         },
-              //         itemCount: diaryBox.values.length,
-              //         separatorBuilder: (BuildContext context, int index) {
-              //           return SizedBox(
-              //             height: _size.height * 0.015,
-              //           );
-              //         },
+                  //         // children: diaryBox.values
+                  //         //     .toList()
+                  //         //     .asMap()
+                  //         //     .entries
+                  //         //     .map((e) => _itemDiaryList(e))
+                  //       )
+                  //     : StreamBuilder<List<DiaryDB>>(
+                  //         initialData: diaryBox.values.toList(),
+                  //         stream: _diaryNewsFeedViewModel.getSearchStream,
+                  //         builder: (context, diaryList) {
+                  //           return ListView.separated(
+                  //             itemBuilder: (BuildContext context, int index) {
+                  //               // diaryBox.values.elementAt(index).diaryId = index;
+                  //               return _itemDiaryList(diaryBox.getAt(index), index);
+                  //             },
+                  //             itemCount: diaryList.data.length,
+                  //             separatorBuilder: (BuildContext context, int index) {
+                  //               return SizedBox(
+                  //                 height: _size.height * 0.015,
+                  //               );
+                  //             },
 
-              //         // children: diaryBox.values
-              //         //     .toList()
-              //         //     .asMap()
-              //         //     .entries
-              //         //     .map((e) => _itemDiaryList(e))
-              //       )
-              //     : StreamBuilder<List<DiaryDB>>(
-              //         initialData: diaryBox.values.toList(),
-              //         stream: _diaryNewsFeedViewModel.getSearchStream,
-              //         builder: (context, diaryList) {
-              //           return ListView.separated(
-              //             itemBuilder: (BuildContext context, int index) {
-              //               // diaryBox.values.elementAt(index).diaryId = index;
-              //               return _itemDiaryList(diaryBox.getAt(index), index);
-              //             },
-              //             itemCount: diaryList.data.length,
-              //             separatorBuilder: (BuildContext context, int index) {
-              //               return SizedBox(
-              //                 height: _size.height * 0.015,
-              //               );
-              //             },
-
-              //             // children: diaryBox.values
-              //             //     .toList()
-              //             //     .asMap()
-              //             //     .entries
-              //             //     .map((e) => _itemDiaryList(e))
-              //           );
-              //         });
-            },
+                  //             // children: diaryBox.values
+                  //             //     .toList()
+                  //             //     .asMap()
+                  //             //     .entries
+                  //             //     .map((e) => _itemDiaryList(e))
+                  //           );
+                  //         });
+                },
+              ),
+              Positioned(
+                right: _size.width * 0.04,
+                bottom: _size.width * 0.04,
+                child: ButtonTheme(
+                  minWidth: _size.height * 0.07,
+                  height: _size.height * 0.07,
+                  child: RaisedButton(
+                    focusElevation: 2,
+                    shape: CircleBorder(),
+                    color: Colors.amber[500],
+                    child: Icon(Icons.add),
+                    elevation: 1,
+                    onPressed: () async {
+                      // NoteDB noteDB =
+                      //     NoteDB(0, 'nganha se lam duoc', 'dkfnsdnfsdfnsd', 0);
+                      // _noteBox.add(noteDB);
+                      // await Hive.openBox<NoteDB>('texts');
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return DiaryEditView(
+                            DiaryDB(DateTime.now()),
+                            state: 1,
+                          );
+                        },
+                      ));
+                    },
+                  ),
+                ),
+              )
+            ],
           )),
     );
-    // Scaffold(
-    //   body:
-    //   // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    //   // floatingActionButton: FloatingActionButton(
-    //   //   backgroundColor: Colors.yellow[900],
-    //   //   onPressed: () {},
-    //   //   child: SvgPicture.asset(
-    //   //     'assets/icons/menu/home-with-hearth.svg',
-    //   //     height: 30,
-    //   //     width: 30,
-    //   //     color: Colors.white,
-    //   //   ),
-    //   //   elevation: 2.0,
-    //   // ),
-    //   // bottomNavigationBar: FABBottomAppBar(
-    //   //   centerItemText: 'Trang chủ',
-    //   //   color: Colors.black38,
-    //   //   backgroundColor: Colors.white,
-    //   //   selectedColor: Colors.black,
-    //   //   notchedShape: CircularNotchedRectangle(),
-    //   //   onTabSelected: (value) {
-    //   //     switch (value) {
-    //   //       case 0:
-    //   //         {
-    //   //           Navigator.push(
-    //   //               context,
-    //   //               MaterialPageRoute(
-    //   //                 builder: (context) => DailyTaskNewsFeedView(),
-    //   //               ));
-    //   //           break;
-    //   //         }
-    //   //       case 1:
-    //   //         {
-    //   //           Navigator.push(
-    //   //               context,
-    //   //               MaterialPageRoute(
-    //   //                 builder: (context) => JourneyNewsfeedView(),
-    //   //               ));
-    //   //           break;
-    //   //         }
-    //   //       case 2:
-    //   //         {
-    //   //           Navigator.push(context, MaterialPageRoute(
-    //   //             builder: (context) {
-    //   //               DiaryDB diary = DiaryDB(DateTime.now());
-    //   //               return DiaryEditView(diary);
-    //   //             },
-    //   //           ));
-    //   //           break;
-    //   //         }
-    //   //       case 3:
-    //   //         {
-    //   //           Navigator.push(
-    //   //               context,
-    //   //               MaterialPageRoute(
-    //   //                 builder: (context) => LoginView(),
-    //   //               ));
-    //   //           break;
-    //   //         }
-    //   //       default:
-    //   //         break;
-    //   //     }
-    //   //   },
-    //   //   items: [
-    //   //     FABBottomAppBarItem(
-    //   //         iconData:
-    //   //             'assets/icons/menu/black-paper-calendar-with-spring.svg',
-    //   //         text: 'Hoạt động'),
-    //   //     FABBottomAppBarItem(
-    //   //         iconData: 'assets/icons/menu/airplane-facing-left.svg',
-    //   //         text: 'Chuyến đi'),
-    //   //     FABBottomAppBarItem(
-    //   //         iconData: 'assets/icons/menu/blank-page-folded-corner.svg',
-    //   //         text: 'Ghi chú'),
-    //   //     FABBottomAppBarItem(
-    //   //         iconData: 'assets/icons/menu/black-user-shape.svg',
-    //   //         text: 'Tài khoản'),
-    //   //   ],
-    //   // ),
-    // );
   }
 
   Widget _itemDiaryList(DiaryDB item, int index) {
@@ -492,8 +453,8 @@ class _DiaryNewFeedsViewState extends State<DiaryNewFeedsView>
                         child: Text(
                           item.diaryContent,
                           // '" Người giờ còn đây không? Thuyền này liệu còn sang sông? Buổi chiều dài mênh mông. Lòng người giờ hòa hay đông? Hồng mắt em cả bầu trời đỏ hoen..."',
-                          style: GoogleFonts.oswald(
-                            fontSize: 15,
+                          style: GoogleFonts.dancingScript(
+                            fontSize: 16,
                             color: Colors.brown[900],
                           ),
                           // TextStyle(

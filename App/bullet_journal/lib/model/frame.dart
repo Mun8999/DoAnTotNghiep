@@ -30,18 +30,40 @@ class Frames {
       frame = new Frame(i, 1);
       _frames.add(frame);
     }
+    for (int i = 7; i < 13; i++) {
+      frame = new Frame(i, 2);
+      _frames.add(frame);
+    }
     _frames[1]._setFramePath(
-        'assets/icons/frame/circle/circlecuteframeclipart.png', 1.4);
+        'assets/images/frame/circle/circlecuteframeclipart.png', 1.4);
     _frames[2]._setFramePath(
-        'assets/icons/frame/circle/circleloveheartframedecoration.png', 1.6);
+        'assets/images/frame/circle/circleloveheartframedecoration.png', 1.6);
     _frames[3]._setFramePath(
-        'assets/icons/frame/circle/framebulletjournalclipart.png', 1.35);
+        'assets/images/frame/circle/framebulletjournalclipart.png', 1.35);
     _frames[4]._setFramePath(
-        'assets/icons/frame/circle/leavesfloralclipart.png', 1.6);
+        'assets/images/frame/circle/leavesfloralclipart.png', 1.6);
     _frames[5]._setFramePath(
-        'assets/icons/frame/circle/lovelypinkheartframeclipart.png', 1.6);
+        'assets/images/frame/circle/lovelypinkheartframeclipart.png', 1.6);
     _frames[6]._setFramePath(
-        'assets/icons/frame/circle/vectorpinkloveborder.png', 1.32);
+        'assets/images/frame/circle/vectorpinkloveborder.png', 1.32);
+    _frames[7]._setFramePath(
+        'assets/images/frame/rectangle/friday planner and bullet journal_6235721.png',
+        1.3);
+    _frames[8]._setFramePath(
+        'assets/images/frame/rectangle/monday planner and bullet journal_6219048.png',
+        1.3);
+    _frames[9]._setFramePath(
+        'assets/images/frame/rectangle/sunday planner and bullet journal_6235720.png',
+        1.3);
+    _frames[10]._setFramePath(
+        'assets/images/frame/rectangle/thursday planner and bullet journal_6235718.png',
+        1.3);
+    _frames[11]._setFramePath(
+        'assets/images/frame/rectangle/tuesday planner and bullet journal_6235722.png',
+        1.3);
+    _frames[12]._setFramePath(
+        'assets/images/frame/rectangle/wednesday planner and bullet journal_6219049.png',
+        1.3);
   }
   List<Frame> get getFrames => this._frames;
 }

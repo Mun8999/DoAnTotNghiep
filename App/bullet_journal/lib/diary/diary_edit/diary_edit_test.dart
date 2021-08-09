@@ -529,7 +529,8 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
                                   Offset(0, _scrollController.offset);
                             }
                             MyText _text = MyText('title', TextStyle(), '',
-                                _innitTextOffset, Size.zero);
+                                _innitTextOffset, Size.zero,
+                                textBackgroundColor: Colors.black);
                             _editTexts.add(_text);
                           },
                           icon: Container(
@@ -1206,8 +1207,14 @@ class _DiaryEditViewTestState extends State<DiaryEditViewTest> {
     if (textBox.length == 0) return;
     textBox.values.toList().forEach((element) {
       print('>content ' + element.textContent + '\n>offset ');
-      _editTexts.add(MyText('', TextStyle(), element.textContent,
-          Offset(element.offset_dx, element.offset_dy), _size));
+      _editTexts.add(MyText(
+        '',
+        TextStyle(),
+        element.textContent,
+        Offset(element.offset_dx, element.offset_dy),
+        _size,
+        textBackgroundColor: Colors.black,
+      ));
     });
     await textBox.close();
   }
